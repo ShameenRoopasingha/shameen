@@ -336,6 +336,7 @@ export function ProjectsSection() {
                     flexDirection: 'column',
                     paddingTop: '25px',
                     position: 'relative',
+                    height: '100%',
                 }}>
                     {currentProject ? (
                         <CaseDetails project={currentProject} index={activeIndex} />
@@ -1031,7 +1032,8 @@ function TechBadge({ name, delay }: { name: string; delay: number }) {
 function EmptyState() {
     return (
         <div style={{
-            height: '100%',
+            flex: 1,
+            width: '100%',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

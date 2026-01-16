@@ -49,8 +49,8 @@ export function CVDownloadButton() {
             <style jsx>{`
                 .cv-btn-wrapper {
                     position: fixed;
-                    right: 22px;
-                    bottom: 65px;
+                    right: 13px;
+                    bottom: 106px;
                     z-index: 20;
                     display: flex;
                     flex-direction: column;
