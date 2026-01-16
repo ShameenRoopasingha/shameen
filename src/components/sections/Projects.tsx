@@ -333,15 +333,11 @@ export function ProjectsSection() {
                 </aside>
 
                 {/* === RIGHT PANEL === */}
-                <main className="projects-main holo-panel" style={{
+                <main className="projects-main" style={{
                     display: 'flex',
                     flexDirection: 'column',
                     paddingTop: '25px',
-                    padding: '25px',
                     position: 'relative',
-                    border: '1px solid rgba(255, 153, 0, 0.3)',
-                    background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.03) 0%, rgba(5, 4, 4, 0.98) 50%, rgba(255, 153, 0, 0.02) 100%)',
-                    animation: 'holoBorder 4s ease-in-out infinite',
                 }}>
                     {currentProject ? (
                         <CaseDetails project={currentProject} index={activeIndex} />
@@ -359,26 +355,27 @@ export function ProjectsSection() {
 
             {/* Responsive Styles */}
             <style jsx global>{`
-                /* Custom Scrollbar */
+                /* Custom Scrollbar - Override global hidden scrollbar */
                 .custom-scrollbar {
-                    scrollbar-width: thin;
-                    scrollbar-color: var(--tva-amber) rgba(255, 153, 0, 0.05);
+                    scrollbar-width: thin !important;
+                    scrollbar-color: var(--tva-amber) rgba(255, 153, 0, 0.08) !important;
                 }
                 .custom-scrollbar::-webkit-scrollbar {
-                    width: 6px;
+                    display: block !important;
+                    width: 8px !important;
                 }
                 .custom-scrollbar::-webkit-scrollbar-track {
-                    background: rgba(255, 153, 0, 0.05);
-                    border-left: 1px solid rgba(255, 153, 0, 0.1);
+                    background: rgba(255, 153, 0, 0.08) !important;
+                    border-left: 1px solid rgba(255, 153, 0, 0.15) !important;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: var(--tva-amber);
-                    border: 1px solid #000;
-                    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+                    background: linear-gradient(180deg, var(--tva-amber) 0%, rgba(255, 130, 0, 0.8) 100%) !important;
+                    border: 1px solid rgba(0, 0, 0, 0.5) !important;
+                    box-shadow: 0 0 8px rgba(255, 153, 0, 0.3), inset 1px 1px 2px rgba(255, 255, 255, 0.2) !important;
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: #FFAA33;
-                    box-shadow: 0 0 10px var(--tva-amber);
+                    background: linear-gradient(180deg, #FFAA33 0%, var(--tva-amber) 100%) !important;
+                    box-shadow: 0 0 15px var(--tva-amber) !important;
                 }
 
                 @media (max-width: 1024px) {
