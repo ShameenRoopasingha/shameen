@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { useProjects, type Project } from '@/lib/data';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setActiveProject } from '@/store/navigationSlice';
+import { Marquee } from '@/components/ui/Marquee';
 
 export function ProjectsSection() {
     const PROJECTS = useProjects();
@@ -269,26 +270,23 @@ export function ProjectsSection() {
                         </p>
                     </div>
 
-                    {/* File List */}
-                    <div className="custom-scrollbar" style={{
+                    {/* File List - Marquee */}
+                    <div style={{
                         flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '8px',
-                        overflowY: 'scroll', // Force scrollbar visibility
-                        paddingRight: '10px',
-                        marginRight: '-10px',
+                        position: 'relative',
                         minHeight: 0,
                     }}>
-                        {PROJECTS.map((project, index) => (
-                            <CaseFileCard
-                                key={project.id}
-                                project={project}
-                                index={index}
-                                isActive={activeProject === project.id}
-                                onClick={() => handleProjectSelect(project.id)}
-                            />
-                        ))}
+                        <Marquee speed={25} pauseOnHover={true} direction="up" gap={10}>
+                            {PROJECTS.map((project, index) => (
+                                <CaseFileCard
+                                    key={project.id}
+                                    project={project}
+                                    index={index}
+                                    isActive={activeProject === project.id}
+                                    onClick={() => handleProjectSelect(project.id)}
+                                />
+                            ))}
+                        </Marquee>
                     </div>
 
                     {/* Footer */}
