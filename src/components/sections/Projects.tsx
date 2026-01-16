@@ -912,16 +912,13 @@ function CaseDetails({ project, index }: CaseDetailsProps) {
                 </div>
             </div>
 
-            {/* Spacer */}
-            <div style={{ flex: 1 }} />
-
-            {/* Actions */}
+            {/* Actions - Now placed after tech stack so they're visible */}
             <div style={{
                 display: 'flex',
                 gap: '18px',
                 paddingTop: '25px',
                 borderTop: '1px solid rgba(255, 153, 0, 0.1)',
-                paddingBottom: '40px',
+                marginBottom: '20px',
             }}>
                 {project.demoUrl ? (
                     <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
@@ -941,6 +938,9 @@ function CaseDetails({ project, index }: CaseDetailsProps) {
                     <ActionButton disabled>View Source Code</ActionButton>
                 )}
             </div>
+
+            {/* Spacer pushes content up */}
+            <div style={{ flex: 1 }} />
         </div>
     );
 }
