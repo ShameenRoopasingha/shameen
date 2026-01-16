@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { useProfile } from '@/lib/data';
+import Image from 'next/image';
 const myImage = '/images/image.png';
 
 type Phase = 'init' | 'scanning' | 'detected' | 'processing' | 'reveal' | 'complete';
@@ -160,10 +161,12 @@ export function Hero() {
                             <div className="hologram-frame">
                                 <CornerAccents />
                                 <div className="image-container">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
+                                    <Image
                                         src={imgSrc}
                                         alt={PROFILE.name}
+                                        fill
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        priority
                                         onError={() => { }}
                                         className="profile-image"
                                     />
