@@ -37,11 +37,11 @@ export function ProjectsSection() {
         >
             {/* === LAYERED BACKGROUND EFFECTS === */}
 
-            {/* Deep space void gradient */}
+            {/* Deep space void gradient - ENHANCED */}
             <div style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(255, 153, 0, 0.06) 0%, transparent 60%)',
+                background: 'radial-gradient(ellipse 100% 60% at 50% 40%, rgba(255, 153, 0, 0.12) 0%, rgba(255, 100, 0, 0.04) 40%, transparent 70%)',
                 pointerEvents: 'none',
             }} />
 
@@ -246,13 +246,13 @@ export function ProjectsSection() {
                             </span>
                         </div>
 
-                        <h1 style={{
-                            fontSize: '36px',
-                            fontWeight: 200,
+                        <h1 className="evidence-title" style={{
+                            fontSize: '42px',
+                            fontWeight: 300,
                             textTransform: 'uppercase',
-                            letterSpacing: '0.08em',
+                            letterSpacing: '0.1em',
                             color: 'var(--tva-amber)',
-                            textShadow: '0 0 60px rgba(255, 153, 0, 0.25), 0 0 120px rgba(255, 153, 0, 0.1)',
+                            animation: 'titleGlow 3s ease-in-out infinite',
                             lineHeight: 1.05,
                             marginBottom: '8px',
                         }}>
@@ -333,11 +333,15 @@ export function ProjectsSection() {
                 </aside>
 
                 {/* === RIGHT PANEL === */}
-                <main className="projects-main" style={{
+                <main className="projects-main holo-panel" style={{
                     display: 'flex',
                     flexDirection: 'column',
                     paddingTop: '25px',
+                    padding: '25px',
                     position: 'relative',
+                    border: '1px solid rgba(255, 153, 0, 0.3)',
+                    background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.03) 0%, rgba(5, 4, 4, 0.98) 50%, rgba(255, 153, 0, 0.02) 100%)',
+                    animation: 'holoBorder 4s ease-in-out infinite',
                 }}>
                     {currentProject ? (
                         <CaseDetails project={currentProject} index={activeIndex} />
@@ -386,28 +390,63 @@ export function ProjectsSection() {
                     .projects-grid { grid-template-columns: 280px 1fr !important; }
                 }
                 @media (max-width: 768px) {
-                    .projects-header { padding: 0 15px !important; height: 50px !important; }
+                    .projects-section { height: auto !important; min-height: 100vh !important; }
+                    .projects-header { 
+                        padding: 0 15px !important; 
+                        height: 50px !important;
+                        position: relative !important;
+                    }
                     .projects-header > div:first-child { gap: 10px !important; }
                     .projects-header > div:last-child { gap: 15px !important; }
                     .projects-header > div:last-child > div:first-child { display: none !important; }
                     .projects-grid {
+                        position: relative !important;
                         grid-template-columns: 1fr !important;
+                        grid-template-rows: auto 1fr !important;
                         left: 15px !important;
                         right: 15px !important;
-                        bottom: 20px !important;
+                        top: 55px !important;
+                        bottom: auto !important;
                         gap: 20px !important;
-                        overflow-y: auto !important;
+                        overflow-y: visible !important;
+                        padding-bottom: 30px !important;
                     }
                     .projects-sidebar {
                         border-right: none !important;
                         padding-right: 0 !important;
                         border-bottom: 1px solid rgba(255, 153, 0, 0.12) !important;
                         padding-bottom: 20px !important;
+                        max-height: 280px !important;
+                        overflow-y: auto !important;
                     }
-                    .projects-main { padding-top: 15px !important; }
+                    .projects-main { 
+                        padding: 15px !important;
+                        min-height: 400px !important;
+                    }
+                    .holo-panel {
+                        animation: none !important;
+                    }
+                    .evidence-title {
+                        font-size: 32px !important;
+                    }
                 }
                 @media (max-width: 480px) {
-                    .projects-header span { font-size: 10px !important; }
+                    .projects-header span { font-size: 9px !important; letter-spacing: 0.1em !important; }
+                    .projects-grid { left: 10px !important; right: 10px !important; }
+                    .projects-sidebar { max-height: 220px !important; }
+                    .projects-main { 
+                        padding: 12px !important;
+                        min-height: 350px !important;
+                    }
+                    .evidence-title {
+                        font-size: 26px !important;
+                    }
+                }
+                @media (max-width: 360px) {
+                    .projects-header > div:first-child > span:last-child { display: none !important; }
+                    .evidence-title {
+                        font-size: 22px !important;
+                    }
                 }
             `}</style>
         </div>
@@ -457,11 +496,7 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
                 border: `1px solid ${isActive ? 'rgba(255, 153, 0, 0.7)' : isHovered ? 'rgba(255, 153, 0, 0.3)' : 'rgba(255, 153, 0, 0.12)'}`,
 
                 transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: isActive
-                    ? '0 0 40px rgba(255, 153, 0, 0.15), 0 0 80px rgba(255, 153, 0, 0.08), inset 0 0 30px rgba(255, 153, 0, 0.05)'
-                    : isHovered
-                        ? '0 0 20px rgba(255, 153, 0, 0.08)'
-                        : 'none',
+                animation: isActive ? 'selectedGlow 2.5s ease-in-out infinite' : 'none',
                 overflow: 'hidden',
             }}
         >
@@ -476,6 +511,19 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
                 boxShadow: isActive ? '0 0 20px var(--tva-amber), 0 0 40px var(--tva-amber)' : 'none',
                 transition: 'all 0.35s ease',
             }} />
+
+            {/* Scanline sweep effect on hover */}
+            {isHovered && (
+                <div style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.6), transparent)',
+                    animation: 'scanlineSweep 0.8s ease-out',
+                    pointerEvents: 'none',
+                }} />
+            )}
 
             {/* Shimmer effect on hover */}
             <div style={{
@@ -1002,21 +1050,41 @@ function EmptyState() {
                 height: '120px',
                 marginBottom: '30px',
             }}>
+                {/* Rotating scan ring */}
+                <div style={{
+                    position: 'absolute',
+                    inset: '-5px',
+                    borderRadius: '50%',
+                    border: '1px dashed rgba(255, 153, 0, 0.2)',
+                    animation: 'rotateScan 8s linear infinite',
+                }} />
                 {/* Outer ring */}
                 <div style={{
                     position: 'absolute',
                     inset: 0,
                     borderRadius: '50%',
-                    border: '1px solid rgba(255, 153, 0, 0.15)',
+                    border: '1px solid rgba(255, 153, 0, 0.25)',
                     animation: 'pulse 3s ease-in-out infinite',
+                    boxShadow: '0 0 30px rgba(255, 153, 0, 0.1), inset 0 0 20px rgba(255, 153, 0, 0.05)',
                 }} />
                 {/* Inner ring */}
                 <div style={{
                     position: 'absolute',
                     inset: '15px',
                     borderRadius: '50%',
-                    border: '1px solid rgba(255, 153, 0, 0.1)',
-                    background: 'radial-gradient(circle, rgba(255, 153, 0, 0.03) 0%, transparent 70%)',
+                    border: '1px solid rgba(255, 153, 0, 0.15)',
+                    background: 'radial-gradient(circle, rgba(255, 153, 0, 0.05) 0%, transparent 70%)',
+                }} />
+                {/* Scan line */}
+                <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    width: '50%',
+                    height: '1px',
+                    background: 'linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.5), transparent)',
+                    transformOrigin: 'left center',
+                    animation: 'rotateScan 4s linear infinite',
                 }} />
                 {/* Icon */}
                 <div style={{
@@ -1031,7 +1099,7 @@ function EmptyState() {
                         height="40"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="rgba(255, 153, 0, 0.25)"
+                        stroke="rgba(255, 153, 0, 0.35)"
                         strokeWidth="0.5"
                     >
                         <path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
@@ -1081,14 +1149,53 @@ function EmptyState() {
 function CornerBrackets() {
     const size = 30;
     const offset = 20;
-    const color = 'rgba(255, 153, 0, 0.2)';
+    const color = 'rgba(255, 153, 0, 0.3)';
+
+    const baseStyle = {
+        position: 'absolute' as const,
+        width: size,
+        height: size,
+        animation: 'cornerPop 0.6s ease-out forwards',
+    };
 
     return (
         <>
-            <div style={{ position: 'absolute', top: offset, left: offset, width: size, height: size, borderTop: `1px solid ${color}`, borderLeft: `1px solid ${color}` }} />
-            <div style={{ position: 'absolute', top: offset, right: offset, width: size, height: size, borderTop: `1px solid ${color}`, borderRight: `1px solid ${color}` }} />
-            <div style={{ position: 'absolute', bottom: offset, left: offset, width: size, height: size, borderBottom: `1px solid ${color}`, borderLeft: `1px solid ${color}` }} />
-            <div style={{ position: 'absolute', bottom: offset, right: offset, width: size, height: size, borderBottom: `1px solid ${color}`, borderRight: `1px solid ${color}` }} />
+            <div style={{
+                ...baseStyle,
+                top: offset,
+                left: offset,
+                borderTop: `1px solid ${color}`,
+                borderLeft: `1px solid ${color}`,
+                animationDelay: '0.1s',
+                opacity: 0,
+            }} />
+            <div style={{
+                ...baseStyle,
+                top: offset,
+                right: offset,
+                borderTop: `1px solid ${color}`,
+                borderRight: `1px solid ${color}`,
+                animationDelay: '0.2s',
+                opacity: 0,
+            }} />
+            <div style={{
+                ...baseStyle,
+                bottom: offset,
+                left: offset,
+                borderBottom: `1px solid ${color}`,
+                borderLeft: `1px solid ${color}`,
+                animationDelay: '0.3s',
+                opacity: 0,
+            }} />
+            <div style={{
+                ...baseStyle,
+                bottom: offset,
+                right: offset,
+                borderBottom: `1px solid ${color}`,
+                borderRight: `1px solid ${color}`,
+                animationDelay: '0.4s',
+                opacity: 0,
+            }} />
         </>
     );
 }

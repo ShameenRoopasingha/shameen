@@ -439,3 +439,101 @@ body {
     opacity: 1;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════ */
+/* ENHANCED EVIDENCE ARCHIVE - Premium Visual Effects              */
+/* ═══════════════════════════════════════════════════════════════ */
+
+/* Holographic Border Effect */
+@keyframes holoBorder {
+  0%, 100% {
+    border-color: rgba(255, 153, 0, 0.3);
+    box-shadow: 
+      0 0 20px rgba(255, 153, 0, 0.1),
+      inset 0 0 30px rgba(255, 153, 0, 0.03);
+  }
+  50% {
+    border-color: rgba(255, 153, 0, 0.6);
+    box-shadow: 
+      0 0 40px rgba(255, 153, 0, 0.2),
+      0 0 60px rgba(255, 153, 0, 0.1),
+      inset 0 0 40px rgba(255, 153, 0, 0.05);
+  }
+}
+
+/* Corner Brackets Entrance Animation */
+@keyframes cornerPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Title Glow Pulse */
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 
+      0 0 40px rgba(255, 153, 0, 0.6),
+      0 0 80px rgba(255, 153, 0, 0.35),
+      0 0 120px rgba(255, 153, 0, 0.2);
+  }
+  50% {
+    text-shadow: 
+      0 0 60px rgba(255, 153, 0, 0.8),
+      0 0 100px rgba(255, 153, 0, 0.5),
+      0 0 150px rgba(255, 153, 0, 0.3),
+      0 0 200px rgba(255, 153, 0, 0.15);
+  }
+}
+
+/* Scanline Sweep Effect */
+@keyframes scanlineSweep {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Selected Card Ambient Glow */
+@keyframes selectedGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 40px rgba(255, 153, 0, 0.15),
+      0 0 80px rgba(255, 153, 0, 0.08),
+      inset 0 0 30px rgba(255, 153, 0, 0.05);
+  }
+  50% {
+    box-shadow: 
+      0 0 60px rgba(255, 153, 0, 0.25),
+      0 0 100px rgba(255, 153, 0, 0.15),
+      inset 0 0 40px rgba(255, 153, 0, 0.08);
+  }
+}
+
+/* Rotating Scan Effect for Empty State */
+@keyframes rotateScan {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
