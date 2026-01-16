@@ -1032,13 +1032,16 @@ function TechBadge({ name, delay }: { name: string; delay: number }) {
 function EmptyState() {
     return (
         <div style={{
-            flex: 1,
-            width: '100%',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             textAlign: 'center',
+            zIndex: 5,
         }}>
             {/* Animated icon */}
             <div style={{
