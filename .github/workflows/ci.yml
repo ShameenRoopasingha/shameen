@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run Lint
+      run: npm run lint
+
+    - name: Type Check
+      run: npx tsc --noEmit
+
+    - name: Build
+      run: npm run build
+      env:
+        # If your build requires env vars (e.g. DATABASE_URL), add them here or in GitHub Secrets
+        # For build validation of Next.js apps, usually strictly static parts are built.
+        # If prisma generate is needed, ensure it runs.
+        # Adding a dummy DATABASE_URL if needed for prisma generate to not fail if it validates schema
+        DATABASE_URL: "postgresql://user:password@localhost:5432/mydb"
