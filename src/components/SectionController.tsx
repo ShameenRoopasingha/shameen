@@ -6,7 +6,6 @@ import { Hero } from '@/components/sections/Hero';
 import { ExperienceSection } from '@/components/sections/Experience';
 import { ProjectsSection } from '@/components/sections/Projects';
 import { SkillsSection } from '@/components/sections/Skills';
-import { ReferencesSection } from '@/components/sections/References';
 import { FeedbacksSection } from '@/components/sections/Feedbacks';
 import { ContactSection } from '@/components/sections/Contact';
 import { useAppSelector } from '@/store/hooks';
@@ -20,7 +19,6 @@ const sections = [
     { id: 'experience', Component: ExperienceSection, label: 'Timeline' },
     { id: 'projects', Component: ProjectsSection, label: 'Evidence' },
     { id: 'skills', Component: SkillsSection, label: 'Skills' },
-    { id: 'references', Component: ReferencesSection, label: 'Files' },
     { id: 'feedbacks', Component: FeedbacksSection, label: 'Reports' },
     { id: 'contact', Component: ContactSection, label: 'Uplink' },
 ];

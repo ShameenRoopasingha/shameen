@@ -1,5 +1,5 @@
 // Section identifiers
-export const SECTIONS = ['hero', 'experience', 'projects', 'skills', 'references', 'feedbacks', 'contact'] as const;
+export const SECTIONS = ['hero', 'experience', 'projects', 'skills', 'feedbacks', 'contact'] as const;
 export type SectionId = typeof SECTIONS[number];
 
 
