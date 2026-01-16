@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 // Total number of sections
-const TOTAL_SECTIONS = 7;
+const TOTAL_SECTIONS = 6;
 
 export interface NavigationState {
     currentSection: number;
