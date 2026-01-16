@@ -58,7 +58,10 @@ export function Marquee({
                     display: 'flex',
                     flexDirection: 'column',
                     gap: `${gap}px`,
-                    animation: `marquee-scroll-${direction} ${duration}s linear infinite`,
+                    animationName: `marquee-scroll-${direction}`,
+                    animationDuration: `${duration}s`,
+                    animationTimingFunction: 'linear',
+                    animationIterationCount: 'infinite',
                     animationPlayState: isPaused ? 'paused' : 'running',
                 }}
             >
