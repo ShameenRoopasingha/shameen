@@ -113,21 +113,54 @@ export function ExperienceSection() {
                 overflow: 'hidden',
             }}
         >
-            {/* Cinematic Background Layers */}
+            {/* Cinematic Background Layers - Enhanced to match Projects */}
             <div className="absolute inset-0">
-                {/* Radial gradient backdrop */}
+                {/* Deep radial gradient - Enhanced */}
                 <div
                     className="absolute inset-0"
                     style={{
-                        background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(255, 153, 0, 0.06) 0%, transparent 60%)',
+                        background: 'radial-gradient(ellipse 100% 60% at 50% 40%, rgba(255, 153, 0, 0.12) 0%, rgba(255, 100, 0, 0.04) 40%, transparent 70%)',
                     }}
                 />
 
-                {/* Horizontal scan lines */}
+                {/* Secondary glow */}
                 <div
-                    className="absolute inset-0 opacity-10"
+                    className="absolute inset-0"
+                    style={{
+                        background: 'radial-gradient(ellipse 80% 60% at 70% 80%, rgba(255, 153, 0, 0.02) 0%, transparent 40%)',
+                    }}
+                />
+
+                {/* Grid pattern overlay */}
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        backgroundImage: `
+                            linear-gradient(rgba(255, 153, 0, 0.015) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(255, 153, 0, 0.015) 1px, transparent 1px)
+                        `,
+                        backgroundSize: '80px 80px',
+                        opacity: 0.5,
+                    }}
+                />
+
+                {/* CRT Scanlines - Enhanced */}
+                <div
+                    className="absolute inset-0"
                     style={{
                         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 153, 0, 0.03) 2px, rgba(255, 153, 0, 0.03) 4px)',
+                        zIndex: 100,
+                        pointerEvents: 'none',
+                    }}
+                />
+
+                {/* Vignette effect */}
+                <div
+                    className="absolute inset-0"
+                    style={{
+                        background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 0%, rgba(0,0,0,0.2) 100%)',
+                        zIndex: 50,
+                        pointerEvents: 'none',
                     }}
                 />
             </div>
@@ -249,6 +282,7 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
                     style={{
                         color: 'var(--tva-amber)',
                         textShadow: '0 0 40px rgba(255, 153, 0, 0.3)',
+                        animation: 'titleGlow 3s ease-in-out infinite',
                     }}
                 >
                     {experience.role}

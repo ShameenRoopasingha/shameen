@@ -303,6 +303,7 @@ export function FeedbacksSection({ feedbacks = [] }: FeedbacksSectionProps) {
                     text-shadow: 0 0 50px rgba(255, 153, 0, 0.3);
                     line-height: 1.05;
                     margin-bottom: 25px;
+                    animation: titleGlow 3s ease-in-out infinite;
                 }
                 @media (max-width: 1024px) { .feedback-title { font-size: 38px; } }
                 @media (max-width: 768px) { .feedback-title { font-size: 32px; margin-bottom: 20px; } }
@@ -612,11 +613,16 @@ function SubmissionSuccess() {
 function BackgroundLayers() {
     return (
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 70% at 30% 20%, rgba(255, 153, 0, 0.02) 0%, transparent 45%)' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 70% 60% at 70% 80%, rgba(0, 255, 0, 0.01) 0%, transparent 40%)' }} />
-            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255, 153, 0, 0.012) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 153, 0, 0.012) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px)' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 75% 75% at 50% 50%, transparent 25%, rgba(0,0,0,0.55) 100%)' }} />
+            {/* Deep radial gradient - Enhanced */}
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 100% 60% at 50% 40%, rgba(255, 153, 0, 0.12) 0%, rgba(255, 100, 0, 0.04) 40%, transparent 70%)' }} />
+            {/* Secondary glow */}
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 70% 80%, rgba(255, 153, 0, 0.02) 0%, transparent 40%)' }} />
+            {/* Grid pattern overlay */}
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255, 153, 0, 0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 153, 0, 0.015) 1px, transparent 1px)', backgroundSize: '80px 80px', opacity: 0.5 }} />
+            {/* CRT Scanlines */}
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: 'repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(255, 153, 0, 0.03) 2px, rgba(255, 153, 0, 0.03) 4px)', zIndex: 100 }} />
+            {/* Vignette effect */}
+            <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 80% at 50% 50%, transparent 0%, rgba(0,0,0,0.2) 100%)', zIndex: 50 }} />
         </div>
     );
 }
