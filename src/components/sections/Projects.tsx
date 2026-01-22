@@ -12,6 +12,15 @@ export function ProjectsSection() {
     const dispatch = useAppDispatch();
     const activeProject = useAppSelector((state) => state.navigation.activeProject);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Detect mobile screen
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     const handleProjectSelect = useCallback((projectId: string) => {
         if (activeProject === projectId) {
@@ -24,6 +33,70 @@ export function ProjectsSection() {
     const currentProject = PROJECTS.find((p) => p.id === activeProject);
     const activeIndex = PROJECTS.findIndex((p) => p.id === activeProject);
 
+    // Mobile Layout
+    if (isMobile) {
+        return (
+            <div
+                ref={containerRef}
+                className="projects-section-mobile"
+                style={{
+                    position: 'relative',
+                    minHeight: '100dvh',
+                    width: '100%',
+                    background: '#030303',
+                    padding: '16px',
+                    paddingTop: '60px',
+                }}
+            >
+                {/* Background effects */}
+                <div style={{
+                    position: 'fixed',
+                    inset: 0,
+                    background: 'radial-gradient(ellipse 100% 60% at 50% 40%, rgba(255, 153, 0, 0.08) 0%, transparent 70%)',
+                    pointerEvents: 'none',
+                    zIndex: 0,
+                }} />
+
+                {/* Header */}
+                <div style={{ marginBottom: '20px', position: 'relative', zIndex: 1 }}>
+                    <h1 style={{
+                        fontSize: '28px',
+                        fontWeight: 200,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        color: 'var(--tva-amber)',
+                        textShadow: '0 0 30px rgba(255, 153, 0, 0.3)',
+                        marginBottom: '8px',
+                    }}>
+                        Evidence Archive
+                    </h1>
+                    <p style={{
+                        fontSize: '11px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.2em',
+                        color: 'rgba(255, 153, 0, 0.5)',
+                    }}>
+                        {PROJECTS.length} Cases on Record
+                    </p>
+                </div>
+
+                {/* Project Cards - Stacked */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative', zIndex: 1 }}>
+                    {PROJECTS.map((project, index) => (
+                        <MobileProjectCard
+                            key={project.id}
+                            project={project}
+                            index={index}
+                            isActive={activeProject === project.id}
+                            onClick={() => handleProjectSelect(project.id)}
+                        />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // Desktop Layout (original)
     return (
         <div
             ref={containerRef}
@@ -1234,6 +1307,215 @@ function FloatingParticles() {
     );
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE PROJECT CARD
+═══════════════════════════════════════════════════════════════════════════ */
+
+interface MobileProjectCardProps {
+    project: Project;
+    index: number;
+    isActive: boolean;
+    onClick: () => void;
+}
+
+function MobileProjectCard({ project, index, isActive, onClick }: MobileProjectCardProps) {
+    return (
+        <div
+            onClick={onClick}
+            style={{
+                padding: '16px',
+                background: isActive
+                    ? 'linear-gradient(135deg, rgba(255, 153, 0, 0.15) 0%, rgba(255, 153, 0, 0.05) 100%)'
+                    : 'rgba(255, 153, 0, 0.03)',
+                border: `1px solid ${isActive ? 'rgba(255, 153, 0, 0.5)' : 'rgba(255, 153, 0, 0.15)'}`,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+            }}
+        >
+            {/* Header Row */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{
+                        fontSize: '24px',
+                        fontWeight: 100,
+                        color: isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.3)',
+                    }}>
+                        {(index + 1).toString().padStart(2, '0')}
+                    </span>
+                    <span style={{
+                        fontSize: '9px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        padding: '4px 8px',
+                        border: '1px solid rgba(255, 153, 0, 0.3)',
+                        color: 'rgba(255, 153, 0, 0.6)',
+                    }}>
+                        EVD-{(index + 1).toString().padStart(3, '0')}
+                    </span>
+                </div>
+
+                {/* Status dot */}
+                <div style={{
+                    width: '10px',
+                    height: '10px',
+                    borderRadius: '50%',
+                    background: isActive ? 'var(--tva-amber)' : 'transparent',
+                    border: `2px solid ${isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.3)'}`,
+                    boxShadow: isActive ? '0 0 10px var(--tva-amber)' : 'none',
+                }} />
+            </div>
+
+            {/* Title */}
+            <h3 style={{
+                fontSize: '16px',
+                fontWeight: 400,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.7)',
+                marginBottom: '8px',
+            }}>
+                {project.title}
+            </h3>
+
+            {/* In Dev Badge */}
+            {project.inDevelopment && (
+                <div style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '4px 10px',
+                    marginBottom: '10px',
+                    background: 'rgba(255, 153, 0, 0.1)',
+                    border: '1px solid rgba(255, 153, 0, 0.3)',
+                }}>
+                    <div style={{
+                        width: '5px',
+                        height: '5px',
+                        borderRadius: '50%',
+                        background: 'var(--tva-amber)',
+                        animation: 'pulse 1s ease-in-out infinite',
+                    }} />
+                    <span style={{
+                        fontSize: '8px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        color: 'var(--tva-amber)',
+                        fontWeight: 600,
+                    }}>
+                        In Dev
+                    </span>
+                </div>
+            )}
+
+            {/* Tech Tags */}
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: isActive ? '12px' : '0' }}>
+                {project.techStack.slice(0, 4).map((tech) => (
+                    <span
+                        key={tech}
+                        style={{
+                            fontSize: '8px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            padding: '3px 8px',
+                            background: 'rgba(255, 153, 0, 0.05)',
+                            border: '1px solid rgba(255, 153, 0, 0.2)',
+                            color: 'rgba(255, 153, 0, 0.6)',
+                        }}
+                    >
+                        {tech}
+                    </span>
+                ))}
+                {project.techStack.length > 4 && (
+                    <span style={{
+                        fontSize: '8px',
+                        padding: '3px 8px',
+                        color: 'rgba(255, 153, 0, 0.4)',
+                    }}>
+                        +{project.techStack.length - 4}
+                    </span>
+                )}
+            </div>
+
+            {/* Expanded Details */}
+            {isActive && (
+                <div style={{ paddingTop: '12px', borderTop: '1px solid rgba(255, 153, 0, 0.1)' }}>
+                    <p style={{
+                        fontSize: '13px',
+                        lineHeight: '1.6',
+                        color: 'rgba(255, 153, 0, 0.5)',
+                        marginBottom: '16px',
+                    }}>
+                        {project.description}
+                    </p>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        {project.demoUrl ? (
+                            <a
+                                href={project.demoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    flex: 1,
+                                    padding: '12px',
+                                    textAlign: 'center',
+                                    fontSize: '10px',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.15em',
+                                    background: 'var(--tva-amber)',
+                                    color: '#030303',
+                                    textDecoration: 'none',
+                                    fontWeight: 600,
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                Live Demo
+                            </a>
+                        ) : (
+                            <span style={{
+                                flex: 1,
+                                padding: '12px',
+                                textAlign: 'center',
+                                fontSize: '10px',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.15em',
+                                background: 'rgba(255, 153, 0, 0.05)',
+                                color: 'rgba(255, 153, 0, 0.3)',
+                                border: '1px solid rgba(255, 153, 0, 0.1)',
+                            }}>
+                                {project.inDevelopment ? 'Coming Soon' : 'No Demo'}
+                            </span>
+                        )}
+
+                        {project.repoUrl && (
+                            <a
+                                href={project.repoUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                    flex: 1,
+                                    padding: '12px',
+                                    textAlign: 'center',
+                                    fontSize: '10px',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.15em',
+                                    background: 'transparent',
+                                    color: 'var(--tva-amber)',
+                                    textDecoration: 'none',
+                                    border: '1px solid rgba(255, 153, 0, 0.4)',
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                Source
+                            </a>
+                        )}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
 // Display names
 ProjectsSection.displayName = 'ProjectsSection';
 CaseFileCard.displayName = 'CaseFileCard';
@@ -1243,3 +1525,4 @@ TechBadge.displayName = 'TechBadge';
 EmptyState.displayName = 'EmptyState';
 CornerBrackets.displayName = 'CornerBrackets';
 FloatingParticles.displayName = 'FloatingParticles';
+MobileProjectCard.displayName = 'MobileProjectCard';
