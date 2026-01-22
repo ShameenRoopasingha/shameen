@@ -387,63 +387,62 @@ export function ProjectsSection() {
                     .projects-grid { grid-template-columns: 280px 1fr !important; }
                 }
                 @media (max-width: 768px) {
-                    .projects-section { height: auto !important; min-height: 100vh !important; }
+                    .projects-section { height: auto !important; min-height: 100dvh !important; padding-bottom: 20px !important; }
                     .projects-header { 
-                        padding: 0 15px !important; 
-                        height: 50px !important;
+                        padding: 0 12px !important; 
+                        height: 48px !important;
                         position: relative !important;
                     }
-                    .projects-header > div:first-child { gap: 10px !important; }
-                    .projects-header > div:last-child { gap: 15px !important; }
+                    .projects-header > div:first-child { gap: 8px !important; }
+                    .projects-header > div:first-child > div:nth-child(2) { display: none !important; }
+                    .projects-header > div:last-child { gap: 12px !important; }
                     .projects-header > div:last-child > div:first-child { display: none !important; }
+                    .projects-header span { font-size: 9px !important; letter-spacing: 0.15em !important; }
                     .projects-grid {
                         position: relative !important;
-                        grid-template-columns: 1fr !important;
-                        grid-template-rows: auto 1fr !important;
-                        left: 15px !important;
-                        right: 15px !important;
-                        top: 55px !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        left: 12px !important;
+                        right: 12px !important;
+                        top: 50px !important;
                         bottom: auto !important;
-                        gap: 20px !important;
+                        gap: 16px !important;
                         overflow-y: visible !important;
-                        padding-bottom: 30px !important;
+                        padding-bottom: 20px !important;
                     }
                     .projects-sidebar {
                         border-right: none !important;
                         padding-right: 0 !important;
-                        border-bottom: 1px solid rgba(255, 153, 0, 0.12) !important;
-                        padding-bottom: 20px !important;
-                        max-height: 280px !important;
-                        overflow-y: auto !important;
+                        border-bottom: 1px solid rgba(255, 153, 0, 0.15) !important;
+                        padding-bottom: 16px !important;
+                        max-height: none !important;
+                        overflow-y: visible !important;
+                        display: flex !important;
+                        flex-wrap: wrap !important;
+                        gap: 8px !important;
                     }
                     .projects-main { 
-                        padding: 15px !important;
-                        min-height: 400px !important;
+                        padding: 12px !important;
+                        min-height: auto !important;
+                        border: 1px solid rgba(255, 153, 0, 0.12) !important;
+                        background: rgba(255, 153, 0, 0.02) !important;
                     }
                     .holo-panel {
                         animation: none !important;
                     }
                     .evidence-title {
-                        font-size: 32px !important;
+                        font-size: 28px !important;
                     }
                 }
                 @media (max-width: 480px) {
-                    .projects-header span { font-size: 9px !important; letter-spacing: 0.1em !important; }
-                    .projects-grid { left: 10px !important; right: 10px !important; }
-                    .projects-sidebar { max-height: 220px !important; }
-                    .projects-main { 
-                        padding: 12px !important;
-                        min-height: 350px !important;
-                    }
-                    .evidence-title {
-                        font-size: 26px !important;
-                    }
+                    .projects-grid { left: 8px !important; right: 8px !important; gap: 12px !important; }
+                    .projects-sidebar { gap: 6px !important; }
+                    .projects-main { padding: 10px !important; }
+                    .evidence-title { font-size: 24px !important; }
                 }
                 @media (max-width: 360px) {
                     .projects-header > div:first-child > span:last-child { display: none !important; }
-                    .evidence-title {
-                        font-size: 22px !important;
-                    }
+                    .evidence-title { font-size: 20px !important; }
                 }
             `}</style>
         </div>

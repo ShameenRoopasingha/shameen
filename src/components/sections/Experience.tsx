@@ -105,13 +105,13 @@ export function ExperienceSection() {
     }, [activeIndex, jumpToExperience, EXPERIENCE.length]);
 
     const currentExperience = EXPERIENCE[activeIndex];
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
 
     return (
         <div
             ref={containerRef}
-            className="section-container relative"
+            className="section-container relative experience-section"
             style={{
-                height: '100vh',
                 width: '100vw',
                 overflow: 'hidden',
             }}
@@ -180,19 +180,19 @@ export function ExperienceSection() {
             />
 
             {/* Top HUD Bar */}
-            <div className="absolute top-0 left-0 right-0 h-16 flex items-center justify-between px-8 lg:px-16" style={{ borderBottom: '1px solid rgba(255, 153, 0, 0.1)' }}>
-                <div className="flex items-center gap-4">
+            <div className="experience-header absolute top-0 left-0 right-0 h-14 lg:h-16 flex items-center justify-between px-4 lg:px-16" style={{ borderBottom: '1px solid rgba(255, 153, 0, 0.1)' }}>
+                <div className="flex items-center gap-3 lg:gap-4">
                     <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--tva-amber)', boxShadow: '0 0 10px var(--tva-amber)' }} />
-                    <span className="text-xs uppercase tracking-[0.4em]" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
+                    <span className="text-[10px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.4em]" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
                         Sacred Timeline
                     </span>
                 </div>
 
-                <div className="flex items-center gap-8">
-                    <span className="text-xs uppercase tracking-widest" style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
+                <div className="flex items-center gap-4 lg:gap-8">
+                    <span className="hidden sm:inline text-xs uppercase tracking-widest" style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
                         Temporal Coordinate
                     </span>
-                    <span className="text-2xl font-light tracking-widest" style={{ color: 'var(--tva-amber)' }}>
+                    <span className="text-lg lg:text-2xl font-light tracking-widest" style={{ color: 'var(--tva-amber)' }}>
                         {(activeIndex + 1).toString().padStart(2, '0')}
                         <span style={{ color: 'rgba(255, 153, 0, 0.3)' }}> / </span>
                         {EXPERIENCE.length.toString().padStart(2, '0')}
@@ -200,23 +200,39 @@ export function ExperienceSection() {
                 </div>
             </div>
 
-            {/* Main Content - Cinematic Layout */}
-            <div className="h-full flex flex-col pt-24 pb-8 lg:pb-8">
+            {/* Main Content - Responsive Layout */}
+            <div className="experience-content h-full flex flex-col pt-16 lg:pt-24 pb-4 lg:pb-8">
 
-                {/* Experience Content Panel - Upper 2/3 */}
-                <div className="content-panel flex-1 flex items-center justify-center px-6 lg:px-24 overflow-y-auto lg:overflow-visible">
+                {/* Experience Content Panel */}
+                <div className="content-panel flex-1 flex items-center justify-center px-4 lg:px-24 overflow-y-auto">
                     <div className="w-full max-w-5xl py-4 lg:py-0">
                         {currentExperience && <ExperiencePanel experience={currentExperience} index={activeIndex} />}
                     </div>
                 </div>
 
-                {/* Timeline Strip - Lower Section */}
-                <div className="timeline-container h-28 lg:h-40 relative flex-shrink-0">
+                {/* Timeline Strip - Hidden on very small mobile, simplified on tablet */}
+                <div className="timeline-container h-24 lg:h-40 relative flex-shrink-0 hidden sm:block">
                     <TimelineStrip
                         experiences={EXPERIENCE}
                         activeIndex={activeIndex}
                         onSelect={jumpToExperience}
                     />
+                </div>
+
+                {/* Mobile Navigation Dots (simple) */}
+                <div className="sm:hidden flex justify-center gap-2 py-4">
+                    {EXPERIENCE.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => jumpToExperience(index)}
+                            className="w-3 h-3 rounded-full transition-all duration-300"
+                            style={{
+                                background: index === activeIndex ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.2)',
+                                boxShadow: index === activeIndex ? '0 0 10px var(--tva-amber)' : 'none',
+                                border: '1px solid rgba(255, 153, 0, 0.3)',
+                            }}
+                        />
+                    ))}
                 </div>
             </div>
 
@@ -224,14 +240,19 @@ export function ExperienceSection() {
             <CornerBrackets />
 
             <style jsx>{`
+                .experience-section {
+                    height: 100vh;
+                }
                 @media (max-width: 768px) {
-                    .section-container {
-                        height: 100dvh !important; /* Use dynamic viewport height for mobile */
+                    .experience-section {
+                        height: auto !important;
+                        min-height: 100dvh;
                     }
-                    /* Allow text selection on mobile for better UX */
                     .content-panel {
                         -webkit-user-select: text;
                         user-select: text;
+                        align-items: flex-start !important;
+                        padding-top: 20px;
                     }
                 }
             `}</style>
