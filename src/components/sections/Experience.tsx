@@ -231,7 +231,7 @@ export function ExperienceSection() {
                     </div>
                 )}
 
-                {/* Mobile: Vertical Timeline with Cards */}
+                {/* Mobile: Card-Based Timeline */}
                 {isMobile && (
                     <div className="flex-1 px-4 py-6">
                         {/* Section Header */}
@@ -250,111 +250,101 @@ export function ExperienceSection() {
                             </p>
                         </div>
 
-                        {/* Timeline with Cards */}
-                        <div className="relative">
-                            {/* Vertical Connecting Line */}
-                            <div
-                                className="absolute left-4 top-4 bottom-4 w-0.5"
-                                style={{
-                                    background: 'linear-gradient(180deg, var(--tva-amber) 0%, rgba(255, 153, 0, 0.3) 50%, var(--tva-amber) 100%)',
-                                }}
-                            />
-
-                            {/* Experience Cards with Timeline Nodes */}
-                            <div className="space-y-6">
-                                {EXPERIENCE.map((exp, index) => (
-                                    <div key={exp.id} className="relative pl-12">
-                                        {/* Timeline Node */}
-                                        <div
-                                            className="absolute left-2 top-6 w-5 h-5 rounded-full border-2 flex items-center justify-center z-10"
-                                            style={{
-                                                borderColor: 'var(--tva-amber)',
-                                                background: index === 0 ? 'var(--tva-amber)' : '#050404',
-                                                boxShadow: index === 0 ? '0 0 15px var(--tva-amber)' : 'none',
-                                            }}
-                                        >
-                                            {index === 0 && (
-                                                <div className="w-2 h-2 rounded-full bg-white" style={{ boxShadow: '0 0 5px white' }} />
-                                            )}
-                                        </div>
-
-                                        {/* Card */}
-                                        <div
-                                            style={{
-                                                background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.08) 0%, rgba(5, 4, 4, 0.95) 100%)',
-                                                border: '1px solid rgba(255, 153, 0, 0.25)',
-                                                padding: '16px',
-                                                position: 'relative',
-                                            }}
-                                        >
-                                            {/* Card Header: Year & Current Badge */}
-                                            <div className="flex items-center justify-between mb-3">
-                                                <span
-                                                    className="text-xs uppercase tracking-widest px-2 py-1"
-                                                    style={{
-                                                        border: '1px solid rgba(255, 153, 0, 0.4)',
-                                                        color: 'var(--tva-amber)',
-                                                    }}
-                                                >
-                                                    {new Date(exp.startDate).getFullYear()}
-                                                </span>
-                                                {index === 0 && (
-                                                    <div className="flex items-center gap-2">
-                                                        <div
-                                                            className="w-2 h-2 rounded-full"
-                                                            style={{ background: '#00FF00', boxShadow: '0 0 8px #00FF00' }}
-                                                        />
-                                                        <span className="text-xs uppercase tracking-wider" style={{ color: '#00FF00' }}>
-                                                            Current
-                                                        </span>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Role Title */}
-                                            <h3
-                                                className="text-lg uppercase tracking-wide mb-2 font-medium"
-                                                style={{ color: 'var(--tva-amber)' }}
+                        {/* Experience Cards */}
+                        <div className="space-y-4">
+                            {EXPERIENCE.map((exp, index) => (
+                                <div
+                                    key={exp.id}
+                                    style={{
+                                        background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.08) 0%, rgba(255, 153, 0, 0.02) 100%)',
+                                        border: '1px solid rgba(255, 153, 0, 0.25)',
+                                        padding: '16px',
+                                        position: 'relative',
+                                    }}
+                                >
+                                    {/* Card Header */}
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-3">
+                                            {/* Index Number */}
+                                            <span
+                                                className="text-2xl font-thin"
+                                                style={{ color: index === 0 ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.3)' }}
                                             >
-                                                {exp.role}
-                                            </h3>
-
-                                            {/* Company & Date */}
-                                            <div
-                                                className="text-xs uppercase tracking-wider mb-3 pb-3"
+                                                {(index + 1).toString().padStart(2, '0')}
+                                            </span>
+                                            {/* Year Badge */}
+                                            <span
+                                                className="text-xs uppercase tracking-widest px-2 py-1"
                                                 style={{
-                                                    color: 'rgba(255, 153, 0, 0.6)',
-                                                    borderBottom: '1px solid rgba(255, 153, 0, 0.15)',
+                                                    border: '1px solid rgba(255, 153, 0, 0.4)',
+                                                    color: 'var(--tva-amber)',
                                                 }}
                                             >
-                                                <span className="font-semibold">{exp.company}</span>
-                                                <span className="mx-2" style={{ color: 'rgba(255, 153, 0, 0.3)' }}>•</span>
-                                                <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
-                                                    {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
+                                                {new Date(exp.startDate).getFullYear()}
+                                            </span>
+                                        </div>
+                                        {/* Current indicator */}
+                                        {index === 0 && (
+                                            <div className="flex items-center gap-2">
+                                                <div
+                                                    className="w-2 h-2 rounded-full"
+                                                    style={{
+                                                        background: '#00FF00',
+                                                        boxShadow: '0 0 8px #00FF00',
+                                                    }}
+                                                />
+                                                <span
+                                                    className="text-xs uppercase tracking-wider"
+                                                    style={{ color: '#00FF00' }}
+                                                >
+                                                    Current
                                                 </span>
                                             </div>
-
-                                            {/* Description */}
-                                            <p
-                                                className="text-sm leading-relaxed"
-                                                style={{ color: 'rgba(255, 153, 0, 0.55)', lineHeight: '1.6' }}
-                                            >
-                                                {exp.description}
-                                            </p>
-
-                                            {/* Corner accents */}
-                                            <div
-                                                className="absolute top-0 left-0 w-3 h-3"
-                                                style={{ borderTop: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }}
-                                            />
-                                            <div
-                                                className="absolute bottom-0 right-0 w-3 h-3"
-                                                style={{ borderBottom: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }}
-                                            />
-                                        </div>
+                                        )}
                                     </div>
-                                ))}
-                            </div>
+
+                                    {/* Role Title */}
+                                    <h3
+                                        className="text-lg uppercase tracking-wide mb-2 font-medium"
+                                        style={{ color: 'var(--tva-amber)' }}
+                                    >
+                                        {exp.role}
+                                    </h3>
+
+                                    {/* Company & Date */}
+                                    <div
+                                        className="text-xs uppercase tracking-wider mb-3 pb-3"
+                                        style={{
+                                            color: 'rgba(255, 153, 0, 0.6)',
+                                            borderBottom: '1px solid rgba(255, 153, 0, 0.1)',
+                                        }}
+                                    >
+                                        <span className="font-semibold">{exp.company}</span>
+                                        <span className="mx-2" style={{ color: 'rgba(255, 153, 0, 0.3)' }}>|</span>
+                                        <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
+                                            {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
+                                        </span>
+                                    </div>
+
+                                    {/* Description */}
+                                    <p
+                                        className="text-sm leading-relaxed"
+                                        style={{ color: 'rgba(255, 153, 0, 0.55)', lineHeight: '1.6' }}
+                                    >
+                                        {exp.description}
+                                    </p>
+
+                                    {/* Corner accents */}
+                                    <div
+                                        className="absolute top-0 left-0 w-3 h-3"
+                                        style={{ borderTop: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }}
+                                    />
+                                    <div
+                                        className="absolute bottom-0 right-0 w-3 h-3"
+                                        style={{ borderBottom: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}
