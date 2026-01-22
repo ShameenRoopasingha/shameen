@@ -203,14 +203,14 @@ export function ExperienceSection() {
             {/* Main Content - Responsive Layout */}
             <div className="experience-content h-full flex flex-col pt-16 lg:pt-24 pb-4 lg:pb-8">
 
-                {/* Experience Content Panel */}
-                <div className="content-panel flex-1 flex items-center justify-center px-4 lg:px-24 overflow-y-auto">
+                {/* Desktop: Single Experience Panel */}
+                <div className="content-panel hidden sm:flex flex-1 items-center justify-center px-4 lg:px-24 overflow-y-auto">
                     <div className="w-full max-w-5xl py-4 lg:py-0">
                         {currentExperience && <ExperiencePanel experience={currentExperience} index={activeIndex} />}
                     </div>
                 </div>
 
-                {/* Timeline Strip - Hidden on very small mobile, simplified on tablet */}
+                {/* Desktop: Timeline Strip */}
                 <div className="timeline-container h-24 lg:h-40 relative flex-shrink-0 hidden sm:block">
                     <TimelineStrip
                         experiences={EXPERIENCE}
@@ -219,20 +219,75 @@ export function ExperienceSection() {
                     />
                 </div>
 
-                {/* Mobile Navigation Dots (simple) */}
-                <div className="sm:hidden flex justify-center gap-2 py-4">
-                    {EXPERIENCE.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => jumpToExperience(index)}
-                            className="w-3 h-3 rounded-full transition-all duration-300"
-                            style={{
-                                background: index === activeIndex ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.2)',
-                                boxShadow: index === activeIndex ? '0 0 10px var(--tva-amber)' : 'none',
-                                border: '1px solid rgba(255, 153, 0, 0.3)',
-                            }}
+                {/* Mobile: Vertical Timeline - All Experiences */}
+                <div className="sm:hidden flex-1 overflow-y-auto px-4 py-4">
+                    <div className="relative">
+                        {/* Vertical Line */}
+                        <div
+                            className="absolute left-4 top-0 bottom-0 w-px"
+                            style={{ background: 'linear-gradient(180deg, transparent, var(--tva-amber), var(--tva-amber), transparent)' }}
                         />
-                    ))}
+
+                        {/* Timeline Items */}
+                        <div className="space-y-8">
+                            {EXPERIENCE.map((exp, index) => (
+                                <div key={exp.id} className="relative pl-10">
+                                    {/* Timeline Node */}
+                                    <div
+                                        className="absolute left-2 top-2 w-5 h-5 rounded-full border-2 flex items-center justify-center"
+                                        style={{
+                                            borderColor: 'var(--tva-amber)',
+                                            background: index === 0 ? 'var(--tva-amber)' : 'transparent',
+                                            boxShadow: index === 0 ? '0 0 15px var(--tva-amber)' : 'none',
+                                        }}
+                                    >
+                                        {index === 0 && (
+                                            <div className="w-2 h-2 rounded-full bg-white" style={{ boxShadow: '0 0 5px white' }} />
+                                        )}
+                                    </div>
+
+                                    {/* Year Badge */}
+                                    <div
+                                        className="inline-block px-3 py-1 mb-3 text-xs uppercase tracking-widest"
+                                        style={{
+                                            border: '1px solid rgba(255, 153, 0, 0.4)',
+                                            color: 'var(--tva-amber)',
+                                        }}
+                                    >
+                                        {new Date(exp.startDate).getFullYear()}
+                                    </div>
+
+                                    {/* Role */}
+                                    <h3
+                                        className="text-xl uppercase tracking-wide mb-2 font-light"
+                                        style={{ color: 'var(--tva-amber)' }}
+                                    >
+                                        {exp.role}
+                                    </h3>
+
+                                    {/* Company & Date */}
+                                    <div
+                                        className="text-sm uppercase tracking-wider mb-3"
+                                        style={{ color: 'rgba(255, 153, 0, 0.6)' }}
+                                    >
+                                        <span className="font-semibold">{exp.company}</span>
+                                        <span className="mx-2" style={{ color: 'rgba(255, 153, 0, 0.3)' }}>•</span>
+                                        <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
+                                            {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
+                                        </span>
+                                    </div>
+
+                                    {/* Description */}
+                                    <p
+                                        className="text-sm leading-relaxed"
+                                        style={{ color: 'rgba(255, 153, 0, 0.5)', lineHeight: '1.7' }}
+                                    >
+                                        {exp.description}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -247,12 +302,6 @@ export function ExperienceSection() {
                     .experience-section {
                         height: auto !important;
                         min-height: 100dvh;
-                    }
-                    .content-panel {
-                        -webkit-user-select: text;
-                        user-select: text;
-                        align-items: flex-start !important;
-                        padding-top: 20px;
                     }
                 }
             `}</style>
