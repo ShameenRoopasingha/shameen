@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { Hero } from '@/components/sections/Hero';
 import { ExperienceSection } from '@/components/sections/Experience';
@@ -27,10 +27,19 @@ const sections = [
 export function SectionController() {
     const containerRef = useRef<HTMLDivElement>(null);
     const flashRef = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
     const { currentSection, targetSection, isTransitioning } = useAppSelector(
         (state) => state.navigation
     );
     const { setFlashRef } = useWarpTransition();
+
+    // Detect mobile screen
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     // Initialize GSAP Observer
     useGSAPObserver();
@@ -110,7 +119,14 @@ export function SectionController() {
             <div
                 ref={containerRef}
                 className="relative section-container-wrapper"
-                style={{
+                style={isMobile ? {
+                    position: 'relative',
+                    width: '100%',
+                    height: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    background: '#000',
+                } : {
                     position: 'fixed',
                     top: 0,
                     left: 0,
@@ -122,8 +138,12 @@ export function SectionController() {
                 {sections.map(({ id, Component }, index) => (
                     <div
                         key={id}
-                        className="absolute inset-0 section-wrapper"
-                        style={{
+                        className={isMobile ? "section-wrapper-mobile" : "absolute inset-0 section-wrapper"}
+                        style={isMobile ? {
+                            position: 'relative',
+                            width: '100%',
+                            height: 'auto',
+                        } : {
                             opacity: index === currentSection ? 1 : 0,
                             pointerEvents: index === currentSection ? 'auto' : 'none',
                             zIndex: index === currentSection ? 1 : 0,
