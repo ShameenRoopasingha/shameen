@@ -79,9 +79,37 @@ export function SectionController() {
         <>
             <WarpFlash ref={flashRef} />
 
+            <style jsx global>{`
+                @media (max-width: 768px) {
+                    .section-container-wrapper {
+                        position: relative !important;
+                        height: auto !important;
+                        width: 100% !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        overflow: visible !important;
+                        background: #000;
+                    }
+                    .section-wrapper {
+                        position: relative !important;
+                        inset: auto !important;
+                        width: 100% !important;
+                        height: auto !important;
+                        opacity: 1 !important;
+                        pointer-events: auto !important;
+                        z-index: 1 !important;
+                        transform: none !important;
+                        display: block !important;
+                    }
+                    .section-indicators {
+                        display: none !important;
+                    }
+                }
+            `}</style>
+
             <div
                 ref={containerRef}
-                className="relative"
+                className="relative section-container-wrapper"
                 style={{
                     position: 'fixed',
                     top: 0,
@@ -94,7 +122,7 @@ export function SectionController() {
                 {sections.map(({ id, Component }, index) => (
                     <div
                         key={id}
-                        className="absolute inset-0"
+                        className="absolute inset-0 section-wrapper"
                         style={{
                             opacity: index === currentSection ? 1 : 0,
                             pointerEvents: index === currentSection ? 'auto' : 'none',
@@ -107,7 +135,9 @@ export function SectionController() {
             </div>
 
             {/* Section Indicators */}
-            <SectionIndicators currentSection={currentSection} />
+            <div className="section-indicators">
+                <SectionIndicators currentSection={currentSection} />
+            </div>
 
             {/* CV Download Button - Fixed position on right edge */}
             <CVDownloadButton />

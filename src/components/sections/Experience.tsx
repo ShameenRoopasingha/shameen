@@ -73,10 +73,13 @@ export function ExperienceSection() {
 
     }, [activeIndex, isJumping, EXPERIENCE.length]);
 
-    // Handle scroll within section
+    // Handle scroll within section (desktop only)
     useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
+
+        // Skip on mobile - let native scrolling work
+        if (window.innerWidth <= 768) return;
 
         const handleWheel = (e: WheelEvent) => {
             const now = Date.now();
@@ -198,17 +201,17 @@ export function ExperienceSection() {
             </div>
 
             {/* Main Content - Cinematic Layout */}
-            <div className="h-full flex flex-col pt-24 pb-8">
+            <div className="h-full flex flex-col pt-24 pb-8 lg:pb-8">
 
                 {/* Experience Content Panel - Upper 2/3 */}
-                <div className="content-panel flex-1 flex items-center justify-center px-8 lg:px-24">
-                    <div className="w-full max-w-5xl">
+                <div className="content-panel flex-1 flex items-center justify-center px-6 lg:px-24 overflow-y-auto lg:overflow-visible">
+                    <div className="w-full max-w-5xl py-4 lg:py-0">
                         {currentExperience && <ExperiencePanel experience={currentExperience} index={activeIndex} />}
                     </div>
                 </div>
 
                 {/* Timeline Strip - Lower Section */}
-                <div className="timeline-container h-40 relative">
+                <div className="timeline-container h-28 lg:h-40 relative flex-shrink-0">
                     <TimelineStrip
                         experiences={EXPERIENCE}
                         activeIndex={activeIndex}
@@ -219,6 +222,19 @@ export function ExperienceSection() {
 
             {/* Corner Decorations */}
             <CornerBrackets />
+
+            <style jsx>{`
+                @media (max-width: 768px) {
+                    .section-container {
+                        height: 100dvh !important; /* Use dynamic viewport height for mobile */
+                    }
+                    /* Allow text selection on mobile for better UX */
+                    .content-panel {
+                        -webkit-user-select: text;
+                        user-select: text;
+                    }
+                }
+            `}</style>
         </div>
     );
 }
@@ -230,8 +246,8 @@ interface ExperiencePanelProps {
 
 function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
     return (
-        <div className="flex gap-16 lg:gap-24 items-center">
-            {/* Left - Visual Element */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-24 items-start lg:items-center">
+            {/* Left - Visual Element (Hidden on mobile to save space) */}
             <div className="hidden lg:flex flex-col items-center">
                 {/* Large incident number */}
                 <div
@@ -255,11 +271,11 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
             </div>
 
             {/* Right - Content */}
-            <div className="flex-1">
+            <div className="flex-1 w-full">
                 {/* Status Badge */}
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-4 mb-4 lg:mb-6">
                     <div
-                        className="px-4 py-1.5 text-xs uppercase tracking-[0.3em]"
+                        className="px-3 py-1 lg:px-4 lg:py-1.5 text-[10px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.3em]"
                         style={{
                             border: '1px solid rgba(255, 153, 0, 0.4)',
                             color: 'var(--tva-amber)',
@@ -268,7 +284,7 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
                         Incident #{(index + 1).toString().padStart(3, '0')}
                     </div>
                     <div
-                        className="flex items-center gap-2 text-xs uppercase tracking-widest"
+                        className="flex items-center gap-2 text-[10px] lg:text-xs uppercase tracking-widest"
                         style={{ color: '#00FF00' }}
                     >
                         <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00FF00' }} />
@@ -278,11 +294,10 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
 
                 {/* Role Title */}
                 <h2
-                    className="text-5xl lg:text-6xl uppercase tracking-wide mb-4 font-light"
+                    className="text-3xl sm:text-4xl lg:text-6xl uppercase tracking-wide mb-3 lg:mb-4 font-light leading-tight"
                     style={{
                         color: 'var(--tva-amber)',
                         textShadow: '0 0 40px rgba(255, 153, 0, 0.3)',
-                        animation: 'titleGlow 3s ease-in-out infinite',
                     }}
                 >
                     {experience.role}
@@ -290,22 +305,22 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
 
                 {/* Company & Date */}
                 <div
-                    className="text-xl uppercase tracking-[0.2em] mb-8 flex items-center gap-4"
+                    className="text-sm sm:text-base lg:text-xl uppercase tracking-[0.15em] lg:tracking-[0.2em] mb-6 lg:mb-8 flex flex-wrap items-center gap-2 lg:gap-4"
                     style={{ color: 'rgba(255, 153, 0, 0.6)' }}
                 >
-                    <span>{experience.company}</span>
-                    <span style={{ color: 'rgba(255, 153, 0, 0.3)' }}>•</span>
-                    <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
+                    <span className="font-semibold">{experience.company}</span>
+                    <span className="hidden sm:inline" style={{ color: 'rgba(255, 153, 0, 0.3)' }}>•</span>
+                    <span className="w-full sm:w-auto mt-1 sm:mt-0" style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
                         {formatDate(experience.startDate)} - {experience.endDate ? formatDate(experience.endDate) : 'Present'}
                     </span>
                 </div>
 
                 {/* Description */}
                 <p
-                    className="text-lg leading-relaxed max-w-2xl"
+                    className="text-base lg:text-lg leading-relaxed max-w-2xl"
                     style={{
                         color: 'rgba(255, 153, 0, 0.5)',
-                        lineHeight: '1.8',
+                        lineHeight: '1.6',
                     }}
                 >
                     {experience.description}

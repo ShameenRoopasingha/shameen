@@ -334,9 +334,10 @@ export function ProjectsSection() {
                 <main className="projects-main" style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    paddingTop: '25px',
+                    paddingTop: currentProject ? '25px' : '0',
                     position: 'relative',
                     height: '100%',
+                    overflow: 'hidden',
                 }}>
                     {currentProject ? (
                         <CaseDetails project={currentProject} index={activeIndex} />

@@ -179,6 +179,14 @@ export function ContactSection() {
                     overflow: hidden;
                     background: #020202;
                 }
+                @media (max-width: 768px) {
+                    .contact-section {
+                        height: auto;
+                        min-height: 100dvh;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+                    }
+                }
                 
                 .boot-overlay {
                     position: absolute;

@@ -35,6 +35,9 @@ export function useGSAPObserver() {
             }
         };
 
+        // Disable observer on mobile (allow native scrolling)
+        if (window.innerWidth <= 768) return;
+
         observerRef.current = Observer.create({
             target: window,
             type: 'wheel,touch,pointer',
