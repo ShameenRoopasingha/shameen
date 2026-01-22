@@ -516,7 +516,7 @@ function CornerBrackets() {
     );
 }
 
-// Enhanced Mobile Timeline - Horizontal Nodes with Scroll Snap
+// Single Node Timeline with Fade Animations
 function MobileTimelineCarousel({
     experiences,
 }: {
@@ -524,203 +524,272 @@ function MobileTimelineCarousel({
     activeIndex: number;
     onNavigate: (index: number) => void;
 }) {
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [fadeState, setFadeState] = useState<'visible' | 'fadeOut' | 'fadeIn'>('visible');
+    const touchStartY = useRef(0);
+    const lastScrollTime = useRef(0);
 
-    // Update current index based on scroll position
+    const navigateToIndex = useCallback((newIndex: number) => {
+        if (newIndex < 0 || newIndex >= experiences.length || isAnimating) return;
+
+        setIsAnimating(true);
+        setFadeState('fadeOut');
+
+        // After fade out, change index and fade in
+        setTimeout(() => {
+            setCurrentIndex(newIndex);
+            setFadeState('fadeIn');
+
+            setTimeout(() => {
+                setFadeState('visible');
+                setIsAnimating(false);
+            }, 300);
+        }, 300);
+    }, [experiences.length, isAnimating]);
+
+    // Handle touch scroll
+    const handleTouchStart = (e: React.TouchEvent) => {
+        touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        const diff = touchStartY.current - e.changedTouches[0].clientY;
+        const threshold = 50;
+
+        if (Math.abs(diff) > threshold) {
+            if (diff > 0) {
+                // Scroll down -> next
+                navigateToIndex(currentIndex + 1);
+            } else {
+                // Scroll up -> prev
+                navigateToIndex(currentIndex - 1);
+            }
+        }
+    };
+
+    // Handle wheel scroll (for testing on desktop)
+    const handleWheel = useCallback((e: WheelEvent) => {
+        const now = Date.now();
+        if (now - lastScrollTime.current < 800) return; // Debounce
+        lastScrollTime.current = now;
+
+        if (e.deltaY > 0) {
+            navigateToIndex(currentIndex + 1);
+        } else if (e.deltaY < 0) {
+            navigateToIndex(currentIndex - 1);
+        }
+    }, [currentIndex, navigateToIndex]);
+
     useEffect(() => {
-        const container = scrollRef.current;
+        const container = containerRef.current;
         if (!container) return;
 
-        const handleScroll = () => {
-            const scrollTop = container.scrollTop;
-            const itemHeight = container.clientHeight * 0.85; // 85vh per item
-            const newIndex = Math.round(scrollTop / itemHeight);
-            setCurrentIndex(Math.min(newIndex, experiences.length - 1));
-        };
+        container.addEventListener('wheel', handleWheel, { passive: true });
+        return () => container.removeEventListener('wheel', handleWheel);
+    }, [handleWheel]);
 
-        container.addEventListener('scroll', handleScroll);
-        return () => container.removeEventListener('scroll', handleScroll);
-    }, [experiences.length]);
+    const currentExp = experiences[currentIndex];
+    if (!currentExp) return null;
 
-    const currentExp = experiences[currentIndex] || experiences[0];
+    // Calculate timeline offset for horizontal slide
+    const nodeWidth = 60; // px per node
+    const timelineOffset = -currentIndex * nodeWidth;
 
     return (
-        <div className="flex-1 flex flex-col" style={{ height: '100%' }}>
-            {/* Title Section - Above Timeline */}
+        <div
+            ref={containerRef}
+            className="flex-1 flex flex-col overflow-hidden"
+            style={{ height: '100%', touchAction: 'none' }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+        >
+            {/* Title Section - Above Node */}
             <div
-                className="text-center py-4 px-4"
+                className="text-center py-6 px-4"
                 style={{
-                    background: 'linear-gradient(180deg, rgba(5,4,4,0.95) 0%, transparent 100%)',
+                    opacity: fadeState === 'fadeOut' ? 0 : 1,
+                    transform: fadeState === 'fadeOut' ? 'translateY(-10px)' : 'translateY(0)',
+                    transition: 'all 0.3s ease-out',
                 }}
             >
+                {currentIndex === 0 && (
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                        <div
+                            className="w-2 h-2 rounded-full animate-pulse"
+                            style={{
+                                background: '#00FF00',
+                                boxShadow: '0 0 10px #00FF00',
+                            }}
+                        />
+                        <span
+                            className="text-xs uppercase tracking-wider"
+                            style={{ color: '#00FF00' }}
+                        >
+                            Current
+                        </span>
+                    </div>
+                )}
                 <h2
-                    className="text-lg uppercase tracking-widest mb-1 font-medium transition-all duration-300"
+                    className="text-xl uppercase tracking-widest mb-2 font-semibold"
                     style={{ color: 'var(--tva-amber)' }}
                 >
-                    {currentExp?.role || 'Timeline'}
+                    {currentExp.role}
                 </h2>
                 <p
-                    className="text-xs uppercase tracking-wider transition-all duration-300"
-                    style={{ color: 'rgba(255, 153, 0, 0.5)' }}
+                    className="text-sm uppercase tracking-wider"
+                    style={{ color: 'rgba(255, 153, 0, 0.6)' }}
                 >
-                    {currentExp?.company}
+                    {currentExp.company}
                 </p>
             </div>
 
-            {/* Horizontal Timeline Strip */}
+            {/* Single Centered Node with Horizontal Timeline */}
             <div
-                className="relative py-4 px-4"
+                className="relative py-6"
                 style={{
-                    background: 'rgba(5,4,4,0.8)',
-                    borderTop: '1px solid rgba(255, 153, 0, 0.1)',
-                    borderBottom: '1px solid rgba(255, 153, 0, 0.1)',
+                    background: 'rgba(5,4,4,0.9)',
+                    borderTop: '1px solid rgba(255, 153, 0, 0.2)',
+                    borderBottom: '1px solid rgba(255, 153, 0, 0.2)',
                 }}
             >
-                {/* Timeline Line */}
+                {/* Timeline Track - Slides Horizontally */}
                 <div
-                    className="absolute top-1/2 left-8 right-8 h-px -translate-y-1/2"
-                    style={{ background: 'linear-gradient(90deg, transparent, rgba(255,153,0,0.4), transparent)' }}
-                />
-
-                {/* Timeline Nodes */}
-                <div className="flex justify-between items-center px-4 relative">
+                    className="flex items-center justify-center overflow-visible"
+                    style={{
+                        transform: `translateX(${timelineOffset}px)`,
+                        transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                >
                     {experiences.map((exp, index) => (
                         <div
                             key={exp.id}
                             className="flex flex-col items-center"
+                            style={{
+                                width: `${nodeWidth}px`,
+                                flexShrink: 0,
+                            }}
                         >
+                            {/* Connecting Line Left */}
+                            {index > 0 && (
+                                <div
+                                    className="absolute h-px"
+                                    style={{
+                                        width: `${nodeWidth}px`,
+                                        left: `calc(50% - ${nodeWidth}px)`,
+                                        top: '50%',
+                                        background: 'rgba(255, 153, 0, 0.3)',
+                                        transform: `translateX(${(index - currentIndex) * nodeWidth}px)`,
+                                    }}
+                                />
+                            )}
+
                             {/* Node */}
                             <div
-                                className="w-4 h-4 rounded-full border-2 transition-all duration-300 flex items-center justify-center"
+                                className="relative z-10 rounded-full border-2 transition-all duration-500 flex items-center justify-center"
                                 style={{
+                                    width: index === currentIndex ? '24px' : '12px',
+                                    height: index === currentIndex ? '24px' : '12px',
                                     borderColor: index === currentIndex ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.3)',
-                                    background: index === currentIndex ? 'var(--tva-amber)' : 'transparent',
-                                    boxShadow: index === currentIndex ? '0 0 15px var(--tva-amber), 0 0 30px rgba(255,153,0,0.3)' : 'none',
-                                    transform: index === currentIndex ? 'scale(1.3)' : 'scale(1)',
+                                    background: index === currentIndex ? 'var(--tva-amber)' : 'rgba(5,4,4,1)',
+                                    boxShadow: index === currentIndex
+                                        ? '0 0 20px var(--tva-amber), 0 0 40px rgba(255,153,0,0.4), inset 0 0 10px rgba(0,0,0,0.3)'
+                                        : 'none',
                                 }}
                             >
                                 {index === currentIndex && (
-                                    <div className="w-1.5 h-1.5 rounded-full bg-black" />
+                                    <div className="w-2 h-2 rounded-full bg-black/50" />
                                 )}
                             </div>
+
                             {/* Year Label */}
                             <span
-                                className="text-xs mt-2 transition-all duration-300"
+                                className="mt-3 text-xs transition-all duration-300"
                                 style={{
-                                    color: index === currentIndex ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.3)',
-                                    fontWeight: index === currentIndex ? '600' : '400',
+                                    color: index === currentIndex ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.2)',
+                                    fontWeight: index === currentIndex ? '700' : '400',
+                                    fontSize: index === currentIndex ? '14px' : '10px',
                                 }}
                             >
-                                {new Date(exp.startDate).getFullYear().toString().slice(-2)}
+                                {new Date(exp.startDate).getFullYear()}
                             </span>
                         </div>
                     ))}
                 </div>
 
-                {/* Position Indicator */}
+                {/* Position Counter */}
                 <div
-                    className="text-center mt-2 text-xs uppercase tracking-widest"
+                    className="text-center mt-4 text-xs uppercase tracking-widest"
                     style={{ color: 'rgba(255, 153, 0, 0.4)' }}
                 >
                     {(currentIndex + 1).toString().padStart(2, '0')} / {experiences.length.toString().padStart(2, '0')}
                 </div>
             </div>
 
-            {/* Scrollable Cards */}
+            {/* Experience Card - Fades In/Out */}
             <div
-                ref={scrollRef}
-                className="flex-1"
+                className="flex-1 p-4 overflow-auto"
                 style={{
-                    overflowY: 'auto',
-                    scrollSnapType: 'y mandatory',
-                    WebkitOverflowScrolling: 'touch',
+                    opacity: fadeState === 'fadeOut' ? 0 : 1,
+                    transform: fadeState === 'fadeOut' ? 'translateY(20px) scale(0.95)' : 'translateY(0) scale(1)',
+                    transition: 'all 0.3s ease-out',
                 }}
             >
-                {experiences.map((exp, index) => (
+                <div
+                    className="relative mx-auto w-full max-w-md h-full"
+                    style={{
+                        background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.1) 0%, rgba(255, 153, 0, 0.02) 100%)',
+                        border: '1px solid rgba(255, 153, 0, 0.3)',
+                        padding: '20px',
+                    }}
+                >
+                    {/* Date Range */}
                     <div
-                        key={exp.id}
+                        className="text-sm uppercase tracking-wider mb-4 pb-3"
                         style={{
-                            minHeight: '85%',
-                            scrollSnapAlign: 'start',
-                            scrollSnapStop: 'always',
-                            padding: '16px',
-                            display: 'flex',
-                            flexDirection: 'column',
+                            color: 'rgba(255, 153, 0, 0.6)',
+                            borderBottom: '1px solid rgba(255, 153, 0, 0.15)',
                         }}
                     >
-                        {/* Experience Card - Centered */}
-                        <div
-                            className="flex-1 relative mx-auto w-full max-w-md"
-                            style={{
-                                background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.1) 0%, rgba(255, 153, 0, 0.02) 100%)',
-                                border: '1px solid rgba(255, 153, 0, 0.3)',
-                                padding: '20px',
-                            }}
-                        >
-                            {/* Current Badge */}
-                            {index === 0 && (
-                                <div className="flex items-center gap-2 mb-4">
-                                    <div
-                                        className="w-2 h-2 rounded-full animate-pulse"
-                                        style={{
-                                            background: '#00FF00',
-                                            boxShadow: '0 0 10px #00FF00',
-                                        }}
-                                    />
-                                    <span
-                                        className="text-xs uppercase tracking-wider"
-                                        style={{ color: '#00FF00' }}
-                                    >
-                                        Current
-                                    </span>
-                                </div>
-                            )}
-
-                            {/* Date Range */}
-                            <div
-                                className="text-sm uppercase tracking-wider mb-4 pb-3"
-                                style={{
-                                    color: 'rgba(255, 153, 0, 0.6)',
-                                    borderBottom: '1px solid rgba(255, 153, 0, 0.15)',
-                                }}
-                            >
-                                <span className="font-semibold" style={{ color: 'var(--tva-amber)' }}>
-                                    {exp.company}
-                                </span>
-                                <br />
-                                <span className="text-xs" style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
-                                    {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
-                                </span>
-                            </div>
-
-                            {/* Description */}
-                            <p
-                                className="text-sm leading-relaxed"
-                                style={{ color: 'rgba(255, 153, 0, 0.6)', lineHeight: '1.8' }}
-                            >
-                                {exp.description}
-                            </p>
-
-                            {/* Corner accents */}
-                            <div className="absolute top-0 left-0 w-4 h-4" style={{ borderTop: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }} />
-                            <div className="absolute top-0 right-0 w-4 h-4" style={{ borderTop: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }} />
-                            <div className="absolute bottom-0 left-0 w-4 h-4" style={{ borderBottom: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }} />
-                            <div className="absolute bottom-0 right-0 w-4 h-4" style={{ borderBottom: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }} />
-                        </div>
-
-                        {/* Scroll Indicator */}
-                        {index < experiences.length - 1 && (
-                            <div
-                                className="text-center mt-4 text-xs uppercase tracking-wider animate-pulse"
-                                style={{ color: 'rgba(255, 153, 0, 0.4)' }}
-                            >
-                                ↓ Scroll ↓
-                            </div>
-                        )}
+                        <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
+                            {formatDate(currentExp.startDate)} - {currentExp.endDate ? formatDate(currentExp.endDate) : 'Present'}
+                        </span>
                     </div>
-                ))}
+
+                    {/* Description */}
+                    <p
+                        className="text-sm leading-relaxed"
+                        style={{ color: 'rgba(255, 153, 0, 0.6)', lineHeight: '1.9' }}
+                    >
+                        {currentExp.description}
+                    </p>
+
+                    {/* Corner accents */}
+                    <div className="absolute top-0 left-0 w-5 h-5" style={{ borderTop: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }} />
+                    <div className="absolute top-0 right-0 w-5 h-5" style={{ borderTop: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }} />
+                    <div className="absolute bottom-0 left-0 w-5 h-5" style={{ borderBottom: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }} />
+                    <div className="absolute bottom-0 right-0 w-5 h-5" style={{ borderBottom: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }} />
+                </div>
             </div>
+
+            {/* Scroll Hint */}
+            {currentIndex < experiences.length - 1 && (
+                <div
+                    className="text-center pb-4 text-xs uppercase tracking-wider animate-pulse"
+                    style={{ color: 'rgba(255, 153, 0, 0.4)' }}
+                >
+                    ↓ Scroll for Next Experience ↓
+                </div>
+            )}
+            {currentIndex === experiences.length - 1 && (
+                <div
+                    className="text-center pb-4 text-xs uppercase tracking-wider"
+                    style={{ color: 'rgba(255, 153, 0, 0.3)' }}
+                >
+                    End of Timeline
+                </div>
+            )}
         </div>
     );
 }
