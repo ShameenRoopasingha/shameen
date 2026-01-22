@@ -49,8 +49,10 @@ export function SectionController() {
         setFlashRef(flashRef.current);
     }, [setFlashRef]);
 
-    // Handle section transitions
+    // Handle section transitions (desktop only)
     useEffect(() => {
+        // Skip on mobile - no transitions needed, all sections visible
+        if (isMobile) return;
         if (!containerRef.current) return;
 
         const sectionElements = containerRef.current.children;
@@ -82,7 +84,7 @@ export function SectionController() {
                 }
             );
         }
-    }, [currentSection, targetSection, isTransitioning]);
+    }, [currentSection, targetSection, isTransitioning, isMobile]);
 
     return (
         <>
