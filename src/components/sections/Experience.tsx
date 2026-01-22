@@ -231,122 +231,13 @@ export function ExperienceSection() {
                     </div>
                 )}
 
-                {/* Mobile: Card-Based Timeline */}
+                {/* Mobile: Swipeable Timeline Carousel */}
                 {isMobile && (
-                    <div className="flex-1 px-4 py-6">
-                        {/* Section Header */}
-                        <div className="mb-6 text-center">
-                            <h2
-                                className="text-2xl uppercase tracking-widest mb-2"
-                                style={{ color: 'var(--tva-amber)' }}
-                            >
-                                Timeline
-                            </h2>
-                            <p
-                                className="text-xs uppercase tracking-wider"
-                                style={{ color: 'rgba(255, 153, 0, 0.5)' }}
-                            >
-                                {EXPERIENCE.length} Temporal Records
-                            </p>
-                        </div>
-
-                        {/* Experience Cards */}
-                        <div className="space-y-4">
-                            {EXPERIENCE.map((exp, index) => (
-                                <div
-                                    key={exp.id}
-                                    style={{
-                                        background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.08) 0%, rgba(255, 153, 0, 0.02) 100%)',
-                                        border: '1px solid rgba(255, 153, 0, 0.25)',
-                                        padding: '16px',
-                                        position: 'relative',
-                                    }}
-                                >
-                                    {/* Card Header */}
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            {/* Index Number */}
-                                            <span
-                                                className="text-2xl font-thin"
-                                                style={{ color: index === 0 ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.3)' }}
-                                            >
-                                                {(index + 1).toString().padStart(2, '0')}
-                                            </span>
-                                            {/* Year Badge */}
-                                            <span
-                                                className="text-xs uppercase tracking-widest px-2 py-1"
-                                                style={{
-                                                    border: '1px solid rgba(255, 153, 0, 0.4)',
-                                                    color: 'var(--tva-amber)',
-                                                }}
-                                            >
-                                                {new Date(exp.startDate).getFullYear()}
-                                            </span>
-                                        </div>
-                                        {/* Current indicator */}
-                                        {index === 0 && (
-                                            <div className="flex items-center gap-2">
-                                                <div
-                                                    className="w-2 h-2 rounded-full"
-                                                    style={{
-                                                        background: '#00FF00',
-                                                        boxShadow: '0 0 8px #00FF00',
-                                                    }}
-                                                />
-                                                <span
-                                                    className="text-xs uppercase tracking-wider"
-                                                    style={{ color: '#00FF00' }}
-                                                >
-                                                    Current
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Role Title */}
-                                    <h3
-                                        className="text-lg uppercase tracking-wide mb-2 font-medium"
-                                        style={{ color: 'var(--tva-amber)' }}
-                                    >
-                                        {exp.role}
-                                    </h3>
-
-                                    {/* Company & Date */}
-                                    <div
-                                        className="text-xs uppercase tracking-wider mb-3 pb-3"
-                                        style={{
-                                            color: 'rgba(255, 153, 0, 0.6)',
-                                            borderBottom: '1px solid rgba(255, 153, 0, 0.1)',
-                                        }}
-                                    >
-                                        <span className="font-semibold">{exp.company}</span>
-                                        <span className="mx-2" style={{ color: 'rgba(255, 153, 0, 0.3)' }}>|</span>
-                                        <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
-                                            {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
-                                        </span>
-                                    </div>
-
-                                    {/* Description */}
-                                    <p
-                                        className="text-sm leading-relaxed"
-                                        style={{ color: 'rgba(255, 153, 0, 0.55)', lineHeight: '1.6' }}
-                                    >
-                                        {exp.description}
-                                    </p>
-
-                                    {/* Corner accents */}
-                                    <div
-                                        className="absolute top-0 left-0 w-3 h-3"
-                                        style={{ borderTop: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }}
-                                    />
-                                    <div
-                                        className="absolute bottom-0 right-0 w-3 h-3"
-                                        style={{ borderBottom: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <MobileTimelineCarousel
+                        experiences={EXPERIENCE}
+                        activeIndex={activeIndex}
+                        onNavigate={setActiveIndex}
+                    />
                 )}
             </div>
 
@@ -625,8 +516,158 @@ function CornerBrackets() {
     );
 }
 
+// Mobile Timeline Carousel - Scroll Snap Vertical Navigation
+function MobileTimelineCarousel({
+    experiences,
+}: {
+    experiences: Experience[];
+    activeIndex: number;
+    onNavigate: (index: number) => void;
+}) {
+    return (
+        <div
+            className="flex-1"
+            style={{
+                overflowY: 'auto',
+                scrollSnapType: 'y mandatory',
+                WebkitOverflowScrolling: 'touch',
+            }}
+        >
+            {experiences.map((exp, index) => (
+                <div
+                    key={exp.id}
+                    style={{
+                        minHeight: '80vh',
+                        scrollSnapAlign: 'start',
+                        scrollSnapStop: 'always',
+                        padding: '20px 16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <span
+                                className="text-3xl font-thin"
+                                style={{ color: 'var(--tva-amber)' }}
+                            >
+                                {(index + 1).toString().padStart(2, '0')}
+                            </span>
+                            <span
+                                className="text-xs uppercase tracking-widest px-3 py-1"
+                                style={{
+                                    border: '1px solid rgba(255, 153, 0, 0.5)',
+                                    color: 'var(--tva-amber)',
+                                }}
+                            >
+                                {new Date(exp.startDate).getFullYear()}
+                            </span>
+                        </div>
+                        <div
+                            className="text-xs uppercase tracking-wider"
+                            style={{ color: 'rgba(255, 153, 0, 0.5)' }}
+                        >
+                            {(index + 1).toString().padStart(2, '0')} / {experiences.length.toString().padStart(2, '0')}
+                        </div>
+                    </div>
+
+                    {/* Experience Card */}
+                    <div
+                        className="flex-1 relative"
+                        style={{
+                            background: 'linear-gradient(135deg, rgba(255, 153, 0, 0.1) 0%, rgba(255, 153, 0, 0.02) 100%)',
+                            border: '1px solid rgba(255, 153, 0, 0.3)',
+                            padding: '20px',
+                        }}
+                    >
+                        {/* Current Indicator */}
+                        {index === 0 && (
+                            <div className="flex items-center gap-2 mb-4">
+                                <div
+                                    className="w-2 h-2 rounded-full"
+                                    style={{
+                                        background: '#00FF00',
+                                        boxShadow: '0 0 10px #00FF00',
+                                    }}
+                                />
+                                <span
+                                    className="text-xs uppercase tracking-wider"
+                                    style={{ color: '#00FF00' }}
+                                >
+                                    Current Position
+                                </span>
+                            </div>
+                        )}
+
+                        {/* Role Title */}
+                        <h3
+                            className="text-xl uppercase tracking-wide mb-3 font-medium"
+                            style={{ color: 'var(--tva-amber)' }}
+                        >
+                            {exp.role}
+                        </h3>
+
+                        {/* Company & Date */}
+                        <div
+                            className="text-sm uppercase tracking-wider mb-4 pb-4"
+                            style={{
+                                color: 'rgba(255, 153, 0, 0.7)',
+                                borderBottom: '1px solid rgba(255, 153, 0, 0.15)',
+                            }}
+                        >
+                            <span className="font-semibold">{exp.company}</span>
+                            <span className="mx-2 opacity-50">|</span>
+                            <span style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
+                                {formatDate(exp.startDate)} - {exp.endDate ? formatDate(exp.endDate) : 'Present'}
+                            </span>
+                        </div>
+
+                        {/* Description */}
+                        <p
+                            className="text-sm leading-relaxed"
+                            style={{ color: 'rgba(255, 153, 0, 0.6)', lineHeight: '1.8' }}
+                        >
+                            {exp.description}
+                        </p>
+
+                        {/* Corner accents */}
+                        <div
+                            className="absolute top-0 left-0 w-4 h-4"
+                            style={{ borderTop: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }}
+                        />
+                        <div
+                            className="absolute top-0 right-0 w-4 h-4"
+                            style={{ borderTop: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }}
+                        />
+                        <div
+                            className="absolute bottom-0 left-0 w-4 h-4"
+                            style={{ borderBottom: '2px solid var(--tva-amber)', borderLeft: '2px solid var(--tva-amber)' }}
+                        />
+                        <div
+                            className="absolute bottom-0 right-0 w-4 h-4"
+                            style={{ borderBottom: '2px solid var(--tva-amber)', borderRight: '2px solid var(--tva-amber)' }}
+                        />
+                    </div>
+
+                    {/* Scroll Indicator */}
+                    {index < experiences.length - 1 && (
+                        <div
+                            className="text-center mt-4 text-xs uppercase tracking-wider animate-pulse"
+                            style={{ color: 'rgba(255, 153, 0, 0.4)' }}
+                        >
+                            ↓ Scroll for Next ↓
+                        </div>
+                    )}
+                </div>
+            ))}
+        </div>
+    );
+}
+
 ExperienceSection.displayName = 'ExperienceSection';
 ExperiencePanel.displayName = 'ExperiencePanel';
 TimelineStrip.displayName = 'TimelineStrip';
 TimelineNode.displayName = 'TimelineNode';
 CornerBrackets.displayName = 'CornerBrackets';
+MobileTimelineCarousel.displayName = 'MobileTimelineCarousel';
