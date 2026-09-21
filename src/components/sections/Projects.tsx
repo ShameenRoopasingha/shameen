@@ -369,7 +369,8 @@ export function ProjectsSection() {
                     .projects-header > div:last-child { gap: 15px !important; }
                     .projects-header > div:last-child > div:first-child { display: none !important; }
                     .projects-grid {
-                        grid-template-columns: 1fr !important;
+                        display: flex !important;
+                        flex-direction: column !important;
                         left: 15px !important;
                         right: 15px !important;
                         bottom: 20px !important;
@@ -381,8 +382,18 @@ export function ProjectsSection() {
                         padding-right: 0 !important;
                         border-bottom: 1px solid rgba(255, 153, 0, 0.12) !important;
                         padding-bottom: 20px !important;
+                        min-height: auto !important;
+                        flex: none !important;
                     }
-                    .projects-main { padding-top: 15px !important; }
+                    .custom-scrollbar {
+                        overflow-y: visible !important;
+                        flex: none !important;
+                    }
+                    .projects-main { 
+                        padding-top: 15px !important; 
+                        min-height: 400px !important; 
+                        flex: none !important; 
+                    }
                 }
                 @media (max-width: 480px) {
                     .projects-header span { font-size: 10px !important; }

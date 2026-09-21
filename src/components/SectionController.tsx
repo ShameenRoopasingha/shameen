@@ -117,7 +117,7 @@ interface SectionIndicatorsProps {
 function SectionIndicators({ currentSection }: SectionIndicatorsProps) {
     return (
         <div
-            className="fixed right-2 md:right-4 lg:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4"
+            className="fixed right-2 md:right-4 lg:right-8 top-1/2 -translate-y-1/2 flex-col gap-4 hidden md:flex"
             style={{ zIndex: 20 }}
         >
             {sections.map((section, index) => (

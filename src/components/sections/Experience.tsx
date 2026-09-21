@@ -138,19 +138,22 @@ export function ExperienceSection() {
             />
 
             {/* Top HUD Bar */}
-            <div className="absolute top-0 left-0 right-0 h-16 flex items-center justify-between px-8 lg:px-16" style={{ borderBottom: '1px solid rgba(255, 153, 0, 0.1)' }}>
-                <div className="flex items-center gap-4">
-                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--tva-amber)', boxShadow: '0 0 10px var(--tva-amber)' }} />
-                    <span className="text-xs uppercase tracking-[0.4em]" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
+            <div className="absolute top-0 left-0 right-0 h-16 flex items-center justify-between px-4 lg:px-16" style={{ borderBottom: '1px solid rgba(255, 153, 0, 0.1)' }}>
+                <div className="flex items-center gap-2 lg:gap-4">
+                    <div className="w-2 h-2 rounded-full animate-pulse flex-shrink-0" style={{ background: 'var(--tva-amber)', boxShadow: '0 0 10px var(--tva-amber)' }} />
+                    <span className="text-[9px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.4em] hidden sm:block" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
                         Sacred Timeline
+                    </span>
+                    <span className="text-[9px] uppercase tracking-[0.2em] sm:hidden" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
+                        Timeline
                     </span>
                 </div>
 
-                <div className="flex items-center gap-8">
-                    <span className="text-xs uppercase tracking-widest" style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
+                <div className="flex items-center gap-4 lg:gap-8">
+                    <span className="text-[9px] lg:text-xs uppercase tracking-widest hidden sm:block" style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
                         Temporal Coordinate
                     </span>
-                    <span className="text-2xl font-light tracking-widest" style={{ color: 'var(--tva-amber)' }}>
+                    <span className="text-xl lg:text-2xl font-light tracking-widest flex-shrink-0" style={{ color: 'var(--tva-amber)' }}>
                         {(activeIndex + 1).toString().padStart(2, '0')}
                         <span style={{ color: 'rgba(255, 153, 0, 0.3)' }}> / </span>
                         {EXPERIENCE.length.toString().padStart(2, '0')}
@@ -343,13 +346,17 @@ function TimelineNode({ experience, index, isActive, isPast, onClick }: Timeline
         <div 
             className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${isActive ? 'scale-110' : 'opacity-50 hover:opacity-100'}`}
             onClick={onClick}
+            style={{ minWidth: '40px' }}
         >
             <div 
-                className={`w-4 h-4 rounded-full border-2 transition-all duration-300 ${isActive ? 'border-amber-500 bg-amber-500 shadow-[0_0_15px_rgba(255,153,0,0.8)]' : isPast ? 'border-amber-500 bg-amber-900' : 'border-neutral-600 bg-black'}`}
+                className={`w-3 h-3 md:w-4 md:h-4 rounded-full border-2 transition-all duration-300 ${isActive ? 'border-amber-500 bg-amber-500 shadow-[0_0_15px_rgba(255,153,0,0.8)]' : isPast ? 'border-amber-500 bg-amber-900' : 'border-neutral-600 bg-black'}`}
                 style={isActive ? { borderColor: 'var(--tva-amber)', backgroundColor: 'var(--tva-amber)' } : isPast ? { borderColor: 'var(--tva-amber)' } : {}}
             />
-            <div className="mt-4 text-center">
-                <div className="text-xs font-mono tracking-widest" style={{ color: isActive ? 'var(--tva-amber)' : 'rgba(255, 255, 255, 0.5)' }}>
+            <div className={`mt-2 md:mt-4 text-center ${isActive ? 'block' : 'hidden md:block'}`}>
+                <div 
+                    className="text-[8px] md:text-xs font-mono tracking-wider md:tracking-widest max-w-[70px] md:max-w-[120px]" 
+                    style={{ color: isActive ? 'var(--tva-amber)' : 'rgba(255, 255, 255, 0.5)' }}
+                >
                     {experience.year}
                 </div>
             </div>
