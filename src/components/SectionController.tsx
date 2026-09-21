@@ -41,6 +41,7 @@ export function SectionController() {
     // Handle section transitions
     useEffect(() => {
         if (!containerRef.current) return;
+        if (typeof window !== 'undefined' && window.innerWidth <= 768) return;
 
         const sectionElements = containerRef.current.children;
 
@@ -79,30 +80,58 @@ export function SectionController() {
 
             <div
                 ref={containerRef}
-                className="relative"
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100dvh',
-                    zIndex: 10,
-                }}
+                className="section-controller-container"
             >
                 {sections.map(({ id, Component }, index) => (
                     <div
                         key={id}
-                        className="absolute inset-0"
+                        className="section-wrapper"
                         style={{
-                            opacity: index === currentSection ? 1 : 0,
-                            pointerEvents: index === currentSection ? 'auto' : 'none',
-                            zIndex: index === currentSection ? 1 : 0,
-                        }}
+                            '--desktop-opacity': index === currentSection ? 1 : 0,
+                            '--desktop-pointer': index === currentSection ? 'auto' : 'none',
+                            '--desktop-z': index === currentSection ? 1 : 0,
+                        } as React.CSSProperties}
                     >
                         <Component />
                     </div>
                 ))}
             </div>
+
+            <style jsx>{`
+                .section-controller-container {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100dvh;
+                    z-index: 10;
+                }
+                .section-wrapper {
+                    position: absolute;
+                    inset: 0;
+                    opacity: var(--desktop-opacity);
+                    pointer-events: var(--desktop-pointer);
+                    z-index: var(--desktop-z);
+                }
+                
+                @media (max-width: 768px) {
+                    .section-controller-container {
+                        position: relative;
+                        height: auto;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .section-wrapper {
+                        position: relative;
+                        height: auto;
+                        min-height: 100dvh;
+                        opacity: 1 !important;
+                        pointer-events: auto !important;
+                        z-index: 1 !important;
+                        transform: none !important;
+                    }
+                }
+            `}</style>
 
             {/* Section Indicators */}
             <SectionIndicators currentSection={currentSection} />

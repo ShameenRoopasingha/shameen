@@ -125,6 +125,12 @@ export function ReferencesSection() {
                     overflow: hidden;
                     background: #020202;
                 }
+                @media (max-width: 768px) {
+                    .refs-section {
+                        height: auto;
+                        min-height: 100dvh;
+                    }
+                }
                 
                 .boot-overlay {
                     position: absolute;
@@ -177,7 +183,15 @@ export function ReferencesSection() {
                     transition: opacity 0.6s ease;
                 }
                 @media (max-width: 1024px) { .refs-main { padding: 0 40px; } }
-                @media (max-width: 768px) { .refs-main { padding: 80px 25px 40px; align-items: flex-start; overflow-y: auto; } }
+                @media (max-width: 768px) { 
+                    .refs-main { 
+                        position: relative;
+                        padding: 80px 25px 40px; 
+                        align-items: flex-start; 
+                        min-height: 100dvh;
+                        height: auto;
+                    } 
+                }
                 
                 .refs-content {
                     display: flex;

@@ -100,12 +100,7 @@ export function ExperienceSection() {
     return (
         <div
             ref={containerRef}
-            className="section-container relative"
-            style={{
-                height: '100dvh',
-                width: '100%',
-                overflow: 'hidden',
-            }}
+            className="experience-container section-container relative"
         >
             {/* Cinematic Background Layers */}
             <div className="absolute inset-0">
@@ -215,6 +210,20 @@ export function ExperienceSection() {
 
             {/* Corner Decorations */}
             <CornerBrackets />
+
+            <style jsx>{`
+                .experience-container {
+                    height: 100dvh;
+                    width: 100%;
+                    overflow: hidden;
+                }
+                @media (max-width: 768px) {
+                    .experience-container {
+                        height: auto;
+                        min-height: 100dvh;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

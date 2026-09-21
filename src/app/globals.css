@@ -43,6 +43,18 @@ body {
   width: 100%;
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+  }
+}
+
+html, body {
   background: var(--tva-void);
   color: var(--tva-amber);
   font-family: var(--font-mono);

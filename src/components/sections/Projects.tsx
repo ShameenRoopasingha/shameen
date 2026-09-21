@@ -25,14 +25,7 @@ export function ProjectsSection() {
     return (
         <div
             ref={containerRef}
-            className="section-container projects-section"
-            style={{
-                position: 'relative',
-                height: '100dvh',
-                width: '100%',
-                overflow: 'hidden',
-                background: '#030303',
-            }}
+            className="projects-container section-container projects-section"
         >
             {/* === LAYERED BACKGROUND EFFECTS === */}
 
@@ -361,6 +354,19 @@ export function ProjectsSection() {
 
             {/* Responsive Styles */}
             <style jsx global>{`
+                .projects-container {
+                    position: relative;
+                    height: 100dvh;
+                    width: 100%;
+                    overflow: hidden;
+                    background: #030303;
+                }
+                @media (max-width: 768px) {
+                    .projects-container {
+                        height: auto;
+                        min-height: 100dvh;
+                    }
+                }
                 @media (max-width: 1024px) {
                     .projects-header { padding: 0 25px !important; }
                     .projects-grid { left: 25px !important; right: 25px !important; gap: 30px !important; }
@@ -379,13 +385,18 @@ export function ProjectsSection() {
                     .projects-header > div:last-child { gap: 15px !important; }
                     .projects-header > div:last-child > div:first-child { display: none !important; }
                     .projects-grid {
+                        position: relative !important;
+                        top: 80px !important;
                         display: flex !important;
                         flex-direction: column !important;
-                        left: 15px !important;
-                        right: 15px !important;
-                        bottom: 20px !important;
+                        left: auto !important;
+                        right: auto !important;
+                        bottom: auto !important;
+                        padding: 0 15px 40px 15px !important;
                         gap: 20px !important;
-                        overflow-y: auto !important;
+                        overflow-y: visible !important;
+                        height: auto !important;
+                        min-height: 100dvh !important;
                     }
                     .projects-sidebar {
                         border-right: none !important;

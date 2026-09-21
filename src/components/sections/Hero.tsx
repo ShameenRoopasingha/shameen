@@ -238,6 +238,12 @@ export function Hero() {
                     overflow: hidden;
                     background: #020202;
                 }
+                @media (max-width: 768px) {
+                    .hero-section {
+                        height: auto;
+                        min-height: 100dvh;
+                    }
+                }
                 
                 .boot-overlay {
                     position: absolute;
@@ -334,7 +340,15 @@ export function Hero() {
                     transition: opacity 0.8s ease, transform 0.8s ease;
                 }
                 @media (max-width: 1024px) { .hero-main { padding: 0 40px; } }
-                @media (max-width: 768px) { .hero-main { padding: 80px 25px 40px; align-items: flex-start; overflow-y: auto; } }
+                @media (max-width: 768px) { 
+                    .hero-main { 
+                        position: relative;
+                        padding: 80px 25px 40px; 
+                        align-items: flex-start;
+                        min-height: 100dvh;
+                        height: auto;
+                    } 
+                }
                 
                 .hero-content {
                     display: flex;

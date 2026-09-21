@@ -22,6 +22,11 @@ export function useGSAPObserver() {
         if (typeof window === 'undefined') return;
 
         const handleNavigation = (direction: 'next' | 'prev', e?: Event) => {
+            // Disable GSAP section navigation entirely on mobile devices
+            if (window.innerWidth <= 768) {
+                return;
+            }
+
             // Ignore events that originate from a custom scrollable area
             if (e && e.target instanceof Element && e.target.closest('.custom-scrollbar')) {
                 return;

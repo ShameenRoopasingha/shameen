@@ -12,7 +12,7 @@ const Scene = dynamic(
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050404]">
+    <main className="relative min-h-screen md:overflow-hidden bg-[#050404]">
       {/* 3D Background Canvas */}
       <Scene />
 
