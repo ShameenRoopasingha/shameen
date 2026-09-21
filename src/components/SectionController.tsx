@@ -117,14 +117,9 @@ interface SectionIndicatorsProps {
 function SectionIndicators({ currentSection }: SectionIndicatorsProps) {
     return (
         <div
-            className="fixed right-2 md:right-4 lg:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 landscape-mobile-hidden"
+            className="fixed right-2 md:right-4 lg:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4"
             style={{ zIndex: 20 }}
         >
-            <style jsx>{`
-                @media (max-width: 932px) and (orientation: landscape) {
-                    .landscape-mobile-hidden { display: none !important; }
-                }
-            `}</style>
             {sections.map((section, index) => (
                 <div
                     key={section.id}

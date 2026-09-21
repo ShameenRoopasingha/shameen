@@ -3,8 +3,6 @@
 import dynamic from 'next/dynamic';
 import { ScanlineOverlay } from '@/components/ui/ScanlineOverlay';
 import { SectionController } from '@/components/SectionController';
-import { DeviceOrientationAdvice } from '@/components/ui/DeviceOrientationAdvice';
-import { TempadLandscapeMode } from '@/components/tempad/TempadLandscapeMode';
 
 // Dynamically import the 3D Scene to avoid SSR issues
 const Scene = dynamic(
@@ -18,16 +16,11 @@ export default function Home() {
       {/* 3D Background Canvas */}
       <Scene />
 
-      {/* Section Controller wrapped in Mobile Landscape Device mode */}
-      <TempadLandscapeMode>
-        <SectionController />
-      </TempadLandscapeMode>
+      {/* Section Controller handles all sections */}
+      <SectionController />
 
       {/* Global Scanline Overlay */}
       <ScanlineOverlay />
-
-      {/* Orientation Advice for Mobile */}
-      <DeviceOrientationAdvice />
     </main>
   );
 }
