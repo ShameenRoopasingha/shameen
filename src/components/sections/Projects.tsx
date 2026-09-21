@@ -275,7 +275,8 @@ export function ProjectsSection() {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '6px',
-                        overflowY: 'auto',
+                        overflowY: 'scroll',
+                        overflowX: 'hidden',
                         paddingRight: '10px',
                         marginRight: '-10px',
                     }}>
