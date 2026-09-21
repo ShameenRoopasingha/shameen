@@ -42,6 +42,7 @@ body {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  overscroll-behavior: none;
   background: var(--tva-void);
   color: var(--tva-amber);
   font-family: var(--font-mono);

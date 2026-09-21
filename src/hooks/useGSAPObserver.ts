@@ -21,7 +21,12 @@ export function useGSAPObserver() {
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
-        const handleNavigation = (direction: 'next' | 'prev') => {
+        const handleNavigation = (direction: 'next' | 'prev', e?: Event) => {
+            // Ignore events that originate from a custom scrollable area
+            if (e && e.target instanceof Element && e.target.closest('.custom-scrollbar')) {
+                return;
+            }
+
             const now = Date.now();
             if (isTransitioning || now - lastScrollTime.current < scrollCooldown) {
                 return;
@@ -39,10 +44,10 @@ export function useGSAPObserver() {
             target: window,
             type: 'wheel,touch,pointer',
             wheelSpeed: -1,
-            onUp: () => handleNavigation('next'),
-            onDown: () => handleNavigation('prev'),
+            onUp: (self) => handleNavigation('next', self.event),
+            onDown: (self) => handleNavigation('prev', self.event),
             tolerance: 10,
-            preventDefault: true,
+            preventDefault: false, // Let native scroll work for .custom-scrollbar
         });
 
         // Keyboard navigation
