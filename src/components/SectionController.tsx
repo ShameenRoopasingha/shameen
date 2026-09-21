@@ -8,7 +8,7 @@ import { ProjectsSection } from '@/components/sections/Projects';
 import { SkillsSection } from '@/components/sections/Skills';
 import { ReferencesSection } from '@/components/sections/References';
 import { ContactSection } from '@/components/sections/Contact';
-import { useAppSelector } from '@/store/hooks';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { useWarpTransition } from '@/hooks/useWarpTransition';
 import { useGSAPObserver } from '@/hooks/useGSAPObserver';
 import { WarpFlash } from '@/components/ui/WarpFlash';
@@ -25,6 +25,7 @@ const sections = [
 export function SectionController() {
     const containerRef = useRef<HTMLDivElement>(null);
     const flashRef = useRef<HTMLDivElement>(null);
+    const dispatch = useAppDispatch();
     const { currentSection, targetSection, isTransitioning } = useAppSelector(
         (state) => state.navigation
     );
@@ -38,7 +39,7 @@ export function SectionController() {
         setFlashRef(flashRef.current);
     }, [setFlashRef]);
 
-    // Handle section transitions
+    // Handle section transitions for desktop
     useEffect(() => {
         if (!containerRef.current) return;
         if (typeof window !== 'undefined' && window.innerWidth <= 768) return;
@@ -73,6 +74,30 @@ export function SectionController() {
             );
         }
     }, [currentSection, targetSection, isTransitioning]);
+
+    // Handle mobile scroll sync
+    useEffect(() => {
+        if (typeof window === 'undefined' || window.innerWidth > 768) return;
+        if (!containerRef.current) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(containerRef.current!.children).indexOf(entry.target);
+                        if (index !== -1 && index !== currentSection) {
+                            dispatch({ type: 'navigation/setCurrentSection', payload: index });
+                        }
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+
+        Array.from(containerRef.current.children).forEach((child) => observer.observe(child));
+
+        return () => observer.disconnect();
+    }, [dispatch, currentSection]);
 
     return (
         <>
@@ -144,19 +169,30 @@ interface SectionIndicatorsProps {
 }
 
 function SectionIndicators({ currentSection }: SectionIndicatorsProps) {
+    const dispatch = useAppDispatch();
     return (
         <div
-            className="fixed right-2 md:right-4 lg:right-8 top-1/2 -translate-y-1/2 flex-col gap-4 hidden md:flex"
+            className="fixed right-2 md:right-4 lg:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 cursor-pointer"
             style={{ zIndex: 20 }}
         >
             {sections.map((section, index) => (
                 <div
                     key={section.id}
                     className="relative group flex items-center justify-end gap-3"
+                    onClick={() => {
+                        if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                            const wrappers = document.querySelectorAll('.section-wrapper');
+                            if (wrappers[index]) {
+                                wrappers[index].scrollIntoView({ behavior: 'smooth' });
+                            }
+                        } else {
+                            dispatch({ type: 'navigation/setTargetSection', payload: index });
+                        }
+                    }}
                 >
                     {/* Label */}
                     <span
-                        className="text-xs uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        className="text-xs uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden md:block"
                         style={{ color: 'rgba(255, 153, 0, 0.7)' }}
                     >
                         {section.label}

@@ -172,39 +172,43 @@ export function ExperienceSection() {
                 </div>
             </div>
 
-            {/* Mobile Layout - Vertical Feed */}
-            <div className="h-full flex flex-col pt-20 pb-4 md:hidden overflow-y-auto px-4 custom-scrollbar">
-                <div className="flex flex-col gap-12 pb-20 mt-4 relative">
-                    {/* Vertical line connecting nodes */}
-                    <div 
-                        className="absolute left-[9px] top-4 bottom-0 w-px"
-                        style={{ background: 'linear-gradient(180deg, var(--tva-amber), transparent)' }}
+            {/* Mobile Layout - Cinematic */}
+            <div 
+                className="min-h-[100dvh] w-full flex-col pt-20 pb-8 md:hidden flex justify-between relative"
+                onTouchStart={(e) => {
+                    const touch = e.touches[0];
+                    containerRef.current?.setAttribute('data-touch-start', touch.clientX.toString());
+                }}
+                onTouchEnd={(e) => {
+                    const startXStr = containerRef.current?.getAttribute('data-touch-start');
+                    if (!startXStr) return;
+                    const startX = parseFloat(startXStr);
+                    const endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) {
+                            jumpToExperience(Math.min(EXPERIENCE.length - 1, activeIndex + 1));
+                        } else {
+                            jumpToExperience(Math.max(0, activeIndex - 1));
+                        }
+                    }
+                }}
+            >
+                <div className="flex-1 flex flex-col justify-center px-4">
+                    <MobileExperiencePanel experience={currentExperience} index={activeIndex} />
+                </div>
+                
+                <div className="h-24 relative flex-shrink-0 mt-8 mb-6">
+                    <TimelineStrip
+                        experiences={EXPERIENCE}
+                        activeIndex={activeIndex}
+                        onSelect={jumpToExperience}
                     />
-                    
-                    {EXPERIENCE.map((exp, idx) => (
-                        <div key={exp.id} className="flex gap-6 relative z-10">
-                            {/* Node */}
-                            <div className="flex flex-col items-center flex-shrink-0 pt-2">
-                                <div className="w-5 h-5 rounded-full border-2 bg-black border-amber-500 shadow-[0_0_10px_rgba(255,153,0,0.5)]" />
-                            </div>
-                            
-                            {/* Content */}
-                            <div className="flex-1">
-                                <div className="text-[10px] font-mono tracking-widest mb-2" style={{ color: 'var(--tva-amber)' }}>
-                                    {exp.year}
-                                </div>
-                                <h2 className="text-2xl uppercase tracking-wide mb-1 font-light leading-tight" style={{ color: 'var(--tva-amber)' }}>
-                                    {exp.role}
-                                </h2>
-                                <div className="text-xs uppercase tracking-[0.1em] mb-3" style={{ color: 'rgba(255, 153, 0, 0.6)' }}>
-                                    {exp.company}
-                                </div>
-                                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
-                                    {exp.description}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
+                    <div className="absolute bottom-[-15px] left-0 right-0 text-center">
+                        <span className="text-[8px] uppercase tracking-[0.3em] opacity-50" style={{ color: 'var(--tva-amber)' }}>
+                            Swipe to navigate timeline
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -317,6 +321,88 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
     );
 }
 
+function MobileExperiencePanel({ experience, index }: ExperiencePanelProps) {
+    return (
+        <div className="flex flex-col gap-6 md:hidden px-2 mt-4 relative z-10">
+            {/* Top row: Number + Badge */}
+            <div className="flex items-center gap-6">
+                {/* Large incident number */}
+                <div className="relative">
+                    <div
+                        className="text-7xl font-thin tracking-tight"
+                        style={{
+                            color: 'transparent',
+                            WebkitTextStroke: '2px var(--tva-amber)',
+                            opacity: 0.8,
+                            lineHeight: 1
+                        }}
+                    >
+                        {(index + 1).toString().padStart(2, '0')}
+                    </div>
+                    {/* Vertical line descending */}
+                    <div
+                        className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-px h-16"
+                        style={{
+                            background: 'linear-gradient(180deg, var(--tva-amber), transparent)',
+                        }}
+                    />
+                </div>
+                
+                {/* Status Badge */}
+                <div
+                    className="flex items-center"
+                    style={{
+                        border: '1px solid rgba(255, 153, 0, 0.4)',
+                        padding: '6px 12px',
+                        background: 'rgba(0,0,0,0.5)'
+                    }}
+                >
+                    <span className="text-[10px] uppercase tracking-[0.2em] whitespace-nowrap" style={{ color: 'var(--tva-amber)' }}>
+                        Incident #{(index + 1).toString().padStart(3, '0')}
+                    </span>
+                    <span className="mx-2 text-[10px]" style={{ color: 'rgba(255,153,0,0.4)' }}>•</span>
+                    <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest whitespace-nowrap" style={{ color: '#00FF00' }}>
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00FF00' }} />
+                        Verified
+                    </span>
+                </div>
+            </div>
+
+            {/* Role Title */}
+            <h2
+                className="text-3xl uppercase tracking-widest mt-2 font-light leading-tight"
+                style={{
+                    color: 'var(--tva-amber)',
+                    textShadow: '0 0 20px rgba(255, 153, 0, 0.4)',
+                }}
+            >
+                {experience.role}
+            </h2>
+
+            {/* Company & Date */}
+            <div
+                className="text-[10px] uppercase tracking-[0.2em] flex items-center gap-2 flex-wrap"
+                style={{ color: 'rgba(255, 153, 0, 0.8)' }}
+            >
+                <span>{experience.company}</span>
+                <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>•</span>
+                <span style={{ color: 'rgba(255, 153, 0, 0.8)' }}>{experience.year}</span>
+            </div>
+
+            {/* Description */}
+            <p
+                className="text-xs leading-relaxed"
+                style={{
+                    color: 'rgba(255, 153, 0, 0.6)',
+                    lineHeight: '1.6',
+                }}
+            >
+                {experience.description}
+            </p>
+        </div>
+    );
+}
+
 interface TimelineStripProps {
     experiences: Experience[];
     activeIndex: number;
@@ -325,7 +411,7 @@ interface TimelineStripProps {
 
 function TimelineStrip({ experiences, activeIndex, onSelect }: TimelineStripProps) {
     return (
-        <div className="absolute inset-0 flex flex-col justify-center px-8 lg:px-24">
+        <div className="absolute inset-0 flex flex-col justify-center px-4 md:px-8 lg:px-24">
             {/* Main Timeline Line */}
             <div className="relative h-20 flex items-center">
                 {/* Background line */}
@@ -393,10 +479,10 @@ function TimelineNode({ experience, index, isActive, isPast, onClick }: Timeline
                 className={`w-3 h-3 md:w-4 md:h-4 rounded-full border-2 transition-all duration-300 ${isActive ? 'border-amber-500 bg-amber-500 shadow-[0_0_15px_rgba(255,153,0,0.8)]' : isPast ? 'border-amber-500 bg-amber-900' : 'border-neutral-600 bg-black'}`}
                 style={isActive ? { borderColor: 'var(--tva-amber)', backgroundColor: 'var(--tva-amber)' } : isPast ? { borderColor: 'var(--tva-amber)' } : {}}
             />
-            <div className={`mt-2 md:mt-4 text-center ${isActive ? 'block' : 'hidden md:block'}`}>
+            <div className="mt-2 md:mt-4 text-center">
                 <div 
-                    className="text-[8px] md:text-xs font-mono tracking-wider md:tracking-widest max-w-[70px] md:max-w-[120px]" 
-                    style={{ color: isActive ? 'var(--tva-amber)' : 'rgba(255, 255, 255, 0.5)' }}
+                    className="text-[8px] md:text-xs font-mono tracking-wider md:tracking-widest max-w-[80px] md:max-w-[120px] mx-auto" 
+                    style={{ color: isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.4)' }}
                 >
                     {experience.year}
                 </div>
