@@ -210,6 +210,8 @@ export function ProjectsSection() {
                     borderRight: '1px solid rgba(255, 153, 0, 0.12)',
                     paddingRight: '40px',
                     position: 'relative',
+                    overflow: 'hidden',
+                    minHeight: 0,
                 }}>
                     {/* Decorative line */}
                     <div style={{

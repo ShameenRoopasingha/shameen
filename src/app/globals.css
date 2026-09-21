@@ -429,7 +429,6 @@ body {
   }
 }
 
-/* Fade In Animation */
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -438,4 +437,38 @@ body {
   100% {
     opacity: 1;
   }
+}
+
+/* Custom Scrollbar - TVA Themed */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 153, 0, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 153, 0, 0.3);
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 153, 0, 0.5);
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 153, 0, 0.3) rgba(255, 153, 0, 0.05);
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
