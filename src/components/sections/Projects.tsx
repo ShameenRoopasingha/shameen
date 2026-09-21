@@ -441,7 +441,7 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
             onMouseLeave={() => setIsHovered(false)}
             style={{
                 position: 'relative',
-                padding: '10px 14px',
+                padding: '8px 12px',
                 cursor: 'pointer',
                 background: isActive
                     ? 'linear-gradient(135deg, rgba(255, 153, 0, 0.15) 0%, rgba(255, 153, 0, 0.05) 100%)'
@@ -485,11 +485,11 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: '10px',
+                marginBottom: '6px',
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span style={{
-                        fontSize: '18px',
+                        fontSize: '14px',
                         fontWeight: 100,
                         color: isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.25)',
                         transition: 'color 0.3s ease',
@@ -497,12 +497,12 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
                     }}>
                         {(index + 1).toString().padStart(2, '0')}
                     </span>
-                    <div style={{ width: '1px', height: '14px', background: 'rgba(255, 153, 0, 0.2)' }} />
+                    <div style={{ width: '1px', height: '12px', background: 'rgba(255, 153, 0, 0.2)' }} />
                     <span style={{
-                        fontSize: '9px',
+                        fontSize: '8px',
                         textTransform: 'uppercase',
                         letterSpacing: '0.12em',
-                        padding: '5px 12px',
+                        padding: '3px 8px',
                         border: '1px solid rgba(255, 153, 0, 0.25)',
                         color: 'rgba(255, 153, 0, 0.55)',
                         background: 'rgba(255, 153, 0, 0.03)',
@@ -514,8 +514,8 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
                 {/* Status indicator */}
                 <div style={{
                     position: 'relative',
-                    width: '12px',
-                    height: '12px',
+                    width: '10px',
+                    height: '10px',
                 }}>
                     {isActive && (
                         <div style={{
@@ -528,11 +528,11 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
                         }} />
                     )}
                     <div style={{
-                        width: '12px',
-                        height: '12px',
+                        width: '10px',
+                        height: '10px',
                         borderRadius: '50%',
                         background: isActive ? 'var(--tva-amber)' : 'transparent',
-                        border: `2px solid ${isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.25)'}`,
+                        border: `1.5px solid ${isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.25)'}`,
                         boxShadow: isActive ? '0 0 15px var(--tva-amber)' : 'none',
                         transition: 'all 0.3s ease',
                     }} />
@@ -541,27 +541,27 @@ function CaseFileCard({ project, index, isActive, onClick }: CaseFileCardProps) 
 
             {/* Project Title */}
             <h3 style={{
-                fontSize: '14px',
+                fontSize: '12px',
                 fontWeight: 400,
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
                 color: isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.65)',
                 transition: 'color 0.3s ease',
-                marginBottom: '8px',
+                marginBottom: '6px',
             }}>
                 {project.title}
             </h3>
 
             {/* Tech Tags */}
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                 {project.techStack.map((tech) => (
                     <span
                         key={tech}
                         style={{
-                            fontSize: '8px',
+                            fontSize: '7px',
                             textTransform: 'uppercase',
                             letterSpacing: '0.05em',
-                            padding: '3px 8px',
+                            padding: '2px 6px',
                             background: 'rgba(255, 153, 0, 0.04)',
                             border: '1px solid rgba(255, 153, 0, 0.15)',
                             color: 'rgba(255, 153, 0, 0.5)',
