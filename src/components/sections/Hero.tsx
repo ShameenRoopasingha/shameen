@@ -233,8 +233,8 @@ export function Hero() {
             <style jsx>{`
                 .hero-section {
                     position: relative;
-                    height: 100vh;
-                    width: 100vw;
+                    height: 100dvh;
+                    width: 100%;
                     overflow: hidden;
                     background: #020202;
                 }

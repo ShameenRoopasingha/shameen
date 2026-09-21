@@ -102,8 +102,8 @@ export function ExperienceSection() {
             ref={containerRef}
             className="section-container relative"
             style={{
-                height: '100vh',
-                width: '100vw',
+                height: '100dvh',
+                width: '100%',
                 overflow: 'hidden',
             }}
         >
@@ -159,17 +159,17 @@ export function ExperienceSection() {
             </div>
 
             {/* Main Content - Cinematic Layout */}
-            <div className="h-full flex flex-col pt-24 pb-8">
+            <div className="h-full flex flex-col pt-20 md:pt-24 pb-4 md:pb-8">
 
                 {/* Experience Content Panel - Upper 2/3 */}
-                <div className="content-panel flex-1 flex items-center justify-center px-8 lg:px-24">
+                <div className="content-panel flex-1 flex items-center justify-center px-4 md:px-8 lg:px-24 mt-4">
                     <div className="w-full max-w-5xl">
                         <ExperiencePanel experience={currentExperience} index={activeIndex} />
                     </div>
                 </div>
 
                 {/* Timeline Strip - Lower Section */}
-                <div className="timeline-container h-40 relative">
+                <div className="timeline-container h-24 md:h-32 lg:h-40 relative flex-shrink-0">
                     <TimelineStrip
                         experiences={EXPERIENCE}
                         activeIndex={activeIndex}
@@ -218,9 +218,9 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
             {/* Right - Content */}
             <div className="flex-1">
                 {/* Status Badge */}
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-2 lg:gap-4 mb-4 lg:mb-6 flex-wrap">
                     <div
-                        className="px-4 py-1.5 text-xs uppercase tracking-[0.3em]"
+                        className="px-3 py-1 lg:px-4 lg:py-1.5 text-[10px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.3em]"
                         style={{
                             border: '1px solid rgba(255, 153, 0, 0.4)',
                             color: 'var(--tva-amber)',
@@ -229,7 +229,7 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
                         Incident #{(index + 1).toString().padStart(3, '0')}
                     </div>
                     <div
-                        className="flex items-center gap-2 text-xs uppercase tracking-widest"
+                        className="flex items-center gap-1.5 lg:gap-2 text-[10px] lg:text-xs uppercase tracking-widest"
                         style={{ color: '#00FF00' }}
                     >
                         <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00FF00' }} />
@@ -239,7 +239,7 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
 
                 {/* Role Title */}
                 <h2
-                    className="text-5xl lg:text-6xl uppercase tracking-wide mb-4 font-light"
+                    className="text-3xl md:text-4xl lg:text-6xl uppercase tracking-wide mb-2 lg:mb-4 font-light leading-tight"
                     style={{
                         color: 'var(--tva-amber)',
                         textShadow: '0 0 40px rgba(255, 153, 0, 0.3)',
@@ -250,7 +250,7 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
 
                 {/* Company & Date */}
                 <div
-                    className="text-xl uppercase tracking-[0.2em] mb-8 flex items-center gap-4"
+                    className="text-sm md:text-lg lg:text-xl uppercase tracking-[0.1em] md:tracking-[0.2em] mb-4 md:mb-6 lg:mb-8 flex items-center gap-2 md:gap-4 flex-wrap"
                     style={{ color: 'rgba(255, 153, 0, 0.6)' }}
                 >
                     <span>{experience.company}</span>
@@ -260,7 +260,7 @@ function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
 
                 {/* Description */}
                 <p
-                    className="text-lg leading-relaxed max-w-2xl"
+                    className="text-sm md:text-base lg:text-lg leading-relaxed max-w-2xl"
                     style={{
                         color: 'rgba(255, 153, 0, 0.5)',
                         lineHeight: '1.8',
