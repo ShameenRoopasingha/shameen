@@ -161,23 +161,55 @@ export function ExperienceSection() {
                 </div>
             </div>
 
-            {/* Main Content - Cinematic Layout */}
-            <div className="h-full flex flex-col pt-20 md:pt-24 pb-4 md:pb-8">
-
-                {/* Experience Content Panel - Upper 2/3 */}
+            {/* Desktop Layout - Cinematic */}
+            <div className="h-full flex-col pt-20 md:pt-24 pb-4 md:pb-8 hidden md:flex desktop-experience">
                 <div className="content-panel flex-1 flex items-center justify-center px-4 md:px-8 lg:px-24 mt-4">
                     <div className="w-full max-w-5xl">
                         <ExperiencePanel experience={currentExperience} index={activeIndex} />
                     </div>
                 </div>
-
-                {/* Timeline Strip - Lower Section */}
                 <div className="timeline-container h-24 md:h-32 lg:h-40 relative flex-shrink-0">
                     <TimelineStrip
                         experiences={EXPERIENCE}
                         activeIndex={activeIndex}
                         onSelect={jumpToExperience}
                     />
+                </div>
+            </div>
+
+            {/* Mobile Layout - Vertical Feed */}
+            <div className="h-full flex flex-col pt-20 pb-4 md:hidden overflow-y-auto px-4 custom-scrollbar">
+                <div className="flex flex-col gap-12 pb-20 mt-4 relative">
+                    {/* Vertical line connecting nodes */}
+                    <div 
+                        className="absolute left-[9px] top-4 bottom-0 w-px"
+                        style={{ background: 'linear-gradient(180deg, var(--tva-amber), transparent)' }}
+                    />
+                    
+                    {EXPERIENCE.map((exp, idx) => (
+                        <div key={exp.id} className="flex gap-6 relative z-10">
+                            {/* Node */}
+                            <div className="flex flex-col items-center flex-shrink-0 pt-2">
+                                <div className="w-5 h-5 rounded-full border-2 bg-black border-amber-500 shadow-[0_0_10px_rgba(255,153,0,0.5)]" />
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="flex-1">
+                                <div className="text-[10px] font-mono tracking-widest mb-2" style={{ color: 'var(--tva-amber)' }}>
+                                    {exp.year}
+                                </div>
+                                <h2 className="text-2xl uppercase tracking-wide mb-1 font-light leading-tight" style={{ color: 'var(--tva-amber)' }}>
+                                    {exp.role}
+                                </h2>
+                                <div className="text-xs uppercase tracking-[0.1em] mb-3" style={{ color: 'rgba(255, 153, 0, 0.6)' }}>
+                                    {exp.company}
+                                </div>
+                                <p className="text-xs leading-relaxed" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
+                                    {exp.description}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 

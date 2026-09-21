@@ -281,13 +281,19 @@ export function ProjectsSection() {
                         marginRight: '-10px',
                     }}>
                         {PROJECTS.map((project, index) => (
-                            <CaseFileCard
-                                key={project.id}
-                                project={project}
-                                index={index}
-                                isActive={activeProject === project.id}
-                                onClick={() => handleProjectSelect(project.id)}
-                            />
+                            <div key={project.id} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                <CaseFileCard
+                                    project={project}
+                                    index={index}
+                                    isActive={activeProject === project.id}
+                                    onClick={() => handleProjectSelect(project.id)}
+                                />
+                                {activeProject === project.id && (
+                                    <div className="mobile-only-details">
+                                        <CaseDetails project={project} index={index} />
+                                    </div>
+                                )}
+                            </div>
                         ))}
                     </div>
 
@@ -363,6 +369,10 @@ export function ProjectsSection() {
                 @media (max-width: 900px) {
                     .projects-grid { grid-template-columns: 280px 1fr !important; }
                 }
+                .mobile-only-details {
+                    display: none;
+                }
+
                 @media (max-width: 768px) {
                     .projects-header { padding: 0 15px !important; height: 50px !important; }
                     .projects-header > div:first-child { gap: 10px !important; }
@@ -380,8 +390,8 @@ export function ProjectsSection() {
                     .projects-sidebar {
                         border-right: none !important;
                         padding-right: 0 !important;
-                        border-bottom: 1px solid rgba(255, 153, 0, 0.12) !important;
-                        padding-bottom: 20px !important;
+                        border-bottom: none !important;
+                        padding-bottom: 0 !important;
                         min-height: auto !important;
                         flex: none !important;
                     }
@@ -390,9 +400,19 @@ export function ProjectsSection() {
                         flex: none !important;
                     }
                     .projects-main { 
-                        padding-top: 15px !important; 
-                        min-height: 400px !important; 
-                        flex: none !important; 
+                        display: none !important; 
+                    }
+                    .mobile-only-details {
+                        display: block;
+                        margin-bottom: 15px;
+                        border-left: 2px solid var(--tva-amber);
+                        padding-left: 10px;
+                    }
+                    .mobile-only-details > div {
+                        height: auto !important;
+                        padding: 15px !important;
+                        border: 1px solid rgba(255, 153, 0, 0.2);
+                        background: rgba(0, 0, 0, 0.4);
                     }
                 }
                 @media (max-width: 480px) {

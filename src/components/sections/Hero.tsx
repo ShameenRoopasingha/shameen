@@ -133,7 +133,7 @@ export function Hero() {
 
             {/* === MAIN CONTENT === */}
             <div
-                className="hero-parallax hero-main"
+                className="hero-parallax hero-main custom-scrollbar"
                 style={{
                     opacity: showMain ? 1 : 0,
                     transform: showMain ? 'scale(1)' : 'scale(0.98)',
@@ -354,10 +354,10 @@ export function Hero() {
                 
                 .hero-left { width: 340px; flex-shrink: 0; }
                 @media (max-width: 1024px) { .hero-left { width: 280px; } }
-                @media (max-width: 768px) { .hero-left { width: 100%; max-width: 280px; } }
+                @media (max-width: 768px) { .hero-left { width: 100%; max-width: 200px; } }
                 
                 .status-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-                @media (max-width: 768px) { .status-header { justify-content: center; margin-bottom: 12px; } }
+                @media (max-width: 768px) { .status-header { justify-content: center; margin-bottom: 10px; } }
                 
                 .status-dot {
                     width: 10px;
