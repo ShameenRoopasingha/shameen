@@ -133,7 +133,7 @@ export function Hero() {
 
             {/* === MAIN CONTENT === */}
             <div
-                className="hero-parallax hero-main custom-scrollbar"
+                className="hero-parallax hero-main"
                 style={{
                     opacity: showMain ? 1 : 0,
                     transform: showMain ? 'scale(1)' : 'scale(0.98)',

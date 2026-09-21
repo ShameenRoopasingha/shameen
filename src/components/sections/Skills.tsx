@@ -75,7 +75,7 @@ export function SkillsSection() {
             )}
 
             <div
-                className="skills-parallax skills-main custom-scrollbar"
+                className="skills-parallax skills-main"
                 style={{ opacity: showContent ? 1 : 0 }}
             >
                 <div className="skills-content">

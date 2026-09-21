@@ -64,7 +64,7 @@ export function ReferencesSection() {
                 </div>
             )}
 
-            <div className="refs-parallax refs-main custom-scrollbar" style={{ opacity: showContent ? 1 : 0 }}>
+            <div className="refs-parallax refs-main" style={{ opacity: showContent ? 1 : 0 }}>
                 <div className="refs-content">
                     {/* LEFT: CLASSIFIED PANEL */}
                     <div className="refs-left">

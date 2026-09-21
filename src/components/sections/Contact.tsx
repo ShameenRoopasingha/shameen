@@ -80,7 +80,7 @@ export function ContactSection() {
                 </div>
             )}
 
-            <div className="contact-parallax contact-main custom-scrollbar" style={{ opacity: showContent ? 1 : 0 }}>
+            <div className="contact-parallax contact-main" style={{ opacity: showContent ? 1 : 0 }}>
                 <div className="contact-content">
                     {/* LEFT: UPLINK INFO */}
                     <div className="contact-element contact-left">
