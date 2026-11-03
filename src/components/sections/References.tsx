@@ -26,10 +26,10 @@ export function ReferencesSection() {
       {/* Header */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
+          <span className="tva-stamp text-[10px]">
             CHRONO-LOGS
           </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest hidden sm:inline">
+          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-wider md:tracking-widest hidden sm:inline">
             AUTHENTICATED PERSONNEL DOSSIERS
           </span>
         </div>
@@ -54,12 +54,12 @@ export function ReferencesSection() {
       {/* Description / Instructions */}
       <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[10px] uppercase tracking-widest text-[#FF3B1F] font-bold">
+          <span className="text-[10px] uppercase tracking-wider md:tracking-widest text-[#FF3B1F] font-bold">
             [RESTRICTED ARCHIVE // PROFESSIONAL REFERENCES]
           </span>
           <span className="text-[9px] text-[#7A4210]">LEVEL-4</span>
         </div>
-        <p className="text-xs sm:text-sm text-[#FF8C24]/85 leading-relaxed">
+        <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed max-w-[65ch]">
           Verified professional references from senior technology leaders who have directly evaluated Shameen&apos;s technical execution. Tap any card or use the master declassify button to reveal direct contact phone numbers.
         </p>
       </div>

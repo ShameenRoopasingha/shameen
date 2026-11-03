@@ -68,42 +68,44 @@ export function ProjectsSection() {
                 </span>
               </div>
 
-              {/* Title & Category */}
-              <h2 className="text-lg sm:text-xl font-bold uppercase tracking-wide text-[#FF8C24] crt-glow mb-1">
+              {/* Title & Category Stamp */}
+              <h2 className="tva-h2 text-[#FF8C24] tva-glow-strong mb-1.5">
                 {proj.title}
               </h2>
-              <div className="text-[10px] uppercase tracking-widest text-[#FFB84D] mb-3">
-                &gt;&gt; {proj.category}
+              <div className="mb-3 flex items-center gap-2">
+                <span className="tva-stamp text-[9px]">
+                  {proj.category}
+                </span>
               </div>
 
-              {/* Problem Solved & Mission */}
+              {/* Problem Solved & Mission in High-Contrast Body Typography */}
               {proj.problemSolved && (
                 <div className="border border-[#7A4210] p-2.5 sm:p-3 mb-3 bg-[#120B05]/80">
-                  <span className="text-[9px] uppercase tracking-widest text-[#FF3B1F] block mb-1 font-bold">
+                  <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#FF3B1F] block mb-1 font-bold">
                     [MISSION & PROBLEM SOLVED]
                   </span>
-                  <p className="text-xs text-[#FF8C24]/90 leading-relaxed">
+                  <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed max-w-[65ch]">
                     {proj.problemSolved}
                   </p>
                 </div>
               )}
 
-              {/* Summary Description */}
-              <p className="text-xs text-[#FF8C24]/80 leading-relaxed mb-3">
+              {/* Summary Description in High-Contrast Sentence Case */}
+              <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed mb-3 max-w-[65ch]">
                 {proj.summary}
               </p>
 
               {/* Architecture Highlights */}
               {proj.architectureHighlights && proj.architectureHighlights.length > 0 && (
                 <div className="mb-3">
-                  <span className="text-[9px] uppercase tracking-widest text-[#FFB84D] block mb-1.5 font-bold">
+                  <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#FFB84D] block mb-1.5 font-bold">
                     ENGINEERING HIGHLIGHTS:
                   </span>
-                  <ul className="space-y-1 text-xs text-[#FF8C24]/90">
+                  <ul className="space-y-1.5 text-xs text-[#FFE2B8] tva-body max-w-[65ch]">
                     {proj.architectureHighlights.slice(0, 3).map((hl, i) => (
                       <li key={i} className="flex items-start gap-1.5">
-                        <span className="text-[#FFB84D] font-bold flex-shrink-0">&gt;</span>
-                        <span>{hl}</span>
+                        <span className="text-[#FF8C24] font-bold flex-shrink-0 font-mono">&gt;</span>
+                        <span className="leading-relaxed">{hl}</span>
                       </li>
                     ))}
                   </ul>
@@ -112,14 +114,14 @@ export function ProjectsSection() {
 
               {/* Wrapping Tech Stack Badges */}
               <div className="mb-4">
-                <span className="text-[9px] uppercase tracking-widest text-[#7A4210] block mb-1.5">
+                <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-1.5">
                   TECH STACK
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {proj.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-2 py-0.5 text-[10px] border border-[#FF8C24] bg-[#FF8C24]/10 text-[#FFB84D]"
+                      className="px-2 py-0.5 text-[10px] border border-[#FF8C24] bg-[#FF8C24]/10 text-[#FFB84D] font-mono tracking-wider"
                     >
                       {tech}
                     </span>

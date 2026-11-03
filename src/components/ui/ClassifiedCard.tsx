@@ -81,13 +81,13 @@ export function ClassifiedCard({
       {/* Personnel Details */}
       <div className="space-y-2">
         <div>
-          <span className="text-[10px] uppercase tracking-widest text-[#7A4210] block">
+          <span className="text-[10px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-0.5">
             AUTHORIZING REFEREE
           </span>
           <div className="relative inline-block overflow-hidden">
             <span
-              className={`text-base sm:text-lg font-bold uppercase tracking-wider block transition-colors duration-80 ${
-                isRevealed ? 'text-[#FFB84D] crt-glow' : 'text-[#7A4210] select-none'
+              className={`tva-h3 block transition-colors duration-80 ${
+                isRevealed ? 'text-[#FFB84D] tva-glow-subtle' : 'text-[#7A4210] select-none font-mono'
               }`}
             >
               {isRevealed ? name : '███████████████'}
@@ -95,26 +95,36 @@ export function ClassifiedCard({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs tracking-wider">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
           <div>
-            <span className="text-[10px] uppercase text-[#7A4210] block">ORGANIZATION</span>
-            <span className={isRevealed ? 'text-[#FF8C24]' : 'text-[#7A4210]'}>
+            <span className="text-[10px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-0.5">
+              ORGANIZATION
+            </span>
+            <span className={`block font-medium ${isRevealed ? 'text-[#FFE2B8]' : 'text-[#7A4210]'}`}>
               {isRevealed ? company : '██████████'}
             </span>
           </div>
           {role && (
             <div>
-              <span className="text-[10px] uppercase text-[#7A4210] block">DESIGNATION</span>
-              <span className={isRevealed ? 'text-[#FF8C24]/80' : 'text-[#7A4210]'}>
-                {isRevealed ? role : '████████'}
+              <span className="text-[10px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-0.5">
+                DESIGNATION
               </span>
+              {isRevealed ? (
+                <span className="tva-stamp text-[9px] mt-0.5">
+                  {role}
+                </span>
+              ) : (
+                <span className="text-[#7A4210]">████████</span>
+              )}
             </div>
           )}
         </div>
 
         {phone && (
           <div className="pt-1">
-            <span className="text-[10px] uppercase text-[#7A4210] block">OFFICIAL CONTACT FREQUENCY</span>
+            <span className="text-[10px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-0.5">
+              OFFICIAL CONTACT FREQUENCY
+            </span>
             {isRevealed ? (
               <a
                 href={`tel:${phone}`}
@@ -122,19 +132,19 @@ export function ClassifiedCard({
                   e.stopPropagation();
                   tvaSound.playConfirm();
                 }}
-                className="font-mono text-xs text-[#00FF66] font-bold hover:underline inline-flex items-center gap-1.5 py-1"
+                className="font-mono text-xs text-[#00FF66] font-bold hover:underline inline-flex items-center gap-1.5 py-1 tva-nums"
               >
                 <span>☎</span> {phone} ↗
               </a>
             ) : (
-              <span className="font-mono text-xs text-[#7A4210]">+██ ██████████</span>
+              <span className="font-mono text-xs text-[#7A4210] tva-nums">+██ ██████████</span>
             )}
           </div>
         )}
 
         {endorsement && isRevealed && (
-          <p className="text-xs text-[#FF8C24]/80 leading-relaxed border-t border-[#7A4210]/40 pt-2 mt-2">
-            &quot;{endorsement}&quot;
+          <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed border-t border-[#7A4210]/40 pt-2 mt-2 max-w-[65ch]">
+            &ldquo;{endorsement}&rdquo;
           </p>
         )}
       </div>

@@ -39,15 +39,15 @@ export function SkillsSection() {
       {/* Header */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
+          <span className="tva-stamp text-[10px]">
             CAPABILITY MATRIX
           </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest hidden sm:inline">
+          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-wider md:tracking-widest hidden sm:inline">
             VOLTAGE DIAGNOSTICS & BENCHMARKS
           </span>
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
-          <span className="text-[#FFB84D] font-bold">
+          <span className="text-[#FFB84D] font-bold tva-nums">
             SHOWING {filteredSkills.length} OF {allSkills.length} METRICS
           </span>
           <span className="text-[#00FF66] font-bold hidden sm:inline">CALIBRATED</span>
@@ -65,7 +65,7 @@ export function SkillsSection() {
               tvaSound.playConfirm();
               setSelectedGroupCode('ALL');
             }}
-            className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all ${
+            className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-wider md:tracking-widest border transition-all tva-nums ${
               selectedGroupCode === 'ALL'
                 ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
                 : 'border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24]'
@@ -82,7 +82,7 @@ export function SkillsSection() {
                 tvaSound.playConfirm();
                 setSelectedGroupCode(g.code);
               }}
-              className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all whitespace-nowrap ${
+              className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-wider md:tracking-widest border transition-all whitespace-nowrap tva-nums ${
                 selectedGroupCode === g.code
                   ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
                   : 'border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24]'
@@ -108,7 +108,7 @@ export function SkillsSection() {
                 }
               }}
               placeholder="FILTER CAPABILITIES [e.g. React, Mongo, Node]..."
-              className="w-full bg-transparent text-base sm:text-xs text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono uppercase tracking-wider"
+              className="w-full bg-transparent text-base md:text-xs text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono uppercase tracking-wider break-words"
             />
             {searchQuery && (
               <button

@@ -48,10 +48,10 @@ export function ContactSection() {
       {/* Header */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
+          <span className="tva-stamp text-[10px]">
             MISSIVES
           </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest hidden sm:inline">
+          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-wider md:tracking-widest hidden sm:inline">
             SECURE DIRECT UPLINK
           </span>
         </div>
@@ -67,20 +67,20 @@ export function ContactSection() {
           <div>
             <div className="flex items-center gap-2 text-xs text-[#FF8C24] mb-2 sm:mb-3">
               <span className="w-2 h-2 bg-[#00FF66] animate-pulse" />
-              <span className="font-bold tracking-widest">VERIFIED CONTACT CHANNELS</span>
+              <span className="font-bold tracking-wider md:tracking-widest">VERIFIED CONTACT CHANNELS</span>
             </div>
-            <p className="text-xs text-[#FF8C24]/80 leading-relaxed mb-4">
+            <p className="text-xs sm:text-sm text-[#FFE2B8] leading-relaxed mb-4 max-w-[65ch]">
               Connect directly with Shameen regarding project-based roles, full-stack web engineering, or SaaS collaborations:
             </p>
 
             <div className="space-y-3 text-xs">
               {/* Email Card with 1-Tap Copy */}
               <div className="border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors flex items-center justify-between gap-2">
-                <div className="truncate">
-                  <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase block">OFFICIAL EMAIL</span>
+                <div className="min-w-0 flex-1">
+                  <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase tracking-wider md:tracking-widest block">OFFICIAL EMAIL</span>
                   <a
                     href={`mailto:${PROFILE.socialLinks.email}`}
-                    className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5 truncate hover:underline"
+                    className="text-xs sm:text-sm text-[#FFE2B8] font-bold block mt-0.5 break-all hover:underline"
                   >
                     {PROFILE.socialLinks.email}
                   </a>
@@ -97,11 +97,11 @@ export function ContactSection() {
 
               {/* Phone Card with 1-Tap Copy */}
               <div className="border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors flex items-center justify-between gap-2">
-                <div>
-                  <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase block">PHONE / DIRECT LINE</span>
+                <div className="min-w-0 flex-1">
+                  <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase tracking-wider md:tracking-widest block">PHONE / DIRECT LINE</span>
                   <a
                     href={`tel:${PROFILE.socialLinks.phone}`}
-                    className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5 hover:underline"
+                    className="text-xs sm:text-sm text-[#FFE2B8] font-bold block mt-0.5 break-words hover:underline"
                   >
                     {PROFILE.socialLinks.phone}
                   </a>
@@ -125,15 +125,15 @@ export function ContactSection() {
                 onClick={() => tvaSound.playConfirm()}
                 className="block border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors"
               >
-                <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase block">OFFICIAL RESUME RECORD</span>
-                <span className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5">
+                <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase tracking-wider md:tracking-widest block">OFFICIAL RESUME RECORD</span>
+                <span className="text-xs sm:text-sm text-[#FFE2B8] font-bold block mt-0.5 break-words">
                   DOWNLOAD SHAMEEN_ROOPASINGHA_CV.PDF ↗
                 </span>
               </a>
 
               {/* Networks */}
               <div className="border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors">
-                <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase block mb-1">PROFESSIONAL NETWORKS</span>
+                <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase tracking-wider md:tracking-widest block mb-1">PROFESSIONAL NETWORKS</span>
                 <div className="flex gap-4">
                   <a
                     href={PROFILE.socialLinks.linkedin}
@@ -141,7 +141,7 @@ export function ContactSection() {
                     rel="noopener noreferrer"
                     onMouseEnter={() => tvaSound.playHover()}
                     onClick={() => tvaSound.playConfirm()}
-                    className="text-[#FF8C24] hover:text-[#FFB84D] underline font-bold text-xs sm:text-sm"
+                    className="text-[#FF8C24] hover:text-[#FFE2B8] underline font-bold text-xs sm:text-sm"
                   >
                     LINKEDIN ↗
                   </a>
@@ -151,7 +151,7 @@ export function ContactSection() {
                     rel="noopener noreferrer"
                     onMouseEnter={() => tvaSound.playHover()}
                     onClick={() => tvaSound.playConfirm()}
-                    className="text-[#FF8C24] hover:text-[#FFB84D] underline font-bold text-xs sm:text-sm"
+                    className="text-[#FF8C24] hover:text-[#FFE2B8] underline font-bold text-xs sm:text-sm"
                   >
                     GITHUB ↗
                   </a>

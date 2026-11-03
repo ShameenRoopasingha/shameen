@@ -9,6 +9,7 @@
   --tva-void: #120B05;            /* Warm phosphor charcoal, never pure #000000 */
   --tva-amber: #FF8C24;           /* Primary Phosphor Amber */
   --tva-amber-highlight: #FFB84D; /* Hot highlight amber */
+  --tva-amber-cream: #FFE2B8;     /* High-contrast warm cream-amber for readable body copy (WCAG AA+) */
   --tva-amber-dim: #7A4210;       /* Dimmed / Inactive amber */
   --tva-red: #FF3B1F;             /* Nexus Alert Red */
   --tva-amber-glow: rgba(255, 140, 36, 0.35);
@@ -19,8 +20,11 @@
   --background: #120B05;
   --foreground: #FF8C24;
 
-  /* Typography */
-  --font-mono: 'Share Tech Mono', 'VT323', 'JetBrains Mono', 'Courier New', monospace;
+  /* 3-Tier TVA Typography System */
+  --font-tva-display: var(--font-tva-display, 'Chakra Petch', sans-serif);
+  --font-tva-tech: var(--font-tva-tech, 'Share Tech Mono', monospace);
+  --font-tva-body: var(--font-tva-body, 'IBM Plex Mono', monospace);
+  --font-mono: var(--font-tva-tech);
 }
 
 @theme inline {
@@ -30,10 +34,14 @@
   --color-tva-void: #120B05;
   --color-tva-amber: #FF8C24;
   --color-tva-amber-highlight: #FFB84D;
+  --color-tva-amber-cream: #FFE2B8;
   --color-tva-amber-dim: #7A4210;
   --color-tva-red: #FF3B1F;
 
-  --font-mono: var(--font-mono);
+  --font-display: var(--font-tva-display);
+  --font-tech: var(--font-tva-tech);
+  --font-body: var(--font-tva-body);
+  --font-mono: var(--font-tva-tech);
 }
 
 /* Sharp Industrial Geometry: 0px Border Radii Everywhere */
@@ -61,14 +69,119 @@ body {
 }
 
 /* Fluid responsive typography */
-.crt-heading-fluid {
+.tva-h1 {
+  font-family: var(--font-tva-display);
   font-size: clamp(1.4rem, 5.5vw, 2.75rem);
   line-height: 1.15;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tva-h2 {
+  font-family: var(--font-tva-display);
+  font-size: clamp(1.15rem, 3.8vw, 1.85rem);
+  line-height: 1.2;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tva-h3 {
+  font-family: var(--font-tva-display);
+  font-size: clamp(0.95rem, 2.8vw, 1.35rem);
+  line-height: 1.25;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tva-micro {
+  font-family: var(--font-tva-tech);
+  font-size: clamp(0.65rem, 1.8vw, 0.75rem);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.tva-body {
+  font-family: var(--font-tva-body);
+  color: var(--tva-amber-cream);
+  line-height: 1.65;
+  max-width: 65ch;
+  text-shadow: none !important;
+}
+
+.crt-heading-fluid {
+  font-family: var(--font-tva-display);
+  font-size: clamp(1.4rem, 5.5vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: 0.04em;
 }
 
 .crt-subheading-fluid {
+  font-family: var(--font-tva-tech);
   font-size: clamp(0.75rem, 3vw, 1.125rem);
   line-height: 1.35;
+  letter-spacing: 0.06em;
+}
+
+/* Enforce Tabular Numerics so telemetry and live counters never jitter horizontally */
+.tva-nums,
+.tabular-nums,
+[data-numeric] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Tiered CRT Phosphor Glow Hierarchy */
+/* 1. Strong glow: multi-stage amber bloom + subtle -0.5px red chromatic aberration for h1/h2 */
+.tva-glow-strong {
+  text-shadow:
+    -0.5px 0 1px rgba(255, 59, 31, 0.45),
+    0.5px 0 1px rgba(255, 140, 36, 0.6),
+    0 0 8px rgba(255, 140, 36, 0.5),
+    0 0 20px rgba(255, 140, 36, 0.25);
+}
+
+/* 2. Subtle glow: light 4px bloom for HUD headers and active telemetry */
+.tva-glow-subtle {
+  text-shadow: 0 0 4px rgba(255, 140, 36, 0.4);
+}
+
+/* 3. No glow: crisp, unblurred body text and inverted elements */
+.tva-glow-none {
+  text-shadow: none !important;
+}
+
+/* Inverted High-Contrast Amber Stamp Badges */
+.tva-stamp {
+  background-color: var(--tva-amber);
+  color: var(--tva-void) !important;
+  font-weight: 700;
+  font-family: var(--font-tva-tech);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  text-shadow: none !important;
+  user-select: none;
+}
+
+.tva-stamp-outline {
+  border: 1px solid var(--tva-amber);
+  color: var(--tva-amber);
+  background-color: rgba(255, 140, 36, 0.12);
+  font-family: var(--font-tva-tech);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  user-select: none;
 }
 
 /* 16px x 16px Amber Coordinate Grid on Mobile, 24px on Desktop */

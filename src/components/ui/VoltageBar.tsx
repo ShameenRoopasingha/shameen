@@ -112,13 +112,13 @@ export function VoltageBar({
         <div className="flex items-center gap-2 text-[10px]">
           <span className="text-[#7A4210]">VLT:</span>
           <span
-            className={`font-bold min-w-[36px] text-right font-mono transition-colors ${
+            className={`font-bold min-w-[38px] text-right font-mono transition-colors tva-nums ${
               isSpiking ? 'text-[#FF3B1F]' : 'text-[#FF8C24]'
             }`}
           >
             {(displayLevel * 2.4).toFixed(1)}V
           </span>
-          <span className="text-[#FFB84D] font-bold min-w-[30px] text-right font-mono">
+          <span className="text-[#FFB84D] font-bold min-w-[32px] text-right font-mono tva-nums">
             {displayLevel}%
           </span>
         </div>

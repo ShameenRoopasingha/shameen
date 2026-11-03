@@ -107,10 +107,10 @@ export function Hero() {
       <div className="border-b border-[#7A4210] pb-3">
         <div className="flex flex-wrap items-center justify-between gap-1.5 mb-1">
           <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px]">
-            <span className="px-1.5 py-0.5 bg-[#FF3B1F] text-[#120B05] font-bold tracking-widest">
+            <span className="tva-stamp text-[9px]">
               OFFICIAL CV DOSSIER
             </span>
-            <span className="text-[#FF8C24] tracking-wider">
+            <span className="text-[#FF8C24] tracking-wider font-mono">
               {PROFILE.variantId}
             </span>
             <span className="text-[#00FF66] font-bold hidden sm:inline">
@@ -122,10 +122,10 @@ export function Hero() {
           </span>
         </div>
 
-        <h1 className="crt-heading-fluid font-light uppercase tracking-wider text-[#FF8C24] crt-glow">
+        <h1 className="tva-h1 font-bold text-[#FF8C24] tva-glow-strong">
           {PROFILE.name}
         </h1>
-        <p className="crt-subheading-fluid text-[#FFB84D] tracking-widest mt-0.5">
+        <p className="tva-h3 text-[#FFB84D] mt-0.5">
           &gt;&gt; {PROFILE.role}
         </p>
       </div>
@@ -163,14 +163,14 @@ export function Hero() {
                 </div>
               </div>
 
-              {/* Bio summary */}
+              {/* Bio summary in High-Contrast Sentence Case */}
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-widest border-b border-[#7A4210]/40 pb-1 mb-2">
+                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-wider md:tracking-widest border-b border-[#7A4210]/40 pb-1 mb-2">
                     <span>CANDIDATE PROFILE SUMMARY</span>
                     <span className="text-[#00FF66] font-bold">READY FOR HIRE</span>
                   </div>
-                  <p className="text-xs sm:text-sm text-[#FF8C24]/90 leading-relaxed">
+                  <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed max-w-[65ch]">
                     {PROFILE.summary}
                   </p>
                 </div>
@@ -222,7 +222,7 @@ export function Hero() {
 
           {/* Education Records Box */}
           <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]/90">
-            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
+            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-wider md:tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
               <span>CANONICAL EDUCATION DOSSIER</span>
               <span className="text-[#00FF66] text-[9px] font-bold">ACCREDITED</span>
             </div>
@@ -234,9 +234,9 @@ export function Hero() {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-1 text-[9px] sm:text-[10px] text-[#7A4210] mb-0.5">
                     <span className="text-[#FF8C24] font-bold">{edu.institution}</span>
-                    <span className="text-[#FFB84D] font-mono">{edu.year}</span>
+                    <span className="text-[#FFB84D] font-mono tva-nums">{edu.year}</span>
                   </div>
-                  <div className="text-xs sm:text-sm text-[#FFB84D] font-bold">
+                  <div className="text-xs sm:text-sm text-[#FFE2B8] font-bold">
                     {edu.degree}
                   </div>
                 </div>
@@ -246,7 +246,7 @@ export function Hero() {
 
           {/* Core Competencies Box */}
           <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]/90">
-            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
+            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-wider md:tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
               <span>CORE TECHNICAL COMPETENCIES</span>
               <span className="text-[#7A4210] text-[9px]">OFFICIAL CV</span>
             </div>
@@ -254,7 +254,7 @@ export function Hero() {
               {PORTFOLIO_DATA.variant.coreCompetencies.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2 py-1 text-[10px] sm:text-xs border border-[#7A4210] bg-[#120B05] text-[#FF8C24]"
+                  className="px-2 py-1 text-[10px] sm:text-xs border border-[#7A4210] bg-[#120B05] text-[#FFE2B8] font-mono"
                 >
                   {tech}
                 </span>
@@ -270,7 +270,7 @@ export function Hero() {
               <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-[#FF8C24] animate-ping" />
-                  <span className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#FF8C24]">
+                  <span className="text-[10px] sm:text-xs uppercase tracking-wider md:tracking-widest font-bold text-[#FF8C24]">
                     VOLTAGE TELEMETRY
                   </span>
                 </div>
@@ -281,7 +281,7 @@ export function Hero() {
 
               {/* Voltage Readings */}
               <div className="mb-3">
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-[#7A4210] block mb-2">
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-2">
                   FLAGSHIP PROFICIENCY VOLTAGES
                 </span>
                 <div className="space-y-1">
@@ -299,14 +299,14 @@ export function Hero() {
             </div>
 
             {/* Diagnostic readout table */}
-            <div className="border-t border-[#7A4210] pt-2 text-[9px] sm:text-[10px] space-y-1">
+            <div className="border-t border-[#7A4210] pt-2 text-[9px] sm:text-[10px] space-y-1 font-mono">
               <div className="flex justify-between text-[#7A4210]">
                 <span>TOTAL ASSESSED METRICS:</span>
-                <span className="text-[#FF8C24] font-bold">{SKILLS.length} SKILLS</span>
+                <span className="text-[#FF8C24] font-bold tva-nums">{SKILLS.length} SKILLS</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
                 <span>FOCUS:</span>
-                <span className="text-[#FFB84D]">FULL-STACK & SAAS</span>
+                <span className="text-[#FFE2B8]">FULL-STACK & SAAS</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
                 <span>WORK PREFERENCE:</span>

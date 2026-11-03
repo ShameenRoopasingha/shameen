@@ -78,11 +78,20 @@ export function TypewriterText({
     <span
       ref={containerRef}
       onClick={handleFastFinish}
-      className={`cursor-pointer ${className}`}
+      className={`relative inline-block cursor-pointer ${className}`}
       title="Click/tap to complete text"
     >
-      {displayText}
-      {showCursor && !isComplete && <span className="tva-cursor">█</span>}
+      {/* Invisible static skeleton locks the exact bounding box height and line wrapping */}
+      <span className="invisible select-none pointer-events-none" aria-hidden="true">
+        {text}
+        {showCursor && <span className="inline-block opacity-0">█</span>}
+      </span>
+
+      {/* Absolute overlay renders live animated typing text without causing layout shifts */}
+      <span className="absolute inset-0">
+        {displayText}
+        {showCursor && !isComplete && <span className="tva-cursor">█</span>}
+      </span>
     </span>
   );
 }

@@ -84,40 +84,42 @@ export function ExperienceSection() {
                 {/* Status Bar */}
                 <div className="flex flex-wrap items-center justify-between border-b border-[#7A4210] pb-2 mb-2 text-[10px] gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.2 border border-[#FF8C24] text-[#FF8C24] font-bold">
+                    <span className="px-1.5 py-0.2 border border-[#FF8C24] text-[#FF8C24] font-bold font-mono tva-nums">
                       INCIDENT #{(index + 1).toString().padStart(3, '0')}
                     </span>
                     <span className="text-[#00FF66] font-bold">● VERIFIED</span>
                   </div>
-                  <span className="text-[#FFB84D] font-bold font-mono">
+                  <span className="text-[#FFB84D] font-bold font-mono tva-nums">
                     {exp.year}
                   </span>
                 </div>
 
-                {/* Role and Organization */}
-                <h3 className="text-base sm:text-xl font-bold uppercase tracking-wide text-[#FF8C24] crt-glow mb-0.5">
+                {/* Role and Organization Stamp */}
+                <h3 className="tva-h3 text-[#FF8C24] tva-glow-subtle mb-1">
                   {exp.role}
                 </h3>
-                <div className="text-xs sm:text-sm uppercase tracking-widest text-[#FFB84D] mb-3">
-                  &gt;&gt; {exp.company}
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="tva-stamp text-[9px]">
+                    {exp.company}
+                  </span>
                 </div>
 
-                {/* Summary */}
-                <p className="text-xs sm:text-sm text-[#FF8C24]/90 leading-relaxed mb-3">
+                {/* Summary in High-Contrast Sentence Case */}
+                <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed mb-3 max-w-[65ch]">
                   {exp.description}
                 </p>
 
                 {/* Key Achievements */}
                 {exp.achievements && exp.achievements.length > 0 && (
                   <div className="mb-3">
-                    <span className="text-[9px] uppercase tracking-widest text-[#FFB84D] block mb-1 font-bold">
+                    <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#FFB84D] block mb-1.5 font-bold">
                       CAREER ACHIEVEMENTS & CONTRIBUTIONS:
                     </span>
-                    <ul className="space-y-1 text-xs text-[#FF8C24]/90">
+                    <ul className="space-y-1.5 text-xs text-[#FFE2B8] tva-body max-w-[65ch]">
                       {exp.achievements.map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-1.5">
-                          <span className="text-[#FF8C24] font-bold flex-shrink-0">&gt;</span>
-                          <span>{item}</span>
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-[#FF8C24] font-bold flex-shrink-0 font-mono">&gt;</span>
+                          <span className="leading-relaxed">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -127,14 +129,14 @@ export function ExperienceSection() {
                 {/* Technologies */}
                 {exp.technologies && exp.technologies.length > 0 && (
                   <div>
-                    <span className="text-[9px] uppercase tracking-widest text-[#7A4210] block mb-1">
+                    <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-1.5">
                       TECHNOLOGY TELEMETRY
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {exp.technologies.map((t) => (
                         <span
                           key={t}
-                          className="px-2 py-0.5 text-[10px] border border-[#7A4210] text-[#FF8C24] bg-[#120B05]"
+                          className="px-2 py-0.5 text-[10px] border border-[#7A4210] text-[#FF8C24] bg-[#120B05] font-mono tracking-wider"
                         >
                           {t}
                         </span>
