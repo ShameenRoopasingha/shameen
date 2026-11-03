@@ -3,78 +3,81 @@
 import { useState } from 'react';
 
 interface TerminalInputProps {
-    label: string;
-    name: string;
-    type?: 'text' | 'email' | 'textarea';
-    value: string;
-    onChange: (value: string) => void;
-    rows?: number;
+  label: string;
+  name: string;
+  type?: 'text' | 'email' | 'textarea';
+  value: string;
+  onChange: (value: string) => void;
+  rows?: number;
+  placeholder?: string;
+  required?: boolean;
 }
 
 export function TerminalInput({
-    label,
-    name,
-    type = 'text',
-    value,
-    onChange,
-    rows = 3,
+  label,
+  name,
+  type = 'text',
+  value,
+  onChange,
+  rows = 3,
+  placeholder,
+  required = false,
 }: TerminalInputProps) {
-    const [isFocused, setIsFocused] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-    const baseStyles = {
-        background: 'transparent',
-        border: 'none',
-        borderBottom: `1px solid ${isFocused ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.3)'}`,
-        color: 'var(--tva-amber)',
-        fontFamily: 'var(--font-mono)',
-        fontSize: '1rem',
-        padding: '0.5rem 0',
-        outline: 'none',
-        width: '100%',
-        caretColor: 'var(--tva-amber)',
-        transition: 'border-color 0.2s ease',
-    };
-
-    return (
-        <div className="mb-6">
-            <label
-                htmlFor={name}
-                className="block mb-2 text-xs uppercase tracking-widest"
-                style={{ color: 'rgba(255, 153, 0, 0.7)' }}
-            >
-                &gt; {label}:
-            </label>
-            <div className="relative">
-                {type === 'textarea' ? (
-                    <textarea
-                        id={name}
-                        name={name}
-                        value={value}
-                        onChange={(e) => onChange(e.target.value)}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                        rows={rows}
-                        style={{
-                            ...baseStyles,
-                            resize: 'none',
-                        }}
-                        className="w-full"
-                    />
-                ) : (
-                    <input
-                        id={name}
-                        name={name}
-                        type={type}
-                        value={value}
-                        onChange={(e) => onChange(e.target.value)}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                        style={baseStyles}
-                    />
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className="mb-5 font-mono">
+      <label
+        htmlFor={name}
+        className="block mb-1 text-[11px] uppercase tracking-widest text-[#FF8C24] opacity-80"
+      >
+        <span className="text-[#FFB84D]">&gt;&gt;</span> {label}
+        {required && <span className="text-[#FF3B1F] ml-1">*</span>}
+      </label>
+      <div
+        className={`relative border bg-[#120B05] transition-all duration-75 ${
+          isFocused
+            ? 'border-[#FF8C24] shadow-[0_0_10px_rgba(255,140,36,0.3)]'
+            : 'border-[#7A4210] hover:border-[#FF8C24]/60'
+        }`}
+      >
+        {type === 'textarea' ? (
+          <textarea
+            id={name}
+            name={name}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            rows={rows}
+            placeholder={placeholder}
+            required={required}
+            className="w-full bg-transparent px-3 py-2 text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-none resize-none font-mono"
+            style={{ caretColor: '#FF8C24' }}
+          />
+        ) : (
+          <input
+            id={name}
+            name={name}
+            type={type}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder={placeholder}
+            required={required}
+            className="w-full bg-transparent px-3 py-2 text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-none font-mono"
+            style={{ caretColor: '#FF8C24' }}
+          />
+        )}
+        {isFocused && (
+          <span className="absolute right-2 top-2 text-[10px] text-[#FF8C24] opacity-40 select-none">
+            [INPUT_ACTIVE]
+          </span>
+        )}
+      </div>
+    </div>
+  );
 }
 
 TerminalInput.displayName = 'TerminalInput';

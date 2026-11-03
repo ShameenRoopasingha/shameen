@@ -4,90 +4,56 @@ import { useEffect, useCallback, useRef } from 'react';
 import gsap from 'gsap';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setWarpSpeed, completeTransition } from '@/store/navigationSlice';
-import { WARP_SPEED_IDLE, WARP_SPEED_PEAK, TRANSITION_DURATION } from '@/lib/constants';
 
 export function useWarpTransition() {
-    const dispatch = useAppDispatch();
-    const { isTransitioning, targetSection, currentSection } = useAppSelector(
-        (state) => state.navigation
-    );
-    const timelineRef = useRef<gsap.core.Timeline | null>(null);
-    const flashRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useAppDispatch();
+  const { isTransitioning, targetSection, currentSection } = useAppSelector(
+    (state) => state.navigation
+  );
+  const flashRef = useRef<HTMLDivElement | null>(null);
 
-    const setFlashRef = useCallback((ref: HTMLDivElement | null) => {
-        flashRef.current = ref;
-    }, []);
+  const setFlashRef = useCallback((ref: HTMLDivElement | null) => {
+    flashRef.current = ref;
+  }, []);
 
-    useEffect(() => {
-        if (isTransitioning && targetSection !== currentSection) {
-            // Kill any existing timeline
-            if (timelineRef.current) {
-                timelineRef.current.kill();
-            }
+  useEffect(() => {
+    if (isTransitioning && targetSection !== currentSection) {
+      const el = flashRef.current;
+      const tl = gsap.timeline({
+        onComplete: () => {
+          dispatch(completeTransition());
+          dispatch(setWarpSpeed(1.0));
+        },
+      });
 
-            // Create warp transition timeline
-            const tl = gsap.timeline({
-                onComplete: () => {
-                    dispatch(completeTransition());
-                },
-            });
+      dispatch(setWarpSpeed(3.0));
 
-            // Ramp up warp speed
-            tl.to(
-                {},
-                {
-                    duration: TRANSITION_DURATION / 2,
-                    ease: 'power4.in',
-                    onUpdate: function () {
-                        const progress = this.progress();
-                        const speed = WARP_SPEED_IDLE + (WARP_SPEED_PEAK - WARP_SPEED_IDLE) * progress;
-                        dispatch(setWarpSpeed(speed));
-                    },
-                }
-            );
+      if (el) {
+        // Crisp 180ms stepped CRT scan-wipe / timedoor wireframe expansion
+        tl.fromTo(
+          el,
+          { opacity: 0, scale: 0.95 },
+          {
+            opacity: 0.85,
+            scale: 1,
+            duration: 0.09,
+            ease: 'steps(2)',
+          }
+        ).to(el, {
+          opacity: 0,
+          scale: 1.05,
+          duration: 0.09,
+          ease: 'steps(2)',
+        });
+      } else {
+        tl.to({}, { duration: 0.18 });
+      }
 
-            // Flash effect
-            if (flashRef.current) {
-                tl.to(
-                    flashRef.current,
-                    {
-                        opacity: 0.6,
-                        duration: 0.1,
-                        ease: 'power2.out',
-                    },
-                    '-=0.1'
-                );
-                tl.to(flashRef.current, {
-                    opacity: 0,
-                    duration: 0.3,
-                    ease: 'power2.out',
-                });
-            }
+      return () => {
+        tl.kill();
+      };
+    }
+  }, [isTransitioning, targetSection, currentSection, dispatch]);
 
-            // Ramp down warp speed
-            tl.to(
-                {},
-                {
-                    duration: TRANSITION_DURATION / 2,
-                    ease: 'power4.out',
-                    onUpdate: function () {
-                        const progress = this.progress();
-                        const speed = WARP_SPEED_PEAK - (WARP_SPEED_PEAK - WARP_SPEED_IDLE) * progress;
-                        dispatch(setWarpSpeed(speed));
-                    },
-                },
-                '-=0.2'
-            );
-
-            timelineRef.current = tl;
-        }
-
-        return () => {
-            if (timelineRef.current) {
-                timelineRef.current.kill();
-            }
-        };
-    }, [isTransitioning, targetSection, currentSection, dispatch]);
-
-    return { setFlashRef };
+  return { setFlashRef };
 }

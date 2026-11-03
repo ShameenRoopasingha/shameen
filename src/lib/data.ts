@@ -1,102 +1,123 @@
-// Portfolio Data - Shameen Roopasingha
+// Centralized Portfolio Data for TVA TemPad OS
+import { PORTFOLIO_DATA } from '@/data/portfolio';
+export * from '@/types/portfolio';
+export { PORTFOLIO_DATA };
 
-export const PROFILE = {
-    name: 'Shameen Roopasingha',
-    role: 'Full Stack Developer',
-    summary: 'Specialist in React, Next.js, Node.js, and UI/UX animations.',
-    tagline: 'VARIANT DETECTED',
+export interface Profile {
+  name: string;
+  role: string;
+  summary: string;
+  tagline: string;
+  variantId: string;
+  clearanceLevel: string;
+  timelineBranch: string;
+  socialLinks: {
+    github: string;
+    linkedin: string;
+    email: string;
+    resumeUrl: string;
+  };
+}
+
+export const PROFILE: Profile = {
+  name: PORTFOLIO_DATA.variant.realName,
+  role: PORTFOLIO_DATA.variant.primaryRole,
+  summary: PORTFOLIO_DATA.variant.dossierSummary,
+  tagline: PORTFOLIO_DATA.variant.operationalStatus,
+  variantId: PORTFOLIO_DATA.variant.variantId,
+  clearanceLevel: PORTFOLIO_DATA.variant.clearanceLevel,
+  timelineBranch: PORTFOLIO_DATA.variant.timelineBranch,
+  socialLinks: PORTFOLIO_DATA.variant.socialLinks,
 };
 
-export interface Experience {
-    id: string;
-    role: string;
-    company: string;
-    year: string;
-    description: string;
+export interface LegacyExperience {
+  id: string;
+  role: string;
+  company: string;
+  year: string;
+  description: string;
+  achievements?: string[];
+  technologies?: string[];
+  coordinate?: string;
+  status?: string;
 }
 
-export const EXPERIENCE: Experience[] = [
-    {
-        id: 'exp-1',
-        role: 'UI/UX Developer',
-        company: 'Ceylon Weighing Machines',
-        year: 'Apr 2024 – Dec 2024',
-        description: 'Designed user interfaces for weighbridge systems using Adobe XD. Customized VB.Net applications for clients to improve weighbridge operations.',
-    },
-    {
-        id: 'exp-2',
-        role: 'Web Developer',
-        company: 'Global Cloud Tech Solutions',
-        year: 'Jan 2021 – Dec 2022',
-        description: 'Developed basic websites using HTML, CSS, PHP, and SQL. Maintained and updated existing web applications for clients.',
-    },
-    {
-        id: 'exp-3',
-        role: 'Web Developer',
-        company: 'Sanota Pvt Ltd',
-        year: 'Jan 2020 – Dec 2020',
-        description: 'Built and deployed the company\'s official website using HTML, CSS, and Bootstrap.',
-    },
-];
+export const EXPERIENCE: LegacyExperience[] = PORTFOLIO_DATA.experiences.map((exp) => ({
+  id: exp.id,
+  role: exp.role,
+  company: exp.company,
+  year: exp.period,
+  description: exp.summary,
+  achievements: exp.achievements,
+  technologies: exp.technologies,
+  coordinate: exp.coordinate,
+  status: exp.status,
+}));
 
-export interface Project {
-    id: string;
-    title: string;
-    description: string;
-    techStack: string[];
+export interface LegacyProject {
+  id: string;
+  codeName?: string;
+  title: string;
+  category?: string;
+  summary?: string;
+  description: string;
+  problemSolved?: string;
+  architectureHighlights?: string[];
+  techStack: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+  status?: string;
+  temporalTag?: string;
 }
 
-export const PROJECTS: Project[] = [
-    {
-        id: 'proj-1',
-        title: 'Pharmacy POS System',
-        description: 'Complete point-of-sale system for pharmacy operations with inventory management and billing.',
-        techStack: ['Electron', 'React', 'SQLite'],
-    },
-    {
-        id: 'proj-2',
-        title: 'WhatsApp POS Bot',
-        description: 'Automated WhatsApp bot for processing orders and managing customer interactions.',
-        techStack: ['Node.js', 'Twilio', 'Supabase'],
-    },
-    {
-        id: 'proj-3',
-        title: 'MERN User System',
-        description: 'Full authentication and user management system with role-based access control.',
-        techStack: ['React', 'Redux', 'Zod'],
-    },
-];
+export const PROJECTS: LegacyProject[] = PORTFOLIO_DATA.projects.map((proj) => ({
+  id: proj.id,
+  codeName: proj.codeName,
+  title: proj.title,
+  category: proj.category,
+  summary: proj.summary,
+  description: proj.summary,
+  problemSolved: proj.problemSolved,
+  architectureHighlights: proj.architectureHighlights,
+  techStack: proj.techStack,
+  githubUrl: proj.githubUrl,
+  liveUrl: proj.liveUrl,
+  status: proj.status,
+  temporalTag: proj.temporalTag,
+}));
 
 export interface Skill {
-    name: string;
-    level: number; // 0-100
+  name: string;
+  level: number;
+  category?: string;
+  tag?: string;
 }
 
-export const SKILLS: Skill[] = [
-    { name: 'React.js', level: 90 },
-    { name: 'Next.js', level: 85 },
-    { name: 'Tailwind', level: 88 },
-    { name: 'Three.js', level: 70 },
-    { name: 'Node.js', level: 82 },
-    { name: 'MongoDB', level: 75 },
-    { name: 'SQL', level: 72 },
-];
+export const SKILLS: Skill[] = PORTFOLIO_DATA.skillGroups.flatMap((group) =>
+  group.skills.map((s) => ({
+    name: s.name,
+    level: s.level,
+    category: group.category,
+    tag: s.tag,
+  }))
+);
 
 export interface Reference {
-    id: string;
-    name: string;
-    company: string;
+  id: string;
+  fileNumber?: string;
+  name: string;
+  role?: string;
+  company: string;
+  endorsement?: string;
+  status?: string;
 }
 
-export const REFERENCES: Reference[] = [
-    {
-        id: 'ref-1',
-        name: 'Dilshan Ranasinghe',
-        company: 'Delta Capita',
-    },
-    {
-        id: 'ref-2',
-        name: 'Uvinda Induwara',
-        company: 'OSO PVT LTD',
-    },
-];
+export const REFERENCES: Reference[] = PORTFOLIO_DATA.references.map((ref) => ({
+  id: ref.id,
+  fileNumber: ref.fileNumber,
+  name: ref.name,
+  role: ref.role,
+  company: ref.organization,
+  endorsement: ref.endorsement,
+  status: ref.verificationStatus,
+}));

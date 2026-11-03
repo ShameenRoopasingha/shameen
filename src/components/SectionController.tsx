@@ -1,224 +1,264 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import gsap from 'gsap';
+import { useRef, useEffect, useState } from 'react';
 import { Hero } from '@/components/sections/Hero';
-import { ExperienceSection } from '@/components/sections/Experience';
 import { ProjectsSection } from '@/components/sections/Projects';
+import { ExperienceSection } from '@/components/sections/Experience';
 import { SkillsSection } from '@/components/sections/Skills';
 import { ReferencesSection } from '@/components/sections/References';
 import { ContactSection } from '@/components/sections/Contact';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { setTargetSection, setSectionByHash } from '@/store/navigationSlice';
 import { useWarpTransition } from '@/hooks/useWarpTransition';
 import { useGSAPObserver } from '@/hooks/useGSAPObserver';
 import { WarpFlash } from '@/components/ui/WarpFlash';
+import { SECTIONS, SECTION_METADATA } from '@/lib/constants';
+import { PROFILE } from '@/lib/data';
 
-const sections = [
-    { id: 'hero', Component: Hero, label: 'Variant' },
-    { id: 'experience', Component: ExperienceSection, label: 'Timeline' },
-    { id: 'projects', Component: ProjectsSection, label: 'Evidence' },
-    { id: 'skills', Component: SkillsSection, label: 'Skills' },
-    { id: 'references', Component: ReferencesSection, label: 'Files' },
-    { id: 'contact', Component: ContactSection, label: 'Uplink' },
+const sectionComponents = [
+  Hero,
+  ProjectsSection,
+  ExperienceSection,
+  SkillsSection,
+  ReferencesSection,
+  ContactSection,
 ];
 
 export function SectionController() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const flashRef = useRef<HTMLDivElement>(null);
-    const dispatch = useAppDispatch();
-    const { currentSection, targetSection, isTransitioning } = useAppSelector(
-        (state) => state.navigation
-    );
-    const { setFlashRef } = useWarpTransition();
+  const flashRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+  const { currentSection } = useAppSelector((state) => state.navigation);
+  const { setFlashRef } = useWarpTransition();
+  const [chronoTime, setChronoTime] = useState<string>('00:00:00 // 616');
 
-    // Initialize GSAP Observer
-    useGSAPObserver();
+  // Register observer
+  useGSAPObserver();
 
-    // Set flash ref
-    useEffect(() => {
-        setFlashRef(flashRef.current);
-    }, [setFlashRef]);
+  // Set flash ref
+  useEffect(() => {
+    setFlashRef(flashRef.current);
+  }, [setFlashRef]);
 
-    // Handle section transitions for desktop
-    useEffect(() => {
-        if (!containerRef.current) return;
-        if (typeof window !== 'undefined' && window.innerWidth <= 768) return;
+  // Live Chrono-ticker
+  useEffect(() => {
+    const updateTime = () => {
+      const d = new Date();
+      const timeStr = d.toTimeString().split(' ')[0];
+      setChronoTime(`${timeStr} // TC-616`);
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
-        const sectionElements = containerRef.current.children;
+  // Sync with URL Hash state on mount & back/forward navigation
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-        // Animate out current section
-        if (isTransitioning && sectionElements[currentSection]) {
-            gsap.to(sectionElements[currentSection], {
-                opacity: 0,
-                scale: 0.95,
-                duration: 0.4,
-                ease: 'power2.in',
-            });
-        }
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        dispatch(setSectionByHash(hash));
+      }
+    };
 
-        // Animate in target section
-        if (sectionElements[targetSection]) {
-            gsap.fromTo(
-                sectionElements[targetSection],
-                {
-                    opacity: 0,
-                    scale: 1.05,
-                },
-                {
-                    opacity: 1,
-                    scale: 1,
-                    duration: 0.6,
-                    delay: isTransitioning ? 0.6 : 0,
-                    ease: 'power3.out',
-                }
-            );
-        }
-    }, [currentSection, targetSection, isTransitioning]);
+    // Initial check
+    if (window.location.hash) {
+      handleHashChange();
+    }
 
-    // Handle mobile scroll sync
-    useEffect(() => {
-        if (typeof window === 'undefined' || window.innerWidth > 768) return;
-        if (!containerRef.current) return;
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleHashChange);
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
+    };
+  }, [dispatch]);
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const index = Array.from(containerRef.current!.children).indexOf(entry.target);
-                        if (index !== -1 && index !== currentSection) {
-                            dispatch({ type: 'navigation/setCurrentSection', payload: index });
-                        }
-                    }
-                });
-            },
-            { threshold: 0.5 }
-        );
+  // Update hash when currentSection changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const currentMeta = SECTION_METADATA[SECTIONS[currentSection]];
+    if (currentMeta && window.location.hash !== currentMeta.hash) {
+      window.history.replaceState(null, '', currentMeta.hash);
+    }
+  }, [currentSection]);
 
-        Array.from(containerRef.current.children).forEach((child) => observer.observe(child));
+  const ActiveComponent = sectionComponents[currentSection] || Hero;
 
-        return () => observer.disconnect();
-    }, [dispatch, currentSection]);
+  return (
+    <div className="relative w-full h-screen overflow-hidden flex flex-col bg-[#120B05] font-mono select-none">
+      <WarpFlash ref={flashRef} />
 
-    return (
-        <>
-            <WarpFlash ref={flashRef} />
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 1. TOP TEMPAD HARDWARE STATUS BAR                              */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <header className="h-12 border-b border-[#7A4210] bg-[#120B05] flex items-center justify-between px-3 md:px-6 z-20 flex-shrink-0">
+        {/* Left: System Identification */}
+        <div className="flex items-center gap-2 md:gap-3 text-xs">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 bg-[#FF8C24] shadow-[0_0_8px_#FF8C24]" />
+            <span className="font-bold tracking-widest text-[#FF8C24]">
+              TVA-OS v4.02
+            </span>
+          </div>
+          <span className="text-[#7A4210] hidden sm:inline">|</span>
+          <span className="text-[#FFB84D] tracking-wider text-[11px] hidden sm:inline">
+            VARIANT: {PROFILE.name.toUpperCase()}
+          </span>
+        </div>
 
-            <div
-                ref={containerRef}
-                className="section-controller-container"
-            >
-                {sections.map(({ id, Component }, index) => (
-                    <div
-                        key={id}
-                        className="section-wrapper"
-                        style={{
-                            '--desktop-opacity': index === currentSection ? 1 : 0,
-                            '--desktop-pointer': index === currentSection ? 'auto' : 'none',
-                            '--desktop-z': index === currentSection ? 1 : 0,
-                        } as React.CSSProperties}
-                    >
-                        <Component />
-                    </div>
-                ))}
+        {/* Center: Live Chrono Ticker */}
+        <div className="hidden md:flex items-center gap-2 text-xs text-[#FF8C24]">
+          <span className="text-[#7A4210]">TEMPORAL ANCHOR:</span>
+          <span className="text-[#FFB84D] font-bold tracking-widest">{chronoTime}</span>
+        </div>
+
+        {/* Right: Recruiter 1-Click Fast Actions */}
+        <div className="flex items-center gap-2 sm:gap-3 text-xs">
+          <a
+            href={PROFILE.socialLinks.resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2 py-1 border border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05] transition-all text-[10px] md:text-xs font-bold tracking-wider"
+          >
+            RESUME (PDF) ↗
+          </a>
+          <a
+            href={PROFILE.socialLinks.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2 py-1 border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] transition-all text-[10px] md:text-xs tracking-wider hidden sm:inline"
+          >
+            GITHUB
+          </a>
+          <a
+            href={PROFILE.socialLinks.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2 py-1 border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] transition-all text-[10px] md:text-xs tracking-wider hidden sm:inline"
+          >
+            LINKEDIN
+          </a>
+        </div>
+      </header>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 2. SPLIT-BEZEL BODY: LEFT ACTION LIST /// + MAIN VIEWPORT     */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        {/* DESKTOP PERSISTENT SIDEBAR: ACTION LIST /// */}
+        <aside className="hidden md:flex w-72 lg:w-80 border-r border-[#7A4210] bg-[#120B05]/95 flex-col justify-between p-4 flex-shrink-0 z-10">
+          <div>
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3">
+              <span className="text-xs font-bold tracking-widest text-[#FF8C24]">
+                ACTION LIST ///
+              </span>
+              <span className="tva-cursor">█</span>
             </div>
 
-            <style jsx>{`
-                .section-controller-container {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100dvh;
-                    z-index: 10;
-                }
-                .section-wrapper {
-                    position: absolute;
-                    inset: 0;
-                    opacity: var(--desktop-opacity);
-                    pointer-events: var(--desktop-pointer);
-                    z-index: var(--desktop-z);
-                }
-                
-                @media (max-width: 768px) {
-                    .section-controller-container {
-                        position: relative;
-                        height: auto;
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    .section-wrapper {
-                        position: relative;
-                        height: auto;
-                        min-height: 100dvh;
-                        opacity: 1 !important;
-                        pointer-events: auto !important;
-                        z-index: 1 !important;
-                        transform: none !important;
-                    }
-                }
-            `}</style>
+            {/* Menu Items with Inverted Amber Block Hover */}
+            <nav className="space-y-1.5" aria-label="TemPad Navigation">
+              {SECTIONS.map((secId, idx) => {
+                const meta = SECTION_METADATA[secId];
+                const isActive = idx === currentSection;
 
-            {/* Section Indicators */}
-            <SectionIndicators currentSection={currentSection} />
-        </>
-    );
-}
-
-interface SectionIndicatorsProps {
-    currentSection: number;
-}
-
-function SectionIndicators({ currentSection }: SectionIndicatorsProps) {
-    const dispatch = useAppDispatch();
-    return (
-        <div
-            className="fixed right-2 md:right-4 lg:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-4 cursor-pointer"
-            style={{ zIndex: 20 }}
-        >
-            {sections.map((section, index) => (
-                <div
-                    key={section.id}
-                    className="relative group flex items-center justify-end gap-3"
-                    onClick={() => {
-                        if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-                            const wrappers = document.querySelectorAll('.section-wrapper');
-                            if (wrappers[index]) {
-                                wrappers[index].scrollIntoView({ behavior: 'smooth' });
-                            }
-                        } else {
-                            dispatch({ type: 'navigation/setTargetSection', payload: index });
-                        }
-                    }}
-                >
-                    {/* Label */}
-                    <span
-                        className="text-xs uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 hidden md:block"
-                        style={{ color: 'rgba(255, 153, 0, 0.7)' }}
-                    >
-                        {section.label}
+                return (
+                  <button
+                    key={secId}
+                    type="button"
+                    onClick={() => dispatch(setTargetSection(idx))}
+                    className={`w-full text-left tva-action-item ${
+                      isActive ? 'active' : ''
+                    }`}
+                  >
+                    <span className="badge text-[10px] px-1 py-0.2 bg-[#FF8C24]/10 border border-[#7A4210] text-[#FFB84D]">
+                      {meta.code}
                     </span>
+                    <div className="flex flex-col truncate">
+                      <span className="text-xs font-bold truncate">
+                        {meta.tvaLabel}
+                      </span>
+                      <span className="text-[9px] opacity-75 truncate">
+                        {meta.recruiterLabel}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
 
-                    {/* Indicator dot */}
-                    <div
-                        className="w-2 h-2 rounded-full transition-all duration-300"
-                        style={{
-                            background:
-                                index === currentSection
-                                    ? 'var(--tva-amber)'
-                                    : 'rgba(255, 153, 0, 0.3)',
-                            boxShadow:
-                                index === currentSection
-                                    ? '0 0 10px var(--tva-amber)'
-                                    : 'none',
-                            transform: index === currentSection ? 'scale(1.5)' : 'scale(1)',
-                        }}
-                    />
-                </div>
-            ))}
-        </div>
-    );
+          {/* Bottom Sidebar Diagnostic Readout */}
+          <div className="border-t border-[#7A4210] pt-3 text-[10px] text-[#7A4210] space-y-1.5">
+            <div className="flex justify-between">
+              <span>KEYBOARD SHORTCUTS:</span>
+              <span className="text-[#FF8C24] font-bold">[1 - 6]</span>
+            </div>
+            <div className="flex justify-between">
+              <span>GRID CALIBRATION:</span>
+              <span className="text-[#00FF66]">24x24 // LOCKED</span>
+            </div>
+            <div className="flex justify-between">
+              <span>CLEARANCE:</span>
+              <span className="text-[#FFB84D]">LEVEL-4 RECRUITER</span>
+            </div>
+          </div>
+        </aside>
+
+        {/* MAIN VIEWPORT: ACTIVE MODULE WITH INTERNAL SCROLLING */}
+        <main className="flex-1 h-full overflow-hidden relative flex flex-col">
+          {/* CRT Module Header Ticker */}
+          <div className="h-7 border-b border-[#7A4210]/60 bg-[#120B05] px-4 flex items-center justify-between text-[10px] text-[#7A4210] flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <span className="text-[#FF8C24]">&gt;&gt; ACTIVE MODULE:</span>
+              <span className="text-[#FFB84D] font-bold">
+                {SECTION_METADATA[SECTIONS[currentSection]]?.tvaLabel} //{' '}
+                {SECTION_METADATA[SECTIONS[currentSection]]?.recruiterLabel}
+              </span>
+            </div>
+            <span className="hidden sm:inline text-[#7A4210]">
+              TVA-OS CRT DISPLAY BUFFER // NORMALIZED
+            </span>
+          </div>
+
+          {/* Scrollable Viewport Container */}
+          <div className="flex-1 w-full h-full overflow-y-auto custom-scrollbar relative">
+            <ActiveComponent />
+          </div>
+        </main>
+      </div>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 3. MOBILE BOTTOM HANDHELD SCANNER CONTROL DECK (< 768px)       */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <nav
+        className="md:hidden border-t border-[#FF8C24] bg-[#120B05] flex items-center justify-between px-2 py-1.5 z-30 flex-shrink-0 overflow-x-auto custom-scrollbar gap-1"
+        aria-label="Mobile Navigation Deck"
+      >
+        {SECTIONS.map((secId, idx) => {
+          const meta = SECTION_METADATA[secId];
+          const isActive = idx === currentSection;
+
+          return (
+            <button
+              key={secId}
+              type="button"
+              onClick={() => dispatch(setTargetSection(idx))}
+              className={`flex-shrink-0 px-2 py-1 text-[10px] uppercase tracking-wider border transition-all ${
+                isActive
+                  ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
+                  : 'border-[#7A4210] text-[#FF8C24] bg-[#120B05]'
+              }`}
+            >
+              {meta.code} {meta.tvaLabel.split(' ')[0]}
+            </button>
+          );
+        })}
+      </nav>
+    </div>
+  );
 }
 
 SectionController.displayName = 'SectionController';
-SectionIndicators.displayName = 'SectionIndicators';
-

@@ -1,515 +1,221 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import gsap from 'gsap';
-import { EXPERIENCE, type Experience } from '@/lib/data';
+import { useState } from 'react';
+import { EXPERIENCE, LegacyExperience } from '@/lib/data';
 
 export function ExperienceSection() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [isJumping, setIsJumping] = useState(false);
-    const lastWheelTime = useRef(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const currentExp: LegacyExperience = EXPERIENCE[activeIndex] || EXPERIENCE[0];
 
-    const jumpToExperience = useCallback((newIndex: number) => {
-        if (isJumping || newIndex === activeIndex || newIndex < 0 || newIndex >= EXPERIENCE.length) {
-            return;
-        }
+  return (
+    <div className="w-full h-full min-h-[calc(100vh-110px)] p-4 md:p-8 font-mono flex flex-col justify-between overflow-y-auto custom-scrollbar select-text">
+      {/* Top Header */}
+      <div className="border-b border-[#7A4210] pb-3 mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
+            SACRED TIMELINE
+          </span>
+          <span className="text-xs text-[#FF8C24] tracking-widest">
+            CANONICAL CAREER DISPATCHES
+          </span>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-[#7A4210]">
+          <span>COORDINATE:</span>
+          <span className="text-[#FFB84D] font-bold">
+            {currentExp.coordinate || `TC-${(activeIndex + 1).toString().padStart(3, '0')}`}
+          </span>
+          <span>|</span>
+          <span className="text-[#00FF66] font-bold">VERIFIED</span>
+        </div>
+      </div>
 
-        setIsJumping(true);
+      {/* Interactive Sacred Timeline Oscilloscope SVG Track */}
+      <div className="border border-[#7A4210] p-4 bg-[#120B05] mb-6">
+        <div className="flex items-center justify-between text-[11px] text-[#7A4210] tracking-widest mb-3">
+          <span>INTERACTIVE TEMPORAL WAVEFORM /// SELECT INCIDENT NODE</span>
+          <span className="text-[#FF8C24]">
+            NODE: [0{activeIndex + 1} / 0{EXPERIENCE.length}]
+          </span>
+        </div>
 
-        // Cinematic jump animation
-        const timeline = gsap.timeline({
-            onComplete: () => {
-                setActiveIndex(newIndex);
-                setIsJumping(false);
-            }
-        });
-
-        // Dramatic flash with chromatic aberration feel
-        timeline.to('.jump-flash', {
-            opacity: 1,
-            duration: 0.1,
-            ease: 'power4.in',
-        });
-
-        // Content fade out with distortion
-        timeline.to('.content-panel', {
-            opacity: 0,
-            scale: 0.95,
-            filter: 'blur(4px)',
-            duration: 0.15,
-            ease: 'power2.in',
-        }, '<');
-
-        // Timeline warp
-        timeline.to('.timeline-container', {
-            scaleX: 1.1,
-            opacity: 0.5,
-            duration: 0.1,
-            ease: 'power2.in',
-        }, '<');
-
-        // Flash peak
-        timeline.set('.jump-flash', { opacity: 0 }, '+=0.05');
-
-        // Content fade in
-        timeline.fromTo('.content-panel',
-            { opacity: 0, scale: 1.05, filter: 'blur(4px)' },
-            { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.3, ease: 'power3.out' }
-        );
-
-        timeline.to('.timeline-container', {
-            scaleX: 1,
-            opacity: 1,
-            duration: 0.2,
-            ease: 'power2.out',
-        }, '<');
-
-    }, [activeIndex, isJumping]);
-
-    // Handle scroll within section
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const handleWheel = (e: WheelEvent) => {
-            const now = Date.now();
-            if (now - lastWheelTime.current < 900) return;
-
-            if (Math.abs(e.deltaY) > 30) {
-                lastWheelTime.current = now;
-
-                if (e.deltaY > 0 && activeIndex < EXPERIENCE.length - 1) {
-                    jumpToExperience(activeIndex + 1);
-                    e.preventDefault();
-                    e.stopPropagation();
-                } else if (e.deltaY < 0 && activeIndex > 0) {
-                    jumpToExperience(activeIndex - 1);
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            }
-        };
-
-        container.addEventListener('wheel', handleWheel, { passive: false });
-        return () => container.removeEventListener('wheel', handleWheel);
-    }, [activeIndex, jumpToExperience]);
-
-    const currentExperience = EXPERIENCE[activeIndex];
-
-    return (
-        <div
-            ref={containerRef}
-            className="experience-container section-container relative"
-        >
-            {/* Cinematic Background Layers */}
-            <div className="absolute inset-0">
-                {/* Radial gradient backdrop */}
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(255, 153, 0, 0.06) 0%, transparent 60%)',
-                    }}
-                />
-
-                {/* Horizontal scan lines */}
-                <div
-                    className="absolute inset-0 opacity-10"
-                    style={{
-                        backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 153, 0, 0.03) 2px, rgba(255, 153, 0, 0.03) 4px)',
-                    }}
-                />
-            </div>
-
-            {/* Jump Flash Overlay */}
-            <div
-                className="jump-flash absolute inset-0 pointer-events-none"
-                style={{
-                    background: 'linear-gradient(90deg, transparent 20%, var(--tva-amber) 50%, transparent 80%)',
-                    opacity: 0,
-                    zIndex: 100,
-                    mixBlendMode: 'screen',
-                }}
+        {/* SVG Oscilloscope Timeline */}
+        <div className="relative py-4">
+          <svg
+            className="w-full h-16 overflow-visible"
+            viewBox="0 0 600 60"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Background sine wave */}
+            <path
+              d="M 0 30 Q 150 10 300 30 T 600 30"
+              stroke="#7A4210"
+              strokeWidth="1.5"
+              strokeDasharray="4 4"
+            />
+            {/* Active strand glow */}
+            <path
+              d="M 0 30 Q 150 10 300 30 T 600 30"
+              stroke="#FF8C24"
+              strokeWidth="2"
+              className="opacity-70"
             />
 
-            {/* Top HUD Bar */}
-            <div className="absolute top-0 left-0 right-0 h-16 flex items-center justify-between px-4 lg:px-16" style={{ borderBottom: '1px solid rgba(255, 153, 0, 0.1)' }}>
-                <div className="flex items-center gap-2 lg:gap-4">
-                    <div className="w-2 h-2 rounded-full animate-pulse flex-shrink-0" style={{ background: 'var(--tva-amber)', boxShadow: '0 0 10px var(--tva-amber)' }} />
-                    <span className="text-[9px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.4em] hidden sm:block" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
-                        Sacred Timeline
-                    </span>
-                    <span className="text-[9px] uppercase tracking-[0.2em] sm:hidden" style={{ color: 'rgba(255, 153, 0, 0.5)' }}>
-                        Timeline
-                    </span>
-                </div>
+            {/* Interactive nodes along timeline */}
+            {EXPERIENCE.map((exp, index) => {
+              const xPos = 80 + index * 220;
+              const yPos = index % 2 === 0 ? 20 : 40;
+              const isActive = index === activeIndex;
 
-                <div className="flex items-center gap-4 lg:gap-8">
-                    <span className="text-[9px] lg:text-xs uppercase tracking-widest hidden sm:block" style={{ color: 'rgba(255, 153, 0, 0.4)' }}>
-                        Temporal Coordinate
-                    </span>
-                    <span className="text-xl lg:text-2xl font-light tracking-widest flex-shrink-0" style={{ color: 'var(--tva-amber)' }}>
-                        {(activeIndex + 1).toString().padStart(2, '0')}
-                        <span style={{ color: 'rgba(255, 153, 0, 0.3)' }}> / </span>
-                        {EXPERIENCE.length.toString().padStart(2, '0')}
-                    </span>
-                </div>
-            </div>
-
-            {/* Desktop Layout - Cinematic */}
-            <div className="h-full flex-col pt-20 md:pt-24 pb-4 md:pb-8 hidden md:flex desktop-experience">
-                <div className="content-panel flex-1 flex items-center justify-center px-4 md:px-8 lg:px-24 mt-4">
-                    <div className="w-full max-w-5xl">
-                        <ExperiencePanel experience={currentExperience} index={activeIndex} />
-                    </div>
-                </div>
-                <div className="timeline-container h-24 md:h-32 lg:h-40 relative flex-shrink-0">
-                    <TimelineStrip
-                        experiences={EXPERIENCE}
-                        activeIndex={activeIndex}
-                        onSelect={jumpToExperience}
+              return (
+                <g
+                  key={exp.id}
+                  onClick={() => setActiveIndex(index)}
+                  className="cursor-pointer group"
+                >
+                  {/* Outer pulse when active */}
+                  {isActive && (
+                    <circle
+                      cx={xPos}
+                      cy={yPos}
+                      r="14"
+                      fill="none"
+                      stroke="#FF8C24"
+                      strokeWidth="1"
+                      className="animate-ping opacity-40"
                     />
-                </div>
-            </div>
-
-            {/* Mobile Layout - Cinematic */}
-            <div 
-                className="min-h-[100dvh] w-full flex-col pt-20 pb-8 md:hidden flex justify-between relative"
-                onTouchStart={(e) => {
-                    const touch = e.touches[0];
-                    containerRef.current?.setAttribute('data-touch-start', touch.clientX.toString());
-                }}
-                onTouchEnd={(e) => {
-                    const startXStr = containerRef.current?.getAttribute('data-touch-start');
-                    if (!startXStr) return;
-                    const startX = parseFloat(startXStr);
-                    const endX = e.changedTouches[0].clientX;
-                    const diff = startX - endX;
-                    if (Math.abs(diff) > 50) {
-                        if (diff > 0) {
-                            jumpToExperience(Math.min(EXPERIENCE.length - 1, activeIndex + 1));
-                        } else {
-                            jumpToExperience(Math.max(0, activeIndex - 1));
-                        }
-                    }
-                }}
-            >
-                <div className="flex-1 flex flex-col justify-center px-4">
-                    <MobileExperiencePanel experience={currentExperience} index={activeIndex} />
-                </div>
-                
-                <div className="h-24 relative flex-shrink-0 mt-8 mb-6">
-                    <TimelineStrip
-                        experiences={EXPERIENCE}
-                        activeIndex={activeIndex}
-                        onSelect={jumpToExperience}
-                    />
-                    <div className="absolute bottom-[-15px] left-0 right-0 text-center">
-                        <span className="text-[8px] uppercase tracking-[0.3em] opacity-50" style={{ color: 'var(--tva-amber)' }}>
-                            Swipe to navigate timeline
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Corner Decorations */}
-            <CornerBrackets />
-
-            <style jsx>{`
-                .experience-container {
-                    height: 100dvh;
-                    width: 100%;
-                    overflow: hidden;
-                }
-                @media (max-width: 768px) {
-                    .experience-container {
-                        height: auto;
-                        min-height: 100dvh;
-                    }
-                }
-            `}</style>
+                  )}
+                  {/* Reticle box */}
+                  <rect
+                    x={xPos - 8}
+                    y={yPos - 8}
+                    width="16"
+                    height="16"
+                    fill={isActive ? '#FF8C24' : '#120B05'}
+                    stroke={isActive ? '#FFB84D' : '#7A4210'}
+                    strokeWidth="1.5"
+                    className="transition-all"
+                  />
+                  {/* Center Dot */}
+                  <circle
+                    cx={xPos}
+                    cy={yPos}
+                    r="2.5"
+                    fill={isActive ? '#120B05' : '#FF8C24'}
+                  />
+                  {/* Label */}
+                  <text
+                    x={xPos}
+                    y={yPos + 22}
+                    textAnchor="middle"
+                    fill={isActive ? '#FFB84D' : '#7A4210'}
+                    fontSize="9"
+                    fontFamily="monospace"
+                    letterSpacing="1"
+                  >
+                    {exp.year}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
         </div>
-    );
-}
+      </div>
 
-interface ExperiencePanelProps {
-    experience: Experience;
-    index: number;
-}
+      {/* Detailed Milestone Inspection Panel */}
+      <div className="border border-[#FF8C24] p-5 md:p-7 bg-[#120B05] shadow-[0_0_20px_rgba(255,140,36,0.15)] flex-1 flex flex-col justify-between relative">
+        <span className="absolute -top-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
+        <span className="absolute -top-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
+        <span className="absolute -bottom-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
+        <span className="absolute -bottom-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
 
-function ExperiencePanel({ experience, index }: ExperiencePanelProps) {
-    return (
-        <div className="flex gap-16 lg:gap-24 items-center">
-            {/* Left - Visual Element */}
-            <div className="hidden lg:flex flex-col items-center">
-                {/* Large incident number */}
-                <div
-                    className="text-8xl font-thin tracking-tight mb-4"
-                    style={{
-                        color: 'transparent',
-                        WebkitTextStroke: '1px var(--tva-amber)',
-                        opacity: 0.3,
-                    }}
-                >
-                    {(index + 1).toString().padStart(2, '0')}
-                </div>
-
-                {/* Vertical line */}
-                <div
-                    className="w-px h-32"
-                    style={{
-                        background: 'linear-gradient(180deg, var(--tva-amber), transparent)',
-                    }}
-                />
+        <div>
+          {/* Status badge */}
+          <div className="flex flex-wrap items-center justify-between border-b border-[#7A4210] pb-2 mb-4 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 border border-[#FF8C24] text-[#FF8C24] text-[10px] font-bold">
+                INCIDENT #{(activeIndex + 1).toString().padStart(3, '0')}
+              </span>
+              <span className="text-[#00FF66] font-bold">● VERIFIED</span>
             </div>
+            <span className="text-[#7A4210]">TEMPORAL DURATION: {currentExp.year}</span>
+          </div>
 
-            {/* Right - Content */}
-            <div className="flex-1">
-                {/* Status Badge */}
-                <div className="flex items-center gap-2 lg:gap-4 mb-4 lg:mb-6 flex-wrap">
-                    <div
-                        className="px-3 py-1 lg:px-4 lg:py-1.5 text-[10px] lg:text-xs uppercase tracking-[0.2em] lg:tracking-[0.3em]"
-                        style={{
-                            border: '1px solid rgba(255, 153, 0, 0.4)',
-                            color: 'var(--tva-amber)',
-                        }}
-                    >
-                        Incident #{(index + 1).toString().padStart(3, '0')}
-                    </div>
-                    <div
-                        className="flex items-center gap-1.5 lg:gap-2 text-[10px] lg:text-xs uppercase tracking-widest"
-                        style={{ color: '#00FF00' }}
-                    >
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00FF00' }} />
-                        Verified
-                    </div>
-                </div>
+          {/* Role and Company */}
+          <h2 className="text-2xl md:text-4xl font-light uppercase tracking-wide text-[#FF8C24] crt-glow mb-1">
+            {currentExp.role}
+          </h2>
+          <div className="text-sm md:text-base uppercase tracking-widest text-[#FFB84D] mb-4">
+            &gt;&gt; {currentExp.company}
+          </div>
 
-                {/* Role Title */}
-                <h2
-                    className="text-3xl md:text-4xl lg:text-6xl uppercase tracking-wide mb-2 lg:mb-4 font-light leading-tight"
-                    style={{
-                        color: 'var(--tva-amber)',
-                        textShadow: '0 0 40px rgba(255, 153, 0, 0.3)',
-                    }}
-                >
-                    {experience.role}
-                </h2>
+          {/* Summary */}
+          <p className="text-xs md:text-sm text-[#FF8C24]/85 leading-relaxed mb-4">
+            {currentExp.description}
+          </p>
 
-                {/* Company & Date */}
-                <div
-                    className="text-sm md:text-lg lg:text-xl uppercase tracking-[0.1em] md:tracking-[0.2em] mb-4 md:mb-6 lg:mb-8 flex items-center gap-2 md:gap-4 flex-wrap"
-                    style={{ color: 'rgba(255, 153, 0, 0.6)' }}
-                >
-                    <span>{experience.company}</span>
-                    <span style={{ color: 'rgba(255, 153, 0, 0.3)' }}>•</span>
-                    <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>{experience.year}</span>
-                </div>
-
-                {/* Description */}
-                <p
-                    className="text-sm md:text-base lg:text-lg leading-relaxed max-w-2xl"
-                    style={{
-                        color: 'rgba(255, 153, 0, 0.5)',
-                        lineHeight: '1.8',
-                    }}
-                >
-                    {experience.description}
-                </p>
+          {/* Key Achievements */}
+          {currentExp.achievements && currentExp.achievements.length > 0 && (
+            <div className="mb-4">
+              <span className="text-[10px] uppercase tracking-widest text-[#FFB84D] block mb-2 font-bold">
+                TIMELINE CONTRIBUTIONS & ENGINEERING ACHIEVEMENTS:
+              </span>
+              <ul className="space-y-1.5 text-xs text-[#FF8C24]/90">
+                {currentExp.achievements.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="text-[#FF8C24] font-bold">&gt;</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
+          )}
+
+          {/* Technologies Used */}
+          {currentExp.technologies && currentExp.technologies.length > 0 && (
+            <div>
+              <span className="text-[10px] uppercase tracking-widest text-[#7A4210] block mb-2">
+                TECHNOLOGY TELEMETRY
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {currentExp.technologies.map((t) => (
+                  <span
+                    key={t}
+                    className="px-2 py-0.5 text-xs border border-[#7A4210] text-[#FF8C24] bg-[#120B05]"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-    );
-}
 
-function MobileExperiencePanel({ experience, index }: ExperiencePanelProps) {
-    return (
-        <div className="flex flex-col gap-6 md:hidden px-2 mt-4 relative z-10">
-            {/* Top row: Number + Badge */}
-            <div className="flex items-center gap-6">
-                {/* Large incident number */}
-                <div className="relative">
-                    <div
-                        className="text-7xl font-thin tracking-tight"
-                        style={{
-                            color: 'transparent',
-                            WebkitTextStroke: '2px var(--tva-amber)',
-                            opacity: 0.8,
-                            lineHeight: 1
-                        }}
-                    >
-                        {(index + 1).toString().padStart(2, '0')}
-                    </div>
-                    {/* Vertical line descending */}
-                    <div
-                        className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-px h-16"
-                        style={{
-                            background: 'linear-gradient(180deg, var(--tva-amber), transparent)',
-                        }}
-                    />
-                </div>
-                
-                {/* Status Badge */}
-                <div
-                    className="flex items-center"
-                    style={{
-                        border: '1px solid rgba(255, 153, 0, 0.4)',
-                        padding: '6px 12px',
-                        background: 'rgba(0,0,0,0.5)'
-                    }}
-                >
-                    <span className="text-[10px] uppercase tracking-[0.2em] whitespace-nowrap" style={{ color: 'var(--tva-amber)' }}>
-                        Incident #{(index + 1).toString().padStart(3, '0')}
-                    </span>
-                    <span className="mx-2 text-[10px]" style={{ color: 'rgba(255,153,0,0.4)' }}>•</span>
-                    <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest whitespace-nowrap" style={{ color: '#00FF00' }}>
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ background: '#00FF00' }} />
-                        Verified
-                    </span>
-                </div>
-            </div>
-
-            {/* Role Title */}
-            <h2
-                className="text-3xl uppercase tracking-widest mt-2 font-light leading-tight"
-                style={{
-                    color: 'var(--tva-amber)',
-                    textShadow: '0 0 20px rgba(255, 153, 0, 0.4)',
-                }}
-            >
-                {experience.role}
-            </h2>
-
-            {/* Company & Date */}
-            <div
-                className="text-[10px] uppercase tracking-[0.2em] flex items-center gap-2 flex-wrap"
-                style={{ color: 'rgba(255, 153, 0, 0.8)' }}
-            >
-                <span>{experience.company}</span>
-                <span style={{ color: 'rgba(255, 153, 0, 0.4)' }}>•</span>
-                <span style={{ color: 'rgba(255, 153, 0, 0.8)' }}>{experience.year}</span>
-            </div>
-
-            {/* Description */}
-            <p
-                className="text-xs leading-relaxed"
-                style={{
-                    color: 'rgba(255, 153, 0, 0.6)',
-                    lineHeight: '1.6',
-                }}
-            >
-                {experience.description}
-            </p>
+        {/* Milestone Navigation Deck */}
+        <div className="border-t border-[#7A4210] pt-4 mt-6 flex items-center justify-between">
+          <button
+            type="button"
+            disabled={activeIndex === 0}
+            onClick={() => setActiveIndex(Math.max(0, activeIndex - 1))}
+            className="tva-button text-xs disabled:opacity-30 disabled:pointer-events-none"
+          >
+            ◄ PREVIOUS INCIDENT
+          </button>
+          <span className="text-[10px] text-[#7A4210]">
+            INCIDENT {activeIndex + 1} OF {EXPERIENCE.length}
+          </span>
+          <button
+            type="button"
+            disabled={activeIndex === EXPERIENCE.length - 1}
+            onClick={() => setActiveIndex(Math.min(EXPERIENCE.length - 1, activeIndex + 1))}
+            className="tva-button text-xs disabled:opacity-30 disabled:pointer-events-none"
+          >
+            NEXT INCIDENT ►
+          </button>
         </div>
-    );
-}
-
-interface TimelineStripProps {
-    experiences: Experience[];
-    activeIndex: number;
-    onSelect: (index: number) => void;
-}
-
-function TimelineStrip({ experiences, activeIndex, onSelect }: TimelineStripProps) {
-    return (
-        <div className="absolute inset-0 flex flex-col justify-center px-4 md:px-8 lg:px-24">
-            {/* Main Timeline Line */}
-            <div className="relative h-20 flex items-center">
-                {/* Background line */}
-                <div
-                    className="absolute left-0 right-0 h-px top-1/2 -translate-y-1/2"
-                    style={{
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255, 153, 0, 0.3) 10%, rgba(255, 153, 0, 0.3) 90%, transparent 100%)',
-                    }}
-                />
-
-                {/* Energy pulse */}
-                <div
-                    className="absolute left-0 right-0 h-px top-1/2 -translate-y-1/2 overflow-hidden"
-                >
-                    <div
-                        className="h-full w-1/3"
-                        style={{
-                            background: 'linear-gradient(90deg, transparent, var(--tva-amber), transparent)',
-                            animation: 'pulseFlow 4s ease-in-out infinite',
-                        }}
-                    />
-                </div>
-
-                {/* Timeline Nodes */}
-                <div className="relative w-full flex justify-between items-center">
-                    {experiences.map((exp, index) => (
-                        <TimelineNode
-                            key={exp.id}
-                            experience={exp}
-                            index={index}
-                            isActive={index === activeIndex}
-                            isPast={index < activeIndex}
-                            onClick={() => onSelect(index)}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            {/* Navigation hint */}
-            <div className="text-center mt-4">
-                <span className="text-xs uppercase tracking-[0.3em]" style={{ color: 'rgba(255, 153, 0, 0.3)' }}>
-                    Scroll to navigate timeline
-                </span>
-            </div>
-        </div>
-    );
-}
-
-interface TimelineNodeProps {
-    experience: Experience;
-    index: number;
-    isActive: boolean;
-    isPast: boolean;
-    onClick: () => void;
-}
-
-function TimelineNode({ experience, index, isActive, isPast, onClick }: TimelineNodeProps) {
-    return (
-        <div 
-            className={`flex flex-col items-center cursor-pointer transition-all duration-300 ${isActive ? 'scale-110' : 'opacity-50 hover:opacity-100'}`}
-            onClick={onClick}
-            style={{ minWidth: '40px' }}
-        >
-            <div 
-                className={`w-3 h-3 md:w-4 md:h-4 rounded-full border-2 transition-all duration-300 ${isActive ? 'border-amber-500 bg-amber-500 shadow-[0_0_15px_rgba(255,153,0,0.8)]' : isPast ? 'border-amber-500 bg-amber-900' : 'border-neutral-600 bg-black'}`}
-                style={isActive ? { borderColor: 'var(--tva-amber)', backgroundColor: 'var(--tva-amber)' } : isPast ? { borderColor: 'var(--tva-amber)' } : {}}
-            />
-            <div className="mt-2 md:mt-4 text-center">
-                <div 
-                    className="text-[8px] md:text-xs font-mono tracking-wider md:tracking-widest max-w-[80px] md:max-w-[120px] mx-auto" 
-                    style={{ color: isActive ? 'var(--tva-amber)' : 'rgba(255, 153, 0, 0.4)' }}
-                >
-                    {experience.year}
-                </div>
-            </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 ExperienceSection.displayName = 'ExperienceSection';
-ExperiencePanel.displayName = 'ExperiencePanel';
-TimelineStrip.displayName = 'TimelineStrip';
-TimelineNode.displayName = 'TimelineNode';
-
-function CornerBrackets() {
-    return (
-        <>
-            <div className="cb cb-tl" /><div className="cb cb-tr" /><div className="cb cb-bl" /><div className="cb cb-br" />
-            <style jsx>{`
-                .cb { position: absolute; width: 35px; height: 35px; }
-                .cb-tl { top: 25px; left: 25px; border-top: 1px solid rgba(255, 153, 0, 0.12); border-left: 1px solid rgba(255, 153, 0, 0.12); }
-                .cb-tr { top: 25px; right: 25px; border-top: 1px solid rgba(255, 153, 0, 0.12); border-right: 1px solid rgba(255, 153, 0, 0.12); }
-                .cb-bl { bottom: 25px; left: 25px; border-bottom: 1px solid rgba(255, 153, 0, 0.12); border-left: 1px solid rgba(255, 153, 0, 0.12); }
-                .cb-br { bottom: 25px; right: 25px; border-bottom: 1px solid rgba(255, 153, 0, 0.12); border-right: 1px solid rgba(255, 153, 0, 0.12); }
-                @media (max-width: 768px) { .cb { width: 25px; height: 25px; } .cb-tl, .cb-bl { left: 15px; } .cb-tr, .cb-br { right: 15px; } .cb-tl, .cb-tr { top: 15px; } .cb-bl, .cb-br { bottom: 15px; } }
-            `}</style>
-        </>
-    );
-}
-
-CornerBrackets.displayName = 'CornerBrackets';

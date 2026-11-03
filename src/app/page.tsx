@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { ScanlineOverlay } from '@/components/ui/ScanlineOverlay';
 import { SectionController } from '@/components/SectionController';
 
-// Dynamically import the 3D Scene to avoid SSR issues
+// Dynamically import 3D Scene to ensure SSR safety
 const Scene = dynamic(
   () => import('@/components/three/Scene').then((mod) => mod.Scene),
   { ssr: false }
@@ -12,14 +12,14 @@ const Scene = dynamic(
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen md:overflow-hidden bg-[#050404]">
-      {/* 3D Background Canvas */}
+    <main className="relative w-screen h-screen overflow-hidden bg-[#120B05]">
+      {/* 3D Sacred Timeline Oscilloscope Wave */}
       <Scene />
 
-      {/* Section Controller handles all sections */}
+      {/* TVA TemPad Split-Bezel OS Shell */}
       <SectionController />
 
-      {/* Global Scanline Overlay */}
+      {/* Single Composited CRT Scanline + Radial Vignette Overlay */}
       <ScanlineOverlay />
     </main>
   );

@@ -1,78 +1,64 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { Observer } from 'gsap/dist/Observer';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { navigateNext, navigatePrev } from '@/store/navigationSlice';
-
-// Register GSAP plugins
-if (typeof window !== 'undefined') {
-    gsap.registerPlugin(Observer);
-}
+import { setTargetSection, navigateNext, navigatePrev } from '@/store/navigationSlice';
+import { SECTIONS, SECTION_METADATA } from '@/lib/constants';
 
 export function useGSAPObserver() {
-    const dispatch = useAppDispatch();
-    const { isTransitioning } = useAppSelector((state) => state.navigation);
-    const observerRef = useRef<Observer | null>(null);
-    const lastScrollTime = useRef(0);
-    const scrollCooldown = 1600; // ms
+  const dispatch = useAppDispatch();
+  const { isTransitioning, currentSection } = useAppSelector((state) => state.navigation);
+  const lastKeyTime = useRef(0);
 
-    useEffect(() => {
-        if (typeof window === 'undefined') return;
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-        const handleNavigation = (direction: 'next' | 'prev', e?: Event) => {
-            // Disable GSAP section navigation entirely on mobile devices
-            if (window.innerWidth <= 768) {
-                return;
-            }
+    // Global Keyboard Navigation (1-6, ArrowUp/ArrowDown, Enter, Escape)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't hijack if user is typing in form inputs or textareas
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea') {
+        return;
+      }
 
-            // Ignore events that originate from a custom scrollable area
-            if (e && e.target instanceof Element && e.target.closest('.custom-scrollbar')) {
-                return;
-            }
+      const now = Date.now();
+      if (now - lastKeyTime.current < 200) return;
 
-            const now = Date.now();
-            if (isTransitioning || now - lastScrollTime.current < scrollCooldown) {
-                return;
-            }
-            lastScrollTime.current = now;
+      // Number keys 1-6 for instant module jumping
+      const num = parseInt(e.key, 10);
+      if (!isNaN(num) && num >= 1 && num <= SECTIONS.length) {
+        lastKeyTime.current = now;
+        e.preventDefault();
+        const targetIndex = num - 1;
+        dispatch(setTargetSection(targetIndex));
+        const hash = SECTION_METADATA[SECTIONS[targetIndex]]?.hash;
+        if (hash) {
+          window.history.replaceState(null, '', hash);
+        }
+        return;
+      }
 
-            if (direction === 'next') {
-                dispatch(navigateNext());
-            } else {
-                dispatch(navigatePrev());
-            }
-        };
+      // Arrow navigation
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+        if (!isTransitioning && currentSection < SECTIONS.length - 1) {
+          lastKeyTime.current = now;
+          e.preventDefault();
+          dispatch(navigateNext());
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        if (!isTransitioning && currentSection > 0) {
+          lastKeyTime.current = now;
+          e.preventDefault();
+          dispatch(navigatePrev());
+        }
+      }
+    };
 
-        observerRef.current = Observer.create({
-            target: window,
-            type: 'wheel,touch,pointer',
-            wheelSpeed: -1,
-            onUp: (self) => handleNavigation('next', self.event),
-            onDown: (self) => handleNavigation('prev', self.event),
-            tolerance: 10,
-            preventDefault: false, // Let native scroll work for .custom-scrollbar
-        });
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [dispatch, isTransitioning, currentSection]);
 
-        // Keyboard navigation
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                handleNavigation('next');
-            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                handleNavigation('prev');
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            if (observerRef.current) {
-                observerRef.current.kill();
-            }
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [dispatch, isTransitioning]);
-
-    return null;
+  return null;
 }

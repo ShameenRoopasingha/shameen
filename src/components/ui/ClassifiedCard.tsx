@@ -3,104 +3,115 @@
 import { useState } from 'react';
 
 interface ClassifiedCardProps {
-    name: string;
-    company: string;
-    index?: number;
+  name: string;
+  company: string;
+  role?: string;
+  fileNumber?: string;
+  endorsement?: string;
+  status?: string;
+  index?: number;
 }
 
-export function ClassifiedCard({ name, company, index = 0 }: ClassifiedCardProps) {
-    const [isRevealed, setIsRevealed] = useState(false);
+export function ClassifiedCard({
+  name,
+  company,
+  role,
+  fileNumber,
+  endorsement,
+  status = 'AUTHENTICATED',
+  index = 0,
+}: ClassifiedCardProps) {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const fileId = fileNumber || `REF-${(index + 1).toString().padStart(3, '0')}`;
 
-    return (
-        <div
-            className="relative p-6 transition-all duration-300"
-            style={{
-                background: 'rgba(255, 153, 0, 0.05)',
-                border: '1px solid rgba(255, 153, 0, 0.2)',
-            }}
-            onMouseEnter={() => setIsRevealed(true)}
-            onMouseLeave={() => setIsRevealed(false)}
-        >
-            {/* Folder Tab */}
-            <div
-                className="absolute -top-3 left-4 px-2 py-1 text-xs uppercase tracking-widest"
-                style={{
-                    background: 'var(--tva-void)',
-                    border: '1px solid rgba(255, 153, 0, 0.3)',
-                    borderBottom: 'none',
-                    color: 'var(--tva-amber)',
-                }}
-            >
-                Ref #{(index + 1).toString().padStart(3, '0')}
-            </div>
+  return (
+    <div
+      className={`relative p-5 bg-[#120B05] border transition-all duration-100 font-mono ${
+        isRevealed
+          ? 'border-[#FF8C24] shadow-[0_0_15px_rgba(255,140,36,0.25)]'
+          : 'border-[#7A4210]'
+      }`}
+      onMouseEnter={() => setIsRevealed(true)}
+      onMouseLeave={() => setIsRevealed(false)}
+      onClick={() => setIsRevealed(!isRevealed)}
+    >
+      {/* Corner Reticle Ticks (+) */}
+      <span className="absolute -top-1.5 -left-1.5 text-[11px] text-[#FF8C24] leading-none select-none">+</span>
+      <span className="absolute -top-1.5 -right-1.5 text-[11px] text-[#FF8C24] leading-none select-none">+</span>
+      <span className="absolute -bottom-1.5 -left-1.5 text-[11px] text-[#FF8C24] leading-none select-none">+</span>
+      <span className="absolute -bottom-1.5 -right-1.5 text-[11px] text-[#FF8C24] leading-none select-none">+</span>
 
-            {/* Content */}
-            <div className="mt-2 space-y-2">
-                <div className="relative overflow-hidden">
-                    <span
-                        className="block text-lg font-bold uppercase tracking-wider transition-all duration-300"
-                        style={{
-                            color: isRevealed ? 'var(--tva-amber)' : 'transparent',
-                            background: isRevealed ? 'transparent' : 'var(--tva-void)',
-                            textShadow: isRevealed ? '0 0 10px rgba(255, 153, 0, 0.5)' : 'none',
-                        }}
-                    >
-                        {name}
-                    </span>
-                    {/* Redaction overlay */}
-                    <div
-                        className="absolute inset-0 transition-transform duration-300"
-                        style={{
-                            background: 'var(--tva-void)',
-                            transform: isRevealed ? 'translateX(100%)' : 'translateX(0)',
-                        }}
-                    />
-                </div>
-
-                <div className="relative overflow-hidden">
-                    <span
-                        className="block text-sm uppercase tracking-widest transition-all duration-300"
-                        style={{
-                            color: isRevealed ? 'rgba(255, 153, 0, 0.7)' : 'transparent',
-                            background: isRevealed ? 'transparent' : 'var(--tva-void)',
-                        }}
-                    >
-                        {company}
-                    </span>
-                    {/* Redaction overlay */}
-                    <div
-                        className="absolute inset-0 transition-transform duration-300 delay-75"
-                        style={{
-                            background: 'var(--tva-void)',
-                            transform: isRevealed ? 'translateX(100%)' : 'translateX(0)',
-                        }}
-                    />
-                </div>
-            </div>
-
-            {/* Cleared Stamp */}
-            <div
-                className="absolute bottom-4 right-4 transition-all duration-300"
-                style={{
-                    opacity: isRevealed ? 1 : 0,
-                    transform: isRevealed ? 'rotate(-5deg) scale(1)' : 'rotate(-5deg) scale(0.8)',
-                }}
-            >
-                <span
-                    className="inline-block px-2 py-1 text-xs font-bold uppercase"
-                    style={{
-                        color: 'var(--tva-red)',
-                        border: '2px solid var(--tva-red)',
-                        letterSpacing: '0.1em',
-                    }}
-                >
-                    CLEARED
-                </span>
-            </div>
+      {/* Technical Header Metadata */}
+      <div className="flex items-center justify-between border-b border-[#7A4210]/60 pb-2 mb-3 text-[10px] tracking-widest text-[#FF8C24]">
+        <div className="flex items-center gap-2">
+          <span className="px-1.5 py-0.5 bg-[#FF8C24]/10 border border-[#FF8C24]/30 text-[#FFB84D]">
+            FILE_ID // {fileId}
+          </span>
+          <span className="opacity-60 hidden sm:inline">TIMEDOOR_REF // ARCHIVE-SEC.4</span>
         </div>
-    );
-}
+        <div className="flex items-center gap-1.5">
+          <span className={`w-1.5 h-1.5 ${isRevealed ? 'bg-[#00FF66]' : 'bg-[#FF3B1F]'}`} />
+          <span className={isRevealed ? 'text-[#00FF66]' : 'text-[#FF3B1F]'}>
+            {isRevealed ? status : 'REDACTED'}
+          </span>
+        </div>
+      </div>
 
+      {/* Personnel Details */}
+      <div className="space-y-2">
+        <div>
+          <span className="text-[10px] uppercase tracking-widest text-[#7A4210] block">
+            AUTHORIZING OFFICER
+          </span>
+          <div className="relative inline-block overflow-hidden">
+            <span
+              className={`text-lg font-bold uppercase tracking-wider block transition-colors duration-100 ${
+                isRevealed ? 'text-[#FFB84D] crt-glow' : 'text-[#7A4210] select-none'
+              }`}
+            >
+              {isRevealed ? name : '███████████████'}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 text-xs tracking-wider">
+          <div>
+            <span className="text-[10px] uppercase text-[#7A4210] block">ORGANIZATION</span>
+            <span className={isRevealed ? 'text-[#FF8C24]' : 'text-[#7A4210]'}>
+              {isRevealed ? company : '██████████'}
+            </span>
+          </div>
+          {role && (
+            <div>
+              <span className="text-[10px] uppercase text-[#7A4210] block">DESIGNATION</span>
+              <span className={isRevealed ? 'text-[#FF8C24]/80' : 'text-[#7A4210]'}>
+                {isRevealed ? role : '████████'}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {endorsement && isRevealed && (
+          <p className="text-xs text-[#FF8C24]/80 leading-relaxed border-t border-[#7A4210]/40 pt-2 mt-2">
+            &quot;{endorsement}&quot;
+          </p>
+        )}
+      </div>
+
+      {/* Action Footer */}
+      <div className="mt-4 pt-2 border-t border-[#7A4210]/40 flex items-center justify-between">
+        <span className="text-[9px] uppercase tracking-widest text-[#7A4210]">
+          {isRevealed ? '[RECORD DECLASSIFIED]' : '[HOVER / TAP TO DECLASSIFY]'}
+        </span>
+        <button
+          type="button"
+          className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05] transition-all font-bold"
+        >
+          {isRevealed ? 'VERIFIED ✓' : 'DECLASSIFY'}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 ClassifiedCard.displayName = 'ClassifiedCard';
-
