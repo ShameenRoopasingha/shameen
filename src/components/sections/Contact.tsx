@@ -29,11 +29,11 @@ export function ContactSection() {
             MISSIVES
           </span>
           <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest hidden sm:inline">
-            SECURE ENCRYPTED CHANNEL
+            SECURE DIRECT UPLINK
           </span>
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
-          <span className="text-[#00FF66] font-bold">CARRIER: DETECTED</span>
+          <span className="text-[#00FF66] font-bold">STATUS: READY FOR PROJECT INQUIRIES</span>
         </div>
       </div>
 
@@ -44,10 +44,10 @@ export function ContactSection() {
           <div>
             <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#FF8C24] mb-2 sm:mb-3">
               <span className="w-2 h-2 bg-[#00FF66] animate-pulse" />
-              <span className="font-bold tracking-widest">FAST CHANNELS</span>
+              <span className="font-bold tracking-widest">VERIFIED CONTACT CHANNELS</span>
             </div>
             <p className="text-[11px] sm:text-xs text-[#FF8C24]/80 leading-relaxed mb-4 sm:mb-6">
-              Direct communication via verified uplink coordinates:
+              Connect directly with Shameen regarding project-based roles, full-stack web engineering, or SaaS collaborations:
             </p>
 
             <div className="space-y-3 sm:space-y-4 text-xs">
@@ -55,9 +55,19 @@ export function ContactSection() {
                 href={`mailto:${PROFILE.socialLinks.email}`}
                 className="block border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors"
               >
-                <span className="text-[10px] text-[#7A4210] uppercase block">EMAIL</span>
+                <span className="text-[10px] text-[#7A4210] uppercase block">OFFICIAL EMAIL</span>
                 <span className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5 break-all">
                   {PROFILE.socialLinks.email}
+                </span>
+              </a>
+
+              <a
+                href={`tel:${PROFILE.socialLinks.phone}`}
+                className="block border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors"
+              >
+                <span className="text-[10px] text-[#7A4210] uppercase block">PHONE / DIRECT LINE</span>
+                <span className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5">
+                  {PROFILE.socialLinks.phone}
                 </span>
               </a>
 
@@ -67,14 +77,14 @@ export function ContactSection() {
                 rel="noopener noreferrer"
                 className="block border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors"
               >
-                <span className="text-[10px] text-[#7A4210] uppercase block">RESUME</span>
+                <span className="text-[10px] text-[#7A4210] uppercase block">OFFICIAL RESUME RECORD</span>
                 <span className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5">
-                  DOWNLOAD CV (PDF) ↗
+                  DOWNLOAD SHAMEEN_ROOPASINGHA_CV.PDF ↗
                 </span>
               </a>
 
               <div className="border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors">
-                <span className="text-[10px] text-[#7A4210] uppercase block mb-1">NETWORK</span>
+                <span className="text-[10px] text-[#7A4210] uppercase block mb-1">PROFESSIONAL NETWORKS</span>
                 <div className="flex gap-3 sm:gap-4">
                   <a
                     href={PROFILE.socialLinks.linkedin}
@@ -98,7 +108,7 @@ export function ContactSection() {
           </div>
 
           <div className="border-t border-[#7A4210] pt-3 mt-4 sm:mt-6 text-[9px] sm:text-[10px] text-[#7A4210]">
-            COLOMBO // REMOTE WORLDWIDE
+            LOCATION: {PROFILE.location.toUpperCase()} // REMOTE WORLDWIDE
           </div>
         </div>
 
@@ -112,18 +122,18 @@ export function ContactSection() {
           <div>
             <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3 sm:mb-4 text-[10px] sm:text-xs">
               <span className="text-[#FF8C24] font-bold tracking-widest">
-                UPLINK TERMINAL
+                DIRECT TRANSMISSION TERMINAL
               </span>
-              <span className="text-[#00FF66]">ENCRYPTED</span>
+              <span className="text-[#00FF66]">CARRIER ACTIVE</span>
             </div>
 
             {submitted ? (
               <div className="border border-[#00FF66] p-4 sm:p-6 bg-[#120B05] text-center my-4 sm:my-8">
                 <div className="text-xs sm:text-sm font-bold text-[#00FF66] tracking-widest mb-2">
-                  ✓ TRANSMISSION CONFIRMED
+                  ✓ TRANSMISSION CONFIRMED & LOGGED
                 </div>
                 <p className="text-[11px] sm:text-xs text-[#FF8C24] mb-4">
-                  Message encrypted and relayed. Response within 24 temporal hours.
+                  Your message has been dispatched to {PROFILE.socialLinks.email}. Shameen will follow up shortly.
                 </p>
                 <button
                   type="button"
@@ -133,36 +143,36 @@ export function ContactSection() {
                   }}
                   className="tva-button text-[10px] sm:text-xs"
                 >
-                  SEND ANOTHER
+                  DISPATCH ANOTHER MESSAGE
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-2">
                 <TerminalInput
-                  label="SENDER"
+                  label="RECRUITER / SENDER NAME"
                   name="name"
                   value={formData.name}
                   onChange={(v) => setFormData({ ...formData, name: v })}
-                  placeholder="Your name / company"
+                  placeholder="e.g. Lead Technical Recruiter / Engineering Manager"
                   required
                 />
                 <TerminalInput
-                  label="EMAIL"
+                  label="RETURN CONTACT EMAIL"
                   name="email"
                   type="email"
                   value={formData.email}
                   onChange={(v) => setFormData({ ...formData, email: v })}
-                  placeholder="name@company.com"
+                  placeholder="recruiter@company.com"
                   required
                 />
                 <TerminalInput
-                  label="MESSAGE"
+                  label="PROJECT PARAMETERS / INQUIRY"
                   name="message"
                   type="textarea"
                   rows={3}
                   value={formData.message}
                   onChange={(v) => setFormData({ ...formData, message: v })}
-                  placeholder="Project scope, interview invite, or mission parameters..."
+                  placeholder="State project scope, technical requirements, or opportunity details..."
                   required
                 />
 
@@ -173,9 +183,9 @@ export function ContactSection() {
                     className="tva-button primary w-full text-[10px] sm:text-xs py-3"
                   >
                     {isSubmitting ? (
-                      <span>TRANSMITTING...</span>
+                      <span>TRANSMITTING MISSIVE...</span>
                     ) : (
-                      <span>► TRANSMIT MISSIVE</span>
+                      <span>► TRANSMIT MISSIVE TO SHAMEEN</span>
                     )}
                   </button>
                 </div>
@@ -184,8 +194,8 @@ export function ContactSection() {
           </div>
 
           <div className="border-t border-[#7A4210] pt-2 sm:pt-3 mt-3 sm:mt-4 text-[9px] text-[#7A4210] flex justify-between">
-            <span>E2E ENCRYPTED</span>
-            <span>TVA // 1970</span>
+            <span>OFFICIAL CV COMMUNICATION PROTOCOL</span>
+            <span>TEMPAD 4.02</span>
           </div>
         </div>
       </div>

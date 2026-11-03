@@ -6,6 +6,7 @@ interface ClassifiedCardProps {
   name: string;
   company: string;
   role?: string;
+  phone?: string;
   fileNumber?: string;
   endorsement?: string;
   status?: string;
@@ -16,6 +17,7 @@ export function ClassifiedCard({
   name,
   company,
   role,
+  phone,
   fileNumber,
   endorsement,
   status = 'AUTHENTICATED',
@@ -26,7 +28,7 @@ export function ClassifiedCard({
 
   return (
     <div
-      className={`relative p-5 bg-[#120B05] border transition-all duration-100 font-mono ${
+      className={`relative p-4 sm:p-5 bg-[#120B05] border transition-all duration-100 font-mono ${
         isRevealed
           ? 'border-[#FF8C24] shadow-[0_0_15px_rgba(255,140,36,0.25)]'
           : 'border-[#7A4210]'
@@ -61,11 +63,11 @@ export function ClassifiedCard({
       <div className="space-y-2">
         <div>
           <span className="text-[10px] uppercase tracking-widest text-[#7A4210] block">
-            AUTHORIZING OFFICER
+            AUTHORIZING REFEREE
           </span>
           <div className="relative inline-block overflow-hidden">
             <span
-              className={`text-lg font-bold uppercase tracking-wider block transition-colors duration-100 ${
+              className={`text-base sm:text-lg font-bold uppercase tracking-wider block transition-colors duration-100 ${
                 isRevealed ? 'text-[#FFB84D] crt-glow' : 'text-[#7A4210] select-none'
               }`}
             >
@@ -74,7 +76,7 @@ export function ClassifiedCard({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 text-xs tracking-wider">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs tracking-wider">
           <div>
             <span className="text-[10px] uppercase text-[#7A4210] block">ORGANIZATION</span>
             <span className={isRevealed ? 'text-[#FF8C24]' : 'text-[#7A4210]'}>
@@ -90,6 +92,15 @@ export function ClassifiedCard({
             </div>
           )}
         </div>
+
+        {phone && (
+          <div className="pt-1">
+            <span className="text-[10px] uppercase text-[#7A4210] block">TELEMETRY / PHONE FREQUENCY</span>
+            <span className={`font-mono text-xs ${isRevealed ? 'text-[#00FF66] font-bold' : 'text-[#7A4210]'}`}>
+              {isRevealed ? phone : '+██ ██████████'}
+            </span>
+          </div>
+        )}
 
         {endorsement && isRevealed && (
           <p className="text-xs text-[#FF8C24]/80 leading-relaxed border-t border-[#7A4210]/40 pt-2 mt-2">

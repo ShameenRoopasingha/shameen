@@ -11,10 +11,19 @@ export interface Profile {
   variantId: string;
   clearanceLevel: string;
   timelineBranch: string;
+  location: string;
+  phone: string;
+  education: Array<{
+    degree: string;
+    institution: string;
+    year: string;
+    level: string;
+  }>;
   socialLinks: {
     github: string;
     linkedin: string;
     email: string;
+    phone: string;
     resumeUrl: string;
   };
 }
@@ -27,6 +36,9 @@ export const PROFILE: Profile = {
   variantId: PORTFOLIO_DATA.variant.variantId,
   clearanceLevel: PORTFOLIO_DATA.variant.clearanceLevel,
   timelineBranch: PORTFOLIO_DATA.variant.timelineBranch,
+  location: PORTFOLIO_DATA.variant.location,
+  phone: PORTFOLIO_DATA.variant.phone,
+  education: PORTFOLIO_DATA.variant.education,
   socialLinks: PORTFOLIO_DATA.variant.socialLinks,
 };
 
@@ -108,6 +120,7 @@ export interface Reference {
   name: string;
   role?: string;
   company: string;
+  phone?: string;
   endorsement?: string;
   status?: string;
 }
@@ -118,6 +131,7 @@ export const REFERENCES: Reference[] = PORTFOLIO_DATA.references.map((ref) => ({
   name: ref.name,
   role: ref.role,
   company: ref.organization,
+  phone: ref.phone,
   endorsement: ref.endorsement,
   status: ref.verificationStatus,
 }));

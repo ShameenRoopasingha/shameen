@@ -30,9 +30,16 @@ export interface ExperienceMilestone {
   technologies: string[];
 }
 
+export interface EducationRecord {
+  degree: string;
+  institution: string;
+  year: string;
+  level: string;
+}
+
 export interface SkillItem {
   name: string;
-  level: number; // 0 - 100 voltage
+  level: number; // 0 - 100 voltage matching CV
   tag: string;
 }
 
@@ -48,6 +55,7 @@ export interface ReferenceFile {
   name: string;
   role: string;
   organization: string;
+  phone: string;
   endorsement: string;
   verificationStatus: 'AUTHENTICATED' | 'CLEARED';
 }
@@ -61,11 +69,15 @@ export interface VariantProfile {
   operationalStatus: string;
   dossierSummary: string;
   timelineBranch: string;
+  location: string;
+  phone: string;
   coreCompetencies: string[];
+  education: EducationRecord[];
   socialLinks: {
     github: string;
     linkedin: string;
     email: string;
+    phone: string;
     resumeUrl: string;
   };
 }

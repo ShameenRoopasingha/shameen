@@ -18,17 +18,17 @@ export function ReferencesSection() {
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
           <span className="text-[#FFB84D] font-bold">{REFERENCES.length} FILES</span>
-          <span className="text-[#00FF66] font-bold hidden sm:inline">GRANTED</span>
+          <span className="text-[#00FF66] font-bold hidden sm:inline">VERIFIED</span>
         </div>
       </div>
 
       {/* Description / Instructions */}
       <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05] mb-4 sm:mb-6">
         <span className="text-[10px] uppercase tracking-widest text-[#FF3B1F] block mb-1 font-bold">
-          [RESTRICTED ARCHIVE]
+          [RESTRICTED ARCHIVE // PROFESSIONAL REFERENCES]
         </span>
         <p className="text-[11px] sm:text-xs md:text-sm text-[#FF8C24]/85 leading-relaxed">
-          Verified endorsements from senior technology leaders who have directly evaluated this variant&apos;s output. Tap any card to declassify.
+          Verified professional references from senior technology leaders who have directly evaluated Shameen&apos;s technical execution and delivery. Tap or hover any dossier to declassify official contact details.
         </p>
       </div>
 
@@ -40,6 +40,7 @@ export function ReferencesSection() {
             name={ref.name}
             company={ref.company}
             role={ref.role}
+            phone={ref.phone}
             fileNumber={ref.fileNumber}
             endorsement={ref.endorsement}
             status={ref.status}
@@ -50,7 +51,7 @@ export function ReferencesSection() {
 
       {/* Footer */}
       <div className="border-t border-[#7A4210] pt-3 mt-4 sm:mt-6 flex flex-wrap items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] gap-2">
-        <span>ENDORSEMENTS DIGITALLY SIGNED & VERIFIED</span>
+        <span>AUTHENTICATED REFERENCES PER RESUME DOSSIER</span>
         <span className="text-[#00FF66] hidden sm:inline">INTEGRITY: 100%</span>
       </div>
     </div>

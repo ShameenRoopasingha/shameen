@@ -47,6 +47,7 @@ export function Hero() {
     }
   };
 
+  // Top 5 voltage readings from authentic CV skills
   const keySkills = SKILLS.slice(0, 5);
 
   return (
@@ -60,7 +61,7 @@ export function Hero() {
           <div className="w-full max-w-md border border-[#FF8C24] p-4 sm:p-6 bg-[#120B05] shadow-[0_0_20px_rgba(255,140,36,0.3)]">
             <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-4">
               <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest font-bold">
-                TVA-OS BOOTSTRAP
+                TVA-OS BOOTSTRAP // TEMPAD 4.02
               </span>
               <span className="w-2 h-2 bg-[#FF3B1F] animate-pulse" />
             </div>
@@ -68,7 +69,7 @@ export function Hero() {
             <p className="text-[11px] sm:text-xs text-[#FF8C24] mb-3">
               &gt; CALIBRATING QUANTUM COORDINATES...<br />
               &gt; QUERYING VARIANT RECORD: SHAMEEN ROOPASINGHA...<br />
-              &gt; CLEARANCE VERIFIED: LEVEL-4 ARCHITECT
+              &gt; CLEARANCE VERIFIED: LEVEL-4 FULL-STACK ENGINEER
             </p>
 
             <div className="w-full h-2 bg-[#7A4210]/30 border border-[#7A4210] mb-4 overflow-hidden">
@@ -84,14 +85,25 @@ export function Hero() {
 
       {/* Top Dossier Title Banner */}
       <div className="border-b border-[#7A4210] pb-3 sm:pb-4 mb-4 sm:mb-6">
-        <div className="flex flex-wrap items-center gap-2 mb-1.5">
-          <span className="px-2 py-0.5 bg-[#FF3B1F] text-[#120B05] text-[10px] font-bold tracking-widest">
-            VARIANT RECORD
-          </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest">
-            DOC-ID: {PROFILE.variantId}
-          </span>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2 py-0.5 bg-[#FF3B1F] text-[#120B05] text-[10px] font-bold tracking-widest">
+              OFFICIAL CV DOSSIER
+            </span>
+            <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest">
+              DOC-ID: {PROFILE.variantId}
+            </span>
+            <span className="text-[#7A4210]">|</span>
+            <span className="text-[10px] sm:text-xs text-[#00FF66] font-bold">
+              ● VERIFIED DATA
+            </span>
+          </div>
+          <div className="text-[10px] text-[#7A4210] tracking-wider">
+            <span>LOCATION:</span>{' '}
+            <span className="text-[#FFB84D] font-bold">{PROFILE.location}</span>
+          </div>
         </div>
+
         <h1 className="text-2xl sm:text-3xl md:text-5xl font-light uppercase tracking-wider text-[#FF8C24] crt-glow">
           {PROFILE.name}
         </h1>
@@ -102,8 +114,9 @@ export function Hero() {
 
       {/* Main Grid: Left Dossier / Right System Telemetry */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
-        {/* Left Col: Photo + Bio & Core Competencies (7 cols) */}
+        {/* Left Col: Photo + Bio & Education & Core Competencies (7 cols) */}
         <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-6">
+          {/* Bio Box with Photo */}
           <div className="border border-[#7A4210] p-3 sm:p-5 bg-[#120B05]/90 relative">
             <span className="absolute -top-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
             <span className="absolute -top-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
@@ -124,7 +137,7 @@ export function Hero() {
                 />
                 <div className="absolute inset-0 bg-[#FF8C24]/10 pointer-events-none" />
                 <div className="absolute bottom-1 left-1 right-1 bg-[#120B05]/90 border border-[#FF8C24]/40 text-[9px] text-[#FF8C24] text-center tracking-widest py-0.5">
-                  ID: SR-2024
+                  ID: SR-2025
                 </div>
               </div>
 
@@ -132,8 +145,8 @@ export function Hero() {
               <div className="flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-widest border-b border-[#7A4210]/40 pb-1 mb-2">
-                    <span>TEMPORAL DOSSIER</span>
-                    <span className="text-[#00FF66] font-bold">VERIFIED</span>
+                    <span>CANDIDATE PROFILE SUMMARY</span>
+                    <span className="text-[#00FF66] font-bold">AUTHENTICATED</span>
                   </div>
                   <p className="text-[11px] sm:text-xs md:text-sm text-[#FF8C24]/90 leading-relaxed">
                     {PROFILE.summary}
@@ -157,6 +170,12 @@ export function Hero() {
                     <span>✉</span> EMAIL
                   </a>
                   <a
+                    href={`tel:${PROFILE.socialLinks.phone}`}
+                    className="tva-button text-[10px] sm:text-xs"
+                  >
+                    <span>☎</span> {PROFILE.socialLinks.phone}
+                  </a>
+                  <a
                     href={PROFILE.socialLinks.github}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -164,24 +183,40 @@ export function Hero() {
                   >
                     GITHUB
                   </a>
-                  <a
-                    href={PROFILE.socialLinks.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="tva-button text-[10px] sm:text-xs"
-                  >
-                    LINKEDIN
-                  </a>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Education Records Box */}
+          <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]/90">
+            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-widest border-b border-[#7A4210]/60 pb-2 mb-3">
+              <span>CANONICAL EDUCATION DOSSIER</span>
+              <span className="text-[#00FF66] text-[10px]">VERIFIED RECORDS</span>
+            </div>
+            <div className="space-y-2.5">
+              {PROFILE.education.map((edu, idx) => (
+                <div
+                  key={idx}
+                  className="border border-[#7A4210]/60 p-2.5 bg-[#120B05] hover:border-[#FF8C24] transition-colors"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-1 text-[10px] text-[#7A4210] mb-0.5">
+                    <span className="text-[#FF8C24] font-bold">{edu.institution}</span>
+                    <span className="text-[#FFB84D] font-mono">{edu.year}</span>
+                  </div>
+                  <div className="text-xs sm:text-sm text-[#FFB84D] font-bold">
+                    {edu.degree}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Core Competencies Box */}
           <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]/90">
             <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-widest border-b border-[#7A4210]/60 pb-2 mb-3">
-              <span>CORE COMPETENCIES</span>
-              <span className="text-[#7A4210] hidden sm:inline">SCHEMA: MATRIX-8</span>
+              <span>SPECIALIZED COMPETENCIES</span>
+              <span className="text-[#7A4210]">FROM CV</span>
             </div>
             <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {PORTFOLIO_DATA.variant.coreCompetencies.map((tech) => (
@@ -198,24 +233,24 @@ export function Hero() {
 
         {/* Right Col: Live System Diagnostic & Voltage Telemetry (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="border border-[#FF8C24] p-3 sm:p-4 bg-[#120B05] shadow-[0_0_15px_rgba(255,140,36,0.15)] flex flex-col">
+          <div className="border border-[#FF8C24] p-3 sm:p-4 bg-[#120B05] shadow-[0_0_15px_rgba(255,140,36,0.15)] flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3 sm:mb-4">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-[#FF8C24] animate-ping" />
                   <span className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#FF8C24]">
-                    SYSTEM DIAGNOSTICS
+                    SKILLS VOLTAGE READINGS
                   </span>
                 </div>
                 <span className="text-[9px] sm:text-[10px] text-[#00FF66] tracking-widest font-bold">
-                  ONLINE
+                  VERIFIED %
                 </span>
               </div>
 
-              {/* Voltage Readings */}
+              {/* Voltage Readings with exact CV percentages */}
               <div className="mb-3 sm:mb-4">
                 <span className="text-[10px] uppercase tracking-widest text-[#7A4210] block mb-2">
-                  PRIMARY VOLTAGE READINGS
+                  FLAGSHIP PROFICIENCY VOLTAGES
                 </span>
                 <div className="space-y-1">
                   {keySkills.map((skill, index) => (
@@ -224,7 +259,7 @@ export function Hero() {
                       name={skill.name}
                       level={skill.level}
                       index={index}
-                      tag={skill.tag || 'CERTIFIED'}
+                      tag={skill.tag || `${skill.level}%`}
                     />
                   ))}
                 </div>
@@ -234,16 +269,16 @@ export function Hero() {
             {/* Diagnostic readout table */}
             <div className="border-t border-[#7A4210] pt-2 sm:pt-3 text-[9px] sm:text-[10px] space-y-1">
               <div className="flex justify-between text-[#7A4210]">
-                <span>ENGINE:</span>
-                <span className="text-[#FF8C24]">NEXT.js 15 // 60 FPS</span>
+                <span>TOTAL ASSESSED SKILLS:</span>
+                <span className="text-[#FF8C24]">{SKILLS.length} METRICS</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
-                <span>DRIFT:</span>
-                <span className="text-[#00FF66]">0.000% [ZERO]</span>
+                <span>ACADEMIC FOCUS:</span>
+                <span className="text-[#FFB84D]">COMP SCI (APPLIED AI)</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
-                <span>STATUS:</span>
-                <span className="text-[#FFB84D]">READY</span>
+                <span>AVAILABILITY:</span>
+                <span className="text-[#00FF66]">PROJECT-BASED & REMOTE</span>
               </div>
             </div>
           </div>
@@ -252,8 +287,8 @@ export function Hero() {
 
       {/* Bottom Technical Bar */}
       <div className="border-t border-[#7A4210] pt-3 mt-4 sm:mt-6 flex flex-wrap items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-widest gap-2">
-        <span>TVA-ARCHIVE-SERIES // CANTINA CREATIVE</span>
-        <span className="text-[#FF8C24] hidden sm:inline">NAVIGATE VIA KEYBOARD [1 - 6] OR ACTION LIST ///</span>
+        <span>TVA-ARCHIVE // ALL DATA SOURCED DIRECTLY FROM OFFICIAL CV</span>
+        <span className="text-[#FF8C24] hidden sm:inline">AUTHENTICATED PERSONNEL DOSSIER</span>
       </div>
     </div>
   );
