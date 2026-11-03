@@ -227,6 +227,9 @@ export function SectionController() {
             <span className="hidden sm:inline text-[#7A4210] flex-shrink-0 ml-2">
               TEMPORAL COORDINATE: {String(currentSection + 1).padStart(2, '0')} / {String(SECTIONS.length).padStart(2, '0')}
             </span>
+            <span className="sm:hidden text-[#FF8C24]/75 text-[9px] flex-shrink-0 flex items-center gap-1 font-bold">
+              SWIPE ◄ ►
+            </span>
           </div>
 
           {/* Scrollable Viewport Container */}
