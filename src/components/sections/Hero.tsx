@@ -8,7 +8,6 @@ type BootPhase = 'booting' | 'ready';
 
 export function Hero() {
   const [bootPhase, setBootPhase] = useState<BootPhase>('booting');
-  const [activeTab, setActiveTab] = useState<'dossier' | 'telemetry'>('dossier');
 
   // Check sessionStorage for fast boot bypass
   useEffect(() => {
@@ -51,22 +50,22 @@ export function Hero() {
   const keySkills = SKILLS.slice(0, 5);
 
   return (
-    <div className="relative w-full h-full min-h-[calc(100vh-110px)] flex flex-col justify-between p-4 md:p-8 font-mono overflow-y-auto custom-scrollbar select-text">
+    <div className="relative w-full flex flex-col p-3 sm:p-4 md:p-8 font-mono overflow-y-auto custom-scrollbar select-text">
       {/* Booting Flash Overlay */}
       {bootPhase === 'booting' && (
         <div
           onClick={handleSkip}
-          className="absolute inset-0 z-50 bg-[#120B05] flex flex-col items-center justify-center cursor-pointer p-6"
+          className="absolute inset-0 z-50 bg-[#120B05] flex flex-col items-center justify-center cursor-pointer p-4 sm:p-6"
         >
-          <div className="w-full max-w-md border border-[#FF8C24] p-6 bg-[#120B05] shadow-[0_0_20px_rgba(255,140,36,0.3)]">
+          <div className="w-full max-w-md border border-[#FF8C24] p-4 sm:p-6 bg-[#120B05] shadow-[0_0_20px_rgba(255,140,36,0.3)]">
             <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-4">
-              <span className="text-xs text-[#FF8C24] tracking-widest font-bold">
-                TVA-OS BOOTSTRAP // TEMPAD 4.02
+              <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest font-bold">
+                TVA-OS BOOTSTRAP
               </span>
               <span className="w-2 h-2 bg-[#FF3B1F] animate-pulse" />
             </div>
 
-            <p className="text-xs text-[#FF8C24] mb-3">
+            <p className="text-[11px] sm:text-xs text-[#FF8C24] mb-3">
               &gt; CALIBRATING QUANTUM COORDINATES...<br />
               &gt; QUERYING VARIANT RECORD: SHAMEEN ROOPASINGHA...<br />
               &gt; CLEARANCE VERIFIED: LEVEL-4 ARCHITECT
@@ -77,69 +76,49 @@ export function Hero() {
             </div>
 
             <div className="text-[10px] text-[#FFB84D] tracking-widest text-center border-t border-[#7A4210]/60 pt-2">
-              [PRESS ESC OR CLICK TO BYPASS BOOT SEQUENCE]
+              [TAP OR PRESS ESC TO SKIP]
             </div>
           </div>
         </div>
       )}
 
       {/* Top Dossier Title Banner */}
-      <div className="border-b border-[#7A4210] pb-4 mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="px-2 py-0.5 bg-[#FF3B1F] text-[#120B05] text-[10px] font-bold tracking-widest">
-              VARIANT RECORD
-            </span>
-            <span className="text-xs text-[#FF8C24] tracking-widest">
-              DOC-ID: {PROFILE.variantId}
-            </span>
-            <span className="text-[#7A4210]">|</span>
-            <span className="text-xs text-[#FFB84D] tracking-wider hidden sm:inline">
-              CLEARANCE: {PROFILE.clearanceLevel}
-            </span>
-          </div>
-          <h1 className="text-3xl md:text-5xl font-light uppercase tracking-wider text-[#FF8C24] crt-glow">
-            {PROFILE.name}
-          </h1>
-          <p className="text-sm md:text-base text-[#FFB84D] tracking-widest mt-1">
-            &gt;&gt; {PROFILE.role}
-          </p>
+      <div className="border-b border-[#7A4210] pb-3 sm:pb-4 mb-4 sm:mb-6">
+        <div className="flex flex-wrap items-center gap-2 mb-1.5">
+          <span className="px-2 py-0.5 bg-[#FF3B1F] text-[#120B05] text-[10px] font-bold tracking-widest">
+            VARIANT RECORD
+          </span>
+          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest">
+            DOC-ID: {PROFILE.variantId}
+          </span>
         </div>
-
-        {/* Quick Diagnostic Badge */}
-        <div className="flex items-center gap-3 border border-[#7A4210] p-2 bg-[#120B05]/80">
-          <div className="text-right">
-            <div className="text-[9px] uppercase tracking-widest text-[#7A4210]">TIMELINE BRANCH</div>
-            <div className="text-xs text-[#00FF66] font-bold">STABLE // EARTH-616</div>
-          </div>
-          <div className="w-px h-8 bg-[#7A4210]" />
-          <div className="text-right">
-            <div className="text-[9px] uppercase tracking-widest text-[#7A4210]">LATENCY</div>
-            <div className="text-xs text-[#FF8C24]">0.003 MS</div>
-          </div>
-        </div>
+        <h1 className="text-2xl sm:text-3xl md:text-5xl font-light uppercase tracking-wider text-[#FF8C24] crt-glow">
+          {PROFILE.name}
+        </h1>
+        <p className="text-xs sm:text-sm md:text-base text-[#FFB84D] tracking-widest mt-1">
+          &gt;&gt; {PROFILE.role}
+        </p>
       </div>
 
       {/* Main Grid: Left Dossier / Right System Telemetry */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
-        {/* Left Col: Hologram Photo + Bio & Core Competencies (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
-          <div className="border border-[#7A4210] p-5 bg-[#120B05]/90 relative">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+        {/* Left Col: Photo + Bio & Core Competencies (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-6">
+          <div className="border border-[#7A4210] p-3 sm:p-5 bg-[#120B05]/90 relative">
             <span className="absolute -top-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
             <span className="absolute -top-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
             <span className="absolute -bottom-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
             <span className="absolute -bottom-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
 
-            <div className="flex flex-col sm:flex-row gap-5">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
               {/* Photo Frame */}
-              <div className="relative w-36 h-44 flex-shrink-0 border border-[#FF8C24] p-1 bg-[#120B05] overflow-hidden group">
+              <div className="relative w-28 h-36 sm:w-36 sm:h-44 flex-shrink-0 border border-[#FF8C24] p-1 bg-[#120B05] overflow-hidden group mx-auto sm:mx-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/profile.png"
                   alt={PROFILE.name}
                   className="w-full h-full object-cover filter contrast-125 brightness-90 grayscale group-hover:grayscale-0 transition-all duration-150"
                   onError={(e) => {
-                    // Fallback to silhouette if image missing
                     e.currentTarget.style.display = 'none';
                   }}
                 />
@@ -152,36 +131,36 @@ export function Hero() {
               {/* Bio summary */}
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between text-[10px] text-[#7A4210] tracking-widest border-b border-[#7A4210]/40 pb-1 mb-2">
-                    <span>TEMPORAL DOSSIER SUMMARY</span>
-                    <span className="text-[#00FF66] font-bold">STATUS: RECRUITER VERIFIED</span>
+                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-widest border-b border-[#7A4210]/40 pb-1 mb-2">
+                    <span>TEMPORAL DOSSIER</span>
+                    <span className="text-[#00FF66] font-bold">VERIFIED</span>
                   </div>
-                  <p className="text-xs md:text-sm text-[#FF8C24]/90 leading-relaxed">
+                  <p className="text-[11px] sm:text-xs md:text-sm text-[#FF8C24]/90 leading-relaxed">
                     {PROFILE.summary}
                   </p>
                 </div>
 
                 {/* Recruiter Quick Actions */}
-                <div className="flex flex-wrap gap-2 pt-4 mt-2 border-t border-[#7A4210]/40">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 sm:pt-4 mt-2 border-t border-[#7A4210]/40">
                   <a
                     href={PROFILE.socialLinks.resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="tva-button primary text-xs"
+                    className="tva-button primary text-[10px] sm:text-xs"
                   >
-                    <span>▼</span> DOWNLOAD DOSSIER (CV)
+                    <span>▼</span> CV (PDF)
                   </a>
                   <a
                     href={`mailto:${PROFILE.socialLinks.email}`}
-                    className="tva-button text-xs"
+                    className="tva-button text-[10px] sm:text-xs"
                   >
-                    <span>✉</span> DIRECT UPLINK
+                    <span>✉</span> EMAIL
                   </a>
                   <a
                     href={PROFILE.socialLinks.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="tva-button text-xs"
+                    className="tva-button text-[10px] sm:text-xs"
                   >
                     GITHUB
                   </a>
@@ -189,7 +168,7 @@ export function Hero() {
                     href={PROFILE.socialLinks.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="tva-button text-xs"
+                    className="tva-button text-[10px] sm:text-xs"
                   >
                     LINKEDIN
                   </a>
@@ -199,16 +178,16 @@ export function Hero() {
           </div>
 
           {/* Core Competencies Box */}
-          <div className="border border-[#7A4210] p-4 bg-[#120B05]/90">
-            <div className="flex items-center justify-between text-[11px] text-[#FFB84D] tracking-widest border-b border-[#7A4210]/60 pb-2 mb-3">
-              <span>CORE ARCHITECTURAL COMPETENCIES</span>
-              <span className="text-[#7A4210]">SCHEMA: MATRIX-8</span>
+          <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]/90">
+            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-widest border-b border-[#7A4210]/60 pb-2 mb-3">
+              <span>CORE COMPETENCIES</span>
+              <span className="text-[#7A4210] hidden sm:inline">SCHEMA: MATRIX-8</span>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               {PORTFOLIO_DATA.variant.coreCompetencies.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2.5 py-1 text-xs border border-[#7A4210] bg-[#120B05] text-[#FF8C24] hover:border-[#FF8C24] hover:bg-[#FF8C24]/10 transition-colors"
+                  className="px-2 py-1 text-[10px] sm:text-xs border border-[#7A4210] bg-[#120B05] text-[#FF8C24] hover:border-[#FF8C24] hover:bg-[#FF8C24]/10 transition-colors"
                 >
                   {tech}
                 </span>
@@ -219,22 +198,22 @@ export function Hero() {
 
         {/* Right Col: Live System Diagnostic & Voltage Telemetry (5 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="border border-[#FF8C24] p-4 bg-[#120B05] shadow-[0_0_15px_rgba(255,140,36,0.15)] flex-1 flex flex-col justify-between">
+          <div className="border border-[#FF8C24] p-3 sm:p-4 bg-[#120B05] shadow-[0_0_15px_rgba(255,140,36,0.15)] flex flex-col">
             <div>
-              <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-4">
+              <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3 sm:mb-4">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-[#FF8C24] animate-ping" />
-                  <span className="text-xs uppercase tracking-widest font-bold text-[#FF8C24]">
-                    LIVE SYSTEM DIAGNOSTICS
+                  <span className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#FF8C24]">
+                    SYSTEM DIAGNOSTICS
                   </span>
                 </div>
-                <span className="text-[10px] text-[#00FF66] tracking-widest font-bold">
-                  TELEMETRY: ONLINE
+                <span className="text-[9px] sm:text-[10px] text-[#00FF66] tracking-widest font-bold">
+                  ONLINE
                 </span>
               </div>
 
-              {/* Voltage Readings from Diagnostic.tsx */}
-              <div className="mb-4">
+              {/* Voltage Readings */}
+              <div className="mb-3 sm:mb-4">
                 <span className="text-[10px] uppercase tracking-widest text-[#7A4210] block mb-2">
                   PRIMARY VOLTAGE READINGS
                 </span>
@@ -253,18 +232,18 @@ export function Hero() {
             </div>
 
             {/* Diagnostic readout table */}
-            <div className="border-t border-[#7A4210] pt-3 text-[10px] space-y-1">
+            <div className="border-t border-[#7A4210] pt-2 sm:pt-3 text-[9px] sm:text-[10px] space-y-1">
               <div className="flex justify-between text-[#7A4210]">
-                <span>QUANTUM ENGINE:</span>
-                <span className="text-[#FF8C24]">NEXT.js 15 TURBOPACK // 60 FPS</span>
+                <span>ENGINE:</span>
+                <span className="text-[#FF8C24]">NEXT.js 15 // 60 FPS</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
-                <span>COORDINATE DRIFT:</span>
-                <span className="text-[#00FF66]">0.0000% [ZERO DEVIATION]</span>
+                <span>DRIFT:</span>
+                <span className="text-[#00FF66]">0.000% [ZERO]</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
-                <span>AUTHORIZED TIMEDOOR:</span>
-                <span className="text-[#FFB84D]">READY FOR RECRUITER INSPECTION</span>
+                <span>STATUS:</span>
+                <span className="text-[#FFB84D]">READY</span>
               </div>
             </div>
           </div>
@@ -272,9 +251,9 @@ export function Hero() {
       </div>
 
       {/* Bottom Technical Bar */}
-      <div className="border-t border-[#7A4210] pt-3 mt-6 flex flex-wrap items-center justify-between text-[10px] text-[#7A4210] tracking-widest">
-        <span>TVA-ARCHIVE-SERIES // CANTINA CREATIVE INTERFACE</span>
-        <span className="text-[#FF8C24]">NAVIGATE VIA KEYBOARD [1 - 6] OR ACTION LIST ///</span>
+      <div className="border-t border-[#7A4210] pt-3 mt-4 sm:mt-6 flex flex-wrap items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-widest gap-2">
+        <span>TVA-ARCHIVE-SERIES // CANTINA CREATIVE</span>
+        <span className="text-[#FF8C24] hidden sm:inline">NAVIGATE VIA KEYBOARD [1 - 6] OR ACTION LIST ///</span>
       </div>
     </div>
   );
