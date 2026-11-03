@@ -39,18 +39,18 @@ export function SkillsSection() {
       {/* Header */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="tva-stamp text-[10px]">
-            CAPABILITY MATRIX
+          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest font-mono">
+            [04] // CAPABILITY_MATRIX
           </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-wider md:tracking-widest hidden sm:inline">
-            VOLTAGE DIAGNOSTICS & BENCHMARKS
+          <span className="tva-meta-label hidden sm:inline">
+            METRIC_REF // VOLTAGE_DIAGNOSTICS
           </span>
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
-          <span className="text-[#FFB84D] font-bold tva-nums">
-            SHOWING {filteredSkills.length} OF {allSkills.length} METRICS
+          <span className="text-[#FFB84D] font-mono tabular-nums font-bold">
+            ACTIVE // {filteredSkills.length} OF {allSkills.length} METRICS
           </span>
-          <span className="text-[#00FF66] font-bold hidden sm:inline">CALIBRATED</span>
+          <span className="text-[#00FF66] font-mono font-bold hidden sm:inline">SYS_STATUS // CALIBRATED</span>
         </div>
       </div>
 
@@ -65,7 +65,7 @@ export function SkillsSection() {
               tvaSound.playConfirm();
               setSelectedGroupCode('ALL');
             }}
-            className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-wider md:tracking-widest border transition-all tva-nums ${
+            className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all font-mono ${
               selectedGroupCode === 'ALL'
                 ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
                 : 'border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24]'
@@ -82,7 +82,7 @@ export function SkillsSection() {
                 tvaSound.playConfirm();
                 setSelectedGroupCode(g.code);
               }}
-              className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-wider md:tracking-widest border transition-all whitespace-nowrap tva-nums ${
+              className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all whitespace-nowrap font-mono ${
                 selectedGroupCode === g.code
                   ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
                   : 'border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24]'
@@ -93,10 +93,10 @@ export function SkillsSection() {
           ))}
         </div>
 
-        {/* Real-Time Terminal Search Filter (text-base on mobile to prevent iOS zoom) */}
+        {/* Real-Time Terminal Search Filter (text-base on mobile to prevent iOS zoom, IBM Plex Mono) */}
         <div className="relative flex-1 max-w-md">
           <div className="flex items-center border border-[#7A4210] bg-[#120B05] px-3 py-2 focus-within:border-[#FF8C24] focus-within:shadow-[0_0_10px_rgba(255,140,36,0.2)]">
-            <span className="text-[#FF8C24] text-xs mr-2 select-none">&gt;</span>
+            <span className="text-[#FF8C24] text-xs mr-2 select-none font-mono">&gt;</span>
             <input
               type="text"
               value={searchQuery}
@@ -108,7 +108,7 @@ export function SkillsSection() {
                 }
               }}
               placeholder="FILTER CAPABILITIES [e.g. React, Mongo, Node]..."
-              className="w-full bg-transparent text-base md:text-xs text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono uppercase tracking-wider break-words"
+              className="w-full bg-transparent text-base sm:text-xs text-[#FFD29D] placeholder-[#7A4210] focus:outline-hidden font-[family-name:var(--font-tva-body)] uppercase tracking-wider"
             />
             {searchQuery && (
               <button
@@ -118,7 +118,7 @@ export function SkillsSection() {
                   tvaSound.playConfirm();
                   setSearchQuery('');
                 }}
-                className="text-[10px] text-[#7A4210] hover:text-[#FF8C24] ml-2 select-none min-h-[32px] px-1"
+                className="text-[10px] text-[#7A4210] hover:text-[#FF8C24] ml-2 select-none min-h-[32px] px-1 font-mono"
               >
                 [CLEAR]
               </button>

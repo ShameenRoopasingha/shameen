@@ -109,16 +109,16 @@ export function VoltageBar({
             {isSpiking ? 'SURGE' : tag}
           </span>
         </div>
-        <div className="flex items-center gap-2 text-[10px]">
-          <span className="text-[#7A4210]">VLT:</span>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="text-[#7A4210] font-mono text-[10px]">VLT:</span>
           <span
-            className={`font-bold min-w-[38px] text-right font-mono transition-colors tva-nums ${
+            className={`font-bold min-w-[38px] text-right tva-telemetry tabular-nums transition-colors ${
               isSpiking ? 'text-[#FF3B1F]' : 'text-[#FF8C24]'
             }`}
           >
             {(displayLevel * 2.4).toFixed(1)}V
           </span>
-          <span className="text-[#FFB84D] font-bold min-w-[32px] text-right font-mono tva-nums">
+          <span className="text-[#FFB84D] font-bold min-w-[32px] text-right tva-telemetry tabular-nums">
             {displayLevel}%
           </span>
         </div>

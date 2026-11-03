@@ -30,7 +30,7 @@ export function TerminalInput({
     <div className="mb-4 font-mono">
       <label
         htmlFor={name}
-        className="block mb-1 text-[10px] sm:text-[11px] uppercase tracking-wider md:tracking-widest text-[#FF8C24] opacity-80 break-words"
+        className="block mb-1 text-[10px] sm:text-[11px] uppercase tracking-widest text-[#FF8C24] opacity-80"
       >
         <span className="text-[#FFB84D]">&gt;&gt;</span> {label}
         {required && <span className="text-[#FF3B1F] ml-1">*</span>}
@@ -61,8 +61,8 @@ export function TerminalInput({
             rows={rows}
             placeholder={placeholder}
             required={required}
-            /* Enforce text-base (16px minimum) on mobile so iOS Safari NEVER auto-zooms on focus */
-            className="w-full bg-transparent px-3 py-2.5 text-base md:text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden resize-none font-mono tracking-wider break-words"
+            /* Enforce text-base (16px minimum) on mobile so iOS Safari NEVER auto-zooms on focus; IBM Plex Mono font */
+            className="w-full bg-transparent px-3 py-2.5 text-base sm:text-sm text-[#FFD29D] placeholder-[#7A4210] focus:outline-hidden resize-none font-[family-name:var(--font-tva-body)]"
             style={{ caretColor: '#FF8C24' }}
           />
         ) : (
@@ -84,8 +84,8 @@ export function TerminalInput({
             onBlur={() => setIsFocused(false)}
             placeholder={placeholder}
             required={required}
-            /* Enforce text-base (16px minimum) on mobile so iOS Safari NEVER auto-zooms on focus */
-            className="w-full bg-transparent px-3 py-2.5 text-base md:text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono tracking-wider break-words"
+            /* Enforce text-base (16px minimum) on mobile so iOS Safari NEVER auto-zooms on focus; IBM Plex Mono font */
+            className="w-full bg-transparent px-3 py-2.5 text-base sm:text-sm text-[#FFD29D] placeholder-[#7A4210] focus:outline-hidden font-[family-name:var(--font-tva-body)]"
             style={{ caretColor: '#FF8C24' }}
           />
         )}

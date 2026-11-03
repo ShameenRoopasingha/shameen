@@ -31,16 +31,20 @@ export function ProjectsSection() {
       {/* Header Bar */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
-            TIMEDOOR EVIDENCE
+          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest font-mono">
+            [02] // TIMEDOOR_EVIDENCE
           </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest hidden sm:inline">
-            CANONICAL ARCHIVE: SEC-04
+          <span className="tva-meta-label hidden sm:inline">
+            ARCHIVE_REF // SEC-04
           </span>
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
-          <span className="text-[#FFB84D] font-bold">{PROJECTS.length} VERIFIED CASES</span>
-          <span className="text-[#00FF66] font-bold hidden sm:inline">DECLASSIFIED</span>
+          <span className="text-[#FFB84D] font-mono tabular-nums font-bold">
+            COUNT // {PROJECTS.length} VERIFIED CASES
+          </span>
+          <span className="text-[#00FF66] font-mono font-bold hidden sm:inline">
+            SYS_STATUS // DECLASSIFIED
+          </span>
         </div>
       </div>
 
@@ -60,52 +64,50 @@ export function ProjectsSection() {
             <div>
               {/* Header Metadata */}
               <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3 text-[10px]">
-                <span className="text-[#FFB84D] font-bold tracking-widest">
-                  {proj.codeName || `CASE-${idx + 1}`}
+                <span className="text-[#FFB84D] font-bold font-mono tracking-widest">
+                  [CASE-{(idx + 1).toString().padStart(2, '0')}] // {proj.codeName || 'LOG'}
                 </span>
-                <span className="px-1.5 py-0.2 border border-[#7A4210] text-[#00FF66] text-[9px] font-bold">
+                <span className="px-1.5 py-0.2 border border-[#7A4210] text-[#00FF66] text-[9px] font-mono font-bold">
                   {proj.status || 'VERIFIED'}
                 </span>
               </div>
 
-              {/* Title & Category Stamp */}
-              <h2 className="tva-h2 text-[#FF8C24] tva-glow-strong mb-1.5">
+              {/* Title & Category */}
+              <h2 className="tva-heading-md mb-1">
                 {proj.title}
               </h2>
-              <div className="mb-3 flex items-center gap-2">
-                <span className="tva-stamp text-[9px]">
-                  {proj.category}
-                </span>
+              <div className="tva-meta-label text-[10px] mb-3">
+                &gt;&gt; CATEGORY // {proj.category}
               </div>
 
-              {/* Problem Solved & Mission in High-Contrast Body Typography */}
+              {/* Problem Solved & Mission */}
               {proj.problemSolved && (
                 <div className="border border-[#7A4210] p-2.5 sm:p-3 mb-3 bg-[#120B05]/80">
-                  <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#FF3B1F] block mb-1 font-bold">
-                    [MISSION & PROBLEM SOLVED]
+                  <span className="tva-meta-label block text-[10px] text-[#FF3B1F] mb-1 font-bold">
+                    [MISSION &amp; PROBLEM SOLVED] //
                   </span>
-                  <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed max-w-[65ch]">
+                  <p className="tva-dossier-copy">
                     {proj.problemSolved}
                   </p>
                 </div>
               )}
 
-              {/* Summary Description in High-Contrast Sentence Case */}
-              <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed mb-3 max-w-[65ch]">
+              {/* Summary Description */}
+              <p className="tva-dossier-copy mb-3">
                 {proj.summary}
               </p>
 
               {/* Architecture Highlights */}
               {proj.architectureHighlights && proj.architectureHighlights.length > 0 && (
                 <div className="mb-3">
-                  <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#FFB84D] block mb-1.5 font-bold">
-                    ENGINEERING HIGHLIGHTS:
+                  <span className="tva-meta-label block text-[10px] text-[#FFB84D] mb-1.5 font-bold">
+                    ENGINEERING_HIGHLIGHTS //
                   </span>
-                  <ul className="space-y-1.5 text-xs text-[#FFE2B8] tva-body max-w-[65ch]">
+                  <ul className="space-y-1.5 text-xs">
                     {proj.architectureHighlights.slice(0, 3).map((hl, i) => (
-                      <li key={i} className="flex items-start gap-1.5">
-                        <span className="text-[#FF8C24] font-bold flex-shrink-0 font-mono">&gt;</span>
-                        <span className="leading-relaxed">{hl}</span>
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-[#FF8C24] font-bold flex-shrink-0">&gt;</span>
+                        <span className="tva-dossier-copy">{hl}</span>
                       </li>
                     ))}
                   </ul>
@@ -114,14 +116,14 @@ export function ProjectsSection() {
 
               {/* Wrapping Tech Stack Badges */}
               <div className="mb-4">
-                <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-1.5">
-                  TECH STACK
+                <span className="tva-meta-label block text-[10px] mb-1.5">
+                  TECH_STACK //
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {proj.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="px-2 py-0.5 text-[10px] border border-[#FF8C24] bg-[#FF8C24]/10 text-[#FFB84D] font-mono tracking-wider"
+                      className="px-2 py-0.5 text-[10px] border border-[#FF8C24] bg-[#FF8C24]/10 text-[#FFB84D] font-mono uppercase"
                     >
                       {tech}
                     </span>

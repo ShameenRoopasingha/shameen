@@ -107,26 +107,26 @@ export function Hero() {
       <div className="border-b border-[#7A4210] pb-3">
         <div className="flex flex-wrap items-center justify-between gap-1.5 mb-1">
           <div className="flex items-center gap-1.5 text-[9px] sm:text-[10px]">
-            <span className="tva-stamp text-[9px]">
-              OFFICIAL CV DOSSIER
+            <span className="px-1.5 py-0.5 bg-[#FF3B1F] text-[#120B05] font-bold tracking-widest font-mono">
+              [01] // OFFICIAL CV DOSSIER
             </span>
-            <span className="text-[#FF8C24] tracking-wider font-mono">
-              {PROFILE.variantId}
+            <span className="tva-meta-label hidden sm:inline text-[#FF8C24]">
+              VARIANT_ID // {PROFILE.variantId}
             </span>
-            <span className="text-[#00FF66] font-bold hidden sm:inline">
+            <span className="text-[#00FF66] font-mono font-bold hidden sm:inline">
               ● VERIFIED
             </span>
           </div>
-          <span className="text-[9px] sm:text-[10px] text-[#FFB84D] font-bold">
-            {PROFILE.location}
+          <span className="tva-meta-label text-[#FFB84D] font-bold">
+            LOC_REF // {PROFILE.location}
           </span>
         </div>
 
-        <h1 className="tva-h1 font-bold text-[#FF8C24] tva-glow-strong">
+        <h1 className="tva-heading-xl font-light uppercase tracking-wider text-[#FF8C24]">
           {PROFILE.name}
         </h1>
-        <p className="tva-h3 text-[#FFB84D] mt-0.5">
-          &gt;&gt; {PROFILE.role}
+        <p className="crt-subheading-fluid text-[#FFB84D] tracking-widest mt-0.5 font-mono">
+          &gt;&gt; ROLE // {PROFILE.role}
         </p>
       </div>
 
@@ -146,7 +146,7 @@ export function Hero() {
               <div className="relative w-28 h-36 sm:w-32 sm:h-40 flex-shrink-0 border border-[#FF8C24] p-1 bg-[#120B05] overflow-hidden group mx-auto sm:mx-0 flex items-center justify-center">
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-[#7A4210] pointer-events-none">
                   <span className="text-xl">⬡</span>
-                  <span className="text-[8px] uppercase tracking-widest mt-1">VARIANT AVATAR</span>
+                  <span className="text-[8px] uppercase tracking-widest mt-1 font-mono">VARIANT AVATAR</span>
                 </div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -158,19 +158,19 @@ export function Hero() {
                   }}
                 />
                 <div className="absolute inset-0 bg-[#FF8C24]/10 pointer-events-none z-2" />
-                <div className="absolute bottom-1 left-1 right-1 bg-[#120B05]/95 border border-[#FF8C24]/40 text-[8px] text-[#FF8C24] text-center tracking-widest py-0.5 z-3">
+                <div className="absolute bottom-1 left-1 right-1 bg-[#120B05]/95 border border-[#FF8C24]/40 text-[8px] text-[#FF8C24] text-center tracking-widest py-0.5 z-3 font-mono">
                   ID: SR-2025
                 </div>
               </div>
 
-              {/* Bio summary in High-Contrast Sentence Case */}
+              {/* Bio summary */}
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-wider md:tracking-widest border-b border-[#7A4210]/40 pb-1 mb-2">
-                    <span>CANDIDATE PROFILE SUMMARY</span>
-                    <span className="text-[#00FF66] font-bold">READY FOR HIRE</span>
+                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] tracking-widest border-b border-[#7A4210]/40 pb-1 mb-2">
+                    <span className="tva-meta-label">CANDIDATE_PROFILE_SUMMARY //</span>
+                    <span className="text-[#00FF66] font-bold font-mono text-[9px]">READY FOR HIRE</span>
                   </div>
-                  <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed max-w-[65ch]">
+                  <p className="tva-dossier-copy">
                     {PROFILE.summary}
                   </p>
                 </div>
@@ -222,9 +222,9 @@ export function Hero() {
 
           {/* Education Records Box */}
           <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]/90">
-            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-wider md:tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
-              <span>CANONICAL EDUCATION DOSSIER</span>
-              <span className="text-[#00FF66] text-[9px] font-bold">ACCREDITED</span>
+            <div className="flex items-center justify-between text-[10px] sm:text-[11px] tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
+              <span className="tva-meta-label text-[#FFB84D]">CANONICAL_EDUCATION_DOSSIER //</span>
+              <span className="text-[#00FF66] text-[9px] font-bold font-mono">ACCREDITED</span>
             </div>
             <div className="space-y-2">
               {PROFILE.education.map((edu, idx) => (
@@ -233,10 +233,10 @@ export function Hero() {
                   className="border border-[#7A4210]/60 p-2 sm:p-2.5 bg-[#120B05] hover:border-[#FF8C24] transition-colors"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-1 text-[9px] sm:text-[10px] text-[#7A4210] mb-0.5">
-                    <span className="text-[#FF8C24] font-bold">{edu.institution}</span>
-                    <span className="text-[#FFB84D] font-mono tva-nums">{edu.year}</span>
+                    <span className="text-[#FF8C24] font-bold font-mono uppercase">{edu.institution}</span>
+                    <span className="text-[#FFB84D] font-mono tabular-nums tva-telemetry text-xs">{edu.year}</span>
                   </div>
-                  <div className="text-xs sm:text-sm text-[#FFE2B8] font-bold">
+                  <div className="text-xs sm:text-sm text-[#FFB84D] font-bold font-mono">
                     {edu.degree}
                   </div>
                 </div>
@@ -246,15 +246,15 @@ export function Hero() {
 
           {/* Core Competencies Box */}
           <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]/90">
-            <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-[#FFB84D] tracking-wider md:tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
-              <span>CORE TECHNICAL COMPETENCIES</span>
-              <span className="text-[#7A4210] text-[9px]">OFFICIAL CV</span>
+            <div className="flex items-center justify-between text-[10px] sm:text-[11px] tracking-widest border-b border-[#7A4210]/60 pb-1.5 mb-2.5">
+              <span className="tva-meta-label text-[#FFB84D]">CORE_TECHNICAL_COMPETENCIES //</span>
+              <span className="tva-meta-label text-[9px]">OFFICIAL_CV</span>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {PORTFOLIO_DATA.variant.coreCompetencies.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2 py-1 text-[10px] sm:text-xs border border-[#7A4210] bg-[#120B05] text-[#FFE2B8] font-mono"
+                  className="px-2 py-1 text-[10px] sm:text-xs border border-[#7A4210] bg-[#120B05] text-[#FF8C24] font-mono uppercase"
                 >
                   {tech}
                 </span>
@@ -270,19 +270,19 @@ export function Hero() {
               <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 bg-[#FF8C24] animate-ping" />
-                  <span className="text-[10px] sm:text-xs uppercase tracking-wider md:tracking-widest font-bold text-[#FF8C24]">
-                    VOLTAGE TELEMETRY
+                  <span className="text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#FF8C24] font-mono">
+                    LIVE_VOLTAGE_TELEMETRY //
                   </span>
                 </div>
-                <span className="text-[9px] text-[#00FF66] tracking-widest font-bold">
+                <span className="text-[9px] text-[#00FF66] tracking-widest font-bold font-mono">
                   VERIFIED %
                 </span>
               </div>
 
               {/* Voltage Readings */}
               <div className="mb-3">
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-2">
-                  FLAGSHIP PROFICIENCY VOLTAGES
+                <span className="tva-meta-label block text-[10px] mb-2">
+                  FLAGSHIP_PROFICIENCY_VOLTAGES //
                 </span>
                 <div className="space-y-1">
                   {keySkills.map((skill, index) => (
@@ -301,16 +301,16 @@ export function Hero() {
             {/* Diagnostic readout table */}
             <div className="border-t border-[#7A4210] pt-2 text-[9px] sm:text-[10px] space-y-1 font-mono">
               <div className="flex justify-between text-[#7A4210]">
-                <span>TOTAL ASSESSED METRICS:</span>
-                <span className="text-[#FF8C24] font-bold tva-nums">{SKILLS.length} SKILLS</span>
+                <span className="tva-meta-label text-[10px]">TOTAL_METRICS //</span>
+                <span className="text-[#FF8C24] font-bold tva-telemetry tabular-nums text-xs">{SKILLS.length} BENCHMARKS</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
-                <span>FOCUS:</span>
-                <span className="text-[#FFE2B8]">FULL-STACK & SAAS</span>
+                <span className="tva-meta-label text-[10px]">CORE_FOCUS //</span>
+                <span className="text-[#FFB84D] uppercase font-bold text-[10px]">FULL-STACK &amp; SAAS</span>
               </div>
               <div className="flex justify-between text-[#7A4210]">
-                <span>WORK PREFERENCE:</span>
-                <span className="text-[#00FF66]">PROJECT-BASED / REMOTE</span>
+                <span className="tva-meta-label text-[10px]">PREFERENCE //</span>
+                <span className="text-[#00FF66] font-bold text-[10px]">PROJECT-BASED / REMOTE</span>
               </div>
             </div>
           </div>

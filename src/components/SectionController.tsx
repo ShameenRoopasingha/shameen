@@ -173,7 +173,7 @@ export function SectionController() {
               />
             </div>
             <span
-              className={`font-bold font-mono transition-colors tva-nums ${
+              className={`font-bold tva-telemetry tabular-nums text-xs transition-colors ${
                 isSurging ? 'text-[#FF3B1F]' : 'text-[#FF8C24]'
               }`}
             >
@@ -184,8 +184,8 @@ export function SectionController() {
 
         {/* Center: Live Chrono Ticker (Desktop Only) */}
         <div className="hidden lg:flex items-center gap-2 text-xs text-[#FF8C24]">
-          <span className="text-[#7A4210]">TEMPORAL ANCHOR:</span>
-          <span className="text-[#FFB84D] font-bold tracking-widest tva-nums">{chronoTime}</span>
+          <span className="tva-meta-label text-[10px]">TEMPORAL ANCHOR //</span>
+          <span className="text-[#FFB84D] font-bold tracking-widest tva-telemetry tabular-nums text-sm">{chronoTime}</span>
         </div>
 
         {/* Right: Audio + Help + 1-Tap CV & GITHUB (min 44px touch targets) */}
@@ -313,7 +313,7 @@ export function SectionController() {
               {currentMeta?.tvaLabel} // {currentMeta?.recruiterLabel}
             </span>
           </div>
-          <span className="text-[#7A4210] flex-shrink-0 text-[9px] tva-nums">
+          <span className="tva-telemetry tabular-nums text-[11px] text-[#FFB84D] flex-shrink-0">
             PRG {String(currentSection + 1).padStart(2, '0')}/06
           </span>
         </div>

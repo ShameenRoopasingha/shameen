@@ -25,16 +25,20 @@ export function ExperienceSection() {
       {/* Top Header */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
-            SACRED TIMELINE
+          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest font-mono">
+            [03] // SACRED_TIMELINE
           </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest hidden sm:inline">
-            CANONICAL CAREER DISPATCHES
+          <span className="tva-meta-label hidden sm:inline">
+            CHRONO_REF // CANONICAL_INCIDENTS
           </span>
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
-          <span className="text-[#FFB84D] font-bold">{EXPERIENCE.length} CANONICAL INCIDENTS</span>
-          <span className="text-[#00FF66] font-bold hidden sm:inline">VERIFIED</span>
+          <span className="text-[#FFB84D] font-mono tabular-nums font-bold">
+            COUNT // {EXPERIENCE.length} INCIDENTS
+          </span>
+          <span className="text-[#00FF66] font-mono font-bold hidden sm:inline">
+            SYS_STATUS // VERIFIED
+          </span>
         </div>
       </div>
 
@@ -84,42 +88,40 @@ export function ExperienceSection() {
                 {/* Status Bar */}
                 <div className="flex flex-wrap items-center justify-between border-b border-[#7A4210] pb-2 mb-2 text-[10px] gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.2 border border-[#FF8C24] text-[#FF8C24] font-bold font-mono tva-nums">
-                      INCIDENT #{(index + 1).toString().padStart(3, '0')}
+                    <span className="px-1.5 py-0.2 border border-[#FF8C24] text-[#FF8C24] font-mono font-bold tabular-nums">
+                      INCIDENT #{(index + 1).toString().padStart(3, '0')} // RECORD
                     </span>
-                    <span className="text-[#00FF66] font-bold">● VERIFIED</span>
+                    <span className="text-[#00FF66] font-mono font-bold">● VERIFIED</span>
                   </div>
-                  <span className="text-[#FFB84D] font-bold font-mono tva-nums">
+                  <span className="text-[#FFB84D] font-bold font-mono tabular-nums tva-telemetry text-xs">
                     {exp.year}
                   </span>
                 </div>
 
-                {/* Role and Organization Stamp */}
-                <h3 className="tva-h3 text-[#FF8C24] tva-glow-subtle mb-1">
+                {/* Role and Organization */}
+                <h3 className="tva-heading-md mb-0.5">
                   {exp.role}
                 </h3>
-                <div className="mb-3 flex items-center gap-2">
-                  <span className="tva-stamp text-[9px]">
-                    {exp.company}
-                  </span>
+                <div className="tva-meta-label text-[11px] mb-3">
+                  &gt;&gt; ORGANIZATION // {exp.company}
                 </div>
 
-                {/* Summary in High-Contrast Sentence Case */}
-                <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed mb-3 max-w-[65ch]">
+                {/* Summary */}
+                <p className="tva-dossier-copy mb-3">
                   {exp.description}
                 </p>
 
                 {/* Key Achievements */}
                 {exp.achievements && exp.achievements.length > 0 && (
                   <div className="mb-3">
-                    <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#FFB84D] block mb-1.5 font-bold">
-                      CAREER ACHIEVEMENTS & CONTRIBUTIONS:
+                    <span className="tva-meta-label block text-[10px] text-[#FFB84D] mb-1.5 font-bold">
+                      CAREER_ACHIEVEMENTS //
                     </span>
-                    <ul className="space-y-1.5 text-xs text-[#FFE2B8] tva-body max-w-[65ch]">
+                    <ul className="space-y-1.5 text-xs">
                       {exp.achievements.map((item, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <span className="text-[#FF8C24] font-bold flex-shrink-0 font-mono">&gt;</span>
-                          <span className="leading-relaxed">{item}</span>
+                          <span className="text-[#FF8C24] font-bold flex-shrink-0">&gt;</span>
+                          <span className="tva-dossier-copy">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -129,14 +131,14 @@ export function ExperienceSection() {
                 {/* Technologies */}
                 {exp.technologies && exp.technologies.length > 0 && (
                   <div>
-                    <span className="text-[9px] uppercase tracking-wider md:tracking-widest text-[#7A4210] block mb-1.5">
-                      TECHNOLOGY TELEMETRY
+                    <span className="tva-meta-label block text-[10px] mb-1">
+                      TECH_TELEMETRY //
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {exp.technologies.map((t) => (
                         <span
                           key={t}
-                          className="px-2 py-0.5 text-[10px] border border-[#7A4210] text-[#FF8C24] bg-[#120B05] font-mono tracking-wider"
+                          className="px-2 py-0.5 text-[10px] border border-[#7A4210] text-[#FF8C24] bg-[#120B05] font-mono uppercase"
                         >
                           {t}
                         </span>

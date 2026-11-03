@@ -26,11 +26,11 @@ export function ReferencesSection() {
       {/* Header */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="tva-stamp text-[10px]">
-            CHRONO-LOGS
+          <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest font-mono">
+            [05] // CHRONO_LOGS
           </span>
-          <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-wider md:tracking-widest hidden sm:inline">
-            AUTHENTICATED PERSONNEL DOSSIERS
+          <span className="tva-meta-label hidden sm:inline">
+            AUTH_REF // PERSONNEL_DOSSIERS
           </span>
         </div>
         <div className="flex items-center gap-3 text-[10px] sm:text-xs">
@@ -47,19 +47,19 @@ export function ReferencesSection() {
             {allDeclassified ? '✓ ALL DECLASSIFIED' : '⚡ DECLASSIFY ALL DOSSIERS'}
           </button>
           <span className="text-[#7A4210] hidden sm:inline">|</span>
-          <span className="text-[#00FF66] font-bold hidden sm:inline">VERIFIED</span>
+          <span className="text-[#00FF66] font-mono font-bold hidden sm:inline">SYS_STATUS // VERIFIED</span>
         </div>
       </div>
 
       {/* Description / Instructions */}
       <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-[10px] uppercase tracking-wider md:tracking-widest text-[#FF3B1F] font-bold">
+          <span className="tva-meta-label text-[#FF3B1F] font-bold text-[10px]">
             [RESTRICTED ARCHIVE // PROFESSIONAL REFERENCES]
           </span>
-          <span className="text-[9px] text-[#7A4210]">LEVEL-4</span>
+          <span className="tva-meta-label text-[9px]">CLEARANCE // LEVEL-4</span>
         </div>
-        <p className="tva-body text-xs sm:text-sm text-[#FFE2B8] leading-relaxed max-w-[65ch]">
+        <p className="tva-dossier-copy mt-1">
           Verified professional references from senior technology leaders who have directly evaluated Shameen&apos;s technical execution. Tap any card or use the master declassify button to reveal direct contact phone numbers.
         </p>
       </div>
