@@ -25,13 +25,22 @@ const sectionComponents = [
   ContactSection,
 ];
 
+// Mobile 2-row x 3-column thumb keypad configuration
+const MOBILE_THUMB_KEYS = [
+  { id: 0, label: '01 // DOSSIER' },
+  { id: 1, label: '02 // PROJECTS' },
+  { id: 2, label: '03 // TIMELINE' },
+  { id: 3, label: '04 // SKILLS' },
+  { id: 4, label: '05 // LOGS' },
+  { id: 5, label: '06 // CONTACT' },
+];
+
 export function SectionController() {
   const flashRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const { currentSection } = useAppSelector((state) => state.navigation);
   const { setFlashRef } = useWarpTransition();
   const [chronoTime, setChronoTime] = useState<string>('00:00:00 // 616');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(false);
 
@@ -108,11 +117,6 @@ export function SectionController() {
     }
   }, [currentSection]);
 
-  // Close mobile menu on section change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [currentSection]);
-
   const handleSelectSection = (idx: number) => {
     soundFx.playMechanicalClick();
     dispatch(setTargetSection(idx));
@@ -127,41 +131,46 @@ export function SectionController() {
   const currentMeta = SECTION_METADATA[SECTIONS[currentSection]];
 
   return (
-    <div className="relative w-full h-[100dvh] h-screen overflow-hidden flex flex-col bg-[#120B05] font-mono select-none">
+    <div className="relative w-full h-dvh max-h-dvh overflow-hidden flex flex-col lg:grid lg:grid-cols-[300px_1fr] lg:grid-rows-[auto_1fr] bg-[#120B05] font-mono select-none">
       <WarpFlash ref={flashRef} />
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/* 1. TOP TEMPAD HARDWARE STATUS BAR                              */}
+      {/* 1. TOP TEMPAD BEZEL BAR (h-12 across mobile & desktop)          */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <header className="h-11 md:h-12 border-b border-[#7A4210] bg-[#120B05] flex items-center justify-between px-2 sm:px-3 md:px-6 z-20 flex-shrink-0">
-        {/* Left: System Identification */}
-        <div className="flex items-center gap-1.5 md:gap-3 text-[10px] md:text-xs">
-          <div className="flex items-center gap-1 md:gap-1.5">
-            <span className="w-2 h-2 bg-[#FF8C24] shadow-[0_0_8px_#FF8C24]" />
-            <span className="font-bold tracking-widest text-[#FF8C24]">
-              TVA-OS
+      <header className="h-12 border-b border-[#7A4210] bg-[#120B05] flex items-center justify-between px-3 md:px-5 z-20 flex-shrink-0 lg:col-span-2">
+        {/* Left: System Identification & Mini Voltmeter */}
+        <div className="flex items-center gap-2 sm:gap-3 text-xs">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 bg-[#FF8C24] shadow-[0_0_8px_#FF8C24]" />
+            <span className="font-bold tracking-widest text-[#FF8C24] text-[11px] sm:text-xs">
+              TVA-OS // S.ROOPASINGHA
             </span>
           </div>
-          <span className="text-[#7A4210] hidden sm:inline">|</span>
-          <span className="text-[#FFB84D] tracking-wider text-[10px] hidden sm:inline truncate max-w-[160px]">
-            {PROFILE.name.toUpperCase()}
-          </span>
+
+          {/* Compact Hardware Voltage Indicator */}
+          <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 border border-[#7A4210] bg-[#120B05] text-[10px]">
+            <span className="text-[#7A4210]">VLT:</span>
+            <div className="w-12 h-1.5 bg-[#7A4210]/40 overflow-hidden relative">
+              <div className="w-4/5 h-full bg-[#FF8C24]" />
+            </div>
+            <span className="text-[#FF8C24] font-bold">24.2V</span>
+          </div>
         </div>
 
-        {/* Center: Live Chrono Ticker */}
+        {/* Center: Live Chrono Ticker (Desktop Only) */}
         <div className="hidden lg:flex items-center gap-2 text-xs text-[#FF8C24]">
           <span className="text-[#7A4210]">TEMPORAL ANCHOR:</span>
           <span className="text-[#FFB84D] font-bold tracking-widest">{chronoTime}</span>
         </div>
 
-        {/* Right: Audio Toggle + Help + Recruiter 1-Click Fast Actions */}
-        <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] md:text-xs">
-          {/* Retro Audio Toggle */}
+        {/* Right: Audio + Help + 1-Tap CV & GITHUB (min 44px touch targets) */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Audio Relay Toggle */}
           <button
             type="button"
             onClick={handleAudioToggle}
             title="Toggle mechanical relay clicks [Key: M]"
-            className={`px-2 py-1 text-[9px] md:text-[10px] border tracking-wider transition-all hidden sm:inline-flex items-center gap-1 ${
+            className={`min-h-[44px] min-w-[44px] px-2 text-[10px] border tracking-wider transition-all hidden sm:inline-flex items-center justify-center gap-1 ${
               audioEnabled
                 ? 'border-[#00FF66] text-[#00FF66] bg-[#00FF66]/10 font-bold'
                 : 'border-[#7A4210] text-[#7A4210] hover:text-[#FF8C24]'
@@ -171,178 +180,53 @@ export function SectionController() {
             <span>{audioEnabled ? 'ON' : 'OFF'}</span>
           </button>
 
-          {/* Quick Help Shortcut */}
+          {/* Help Manual Shortcut */}
           <button
             type="button"
             onClick={() => setHelpOpen(true)}
-            title="TemPad Help & Keyboard Shortcuts [Key: ?]"
-            className="px-2 py-1 border border-[#7A4210] text-[#7A4210] hover:border-[#FF8C24] hover:text-[#FF8C24] transition-all text-[9px] md:text-[10px] tracking-wider font-bold"
+            title="TemPad Help & Shortcuts [Key: ?]"
+            className="min-h-[44px] min-w-[44px] px-2 border border-[#7A4210] text-[#7A4210] hover:border-[#FF8C24] hover:text-[#FF8C24] transition-all text-[10px] tracking-wider font-bold inline-flex items-center justify-center"
           >
-            HELP [?]
+            [?]
           </button>
 
+          {/* 1-Tap CV (min 44px x 44px touch target) */}
           <a
             href={PROFILE.socialLinks.resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-2 py-1.5 border border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05] transition-all text-[10px] md:text-xs font-bold tracking-wider flex items-center"
+            className="min-h-[44px] px-3 border border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05] transition-all text-[11px] font-bold tracking-wider inline-flex items-center justify-center"
           >
             CV ↗
           </a>
+
+          {/* 1-Tap GitHub (min 44px x 44px touch target) */}
           <a
             href={PROFILE.socialLinks.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-2 py-1.5 border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] transition-all text-[10px] md:text-xs tracking-wider hidden sm:flex items-center"
+            className="min-h-[44px] px-3 border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] transition-all text-[11px] tracking-wider hidden sm:inline-flex items-center justify-center"
           >
             GITHUB
-          </a>
-          <a
-            href={PROFILE.socialLinks.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-2 py-1.5 border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] transition-all text-[10px] md:text-xs tracking-wider hidden sm:flex items-center"
-          >
-            LINKEDIN
           </a>
         </div>
       </header>
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/* 2. SPLIT-BEZEL BODY: LEFT ACTION LIST /// + MAIN VIEWPORT     */}
+      {/* 2. DESKTOP PERSISTENT TERMINAL SIDEBAR (lg: Only)              */}
       {/* ════════════════════════════════════════════════════════════════ */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
-        {/* DESKTOP PERSISTENT SIDEBAR: ACTION LIST /// */}
-        <aside className="hidden md:flex w-64 lg:w-72 xl:w-80 border-r border-[#7A4210] bg-[#120B05]/95 flex-col justify-between p-3 lg:p-4 flex-shrink-0 z-10">
-          <div>
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3">
-              <span className="text-xs font-bold tracking-widest text-[#FF8C24]">
-                ACTION LIST ///
-              </span>
-              <span className="tva-cursor">█</span>
-            </div>
-
-            {/* Menu Items with Inverted Amber Block Hover */}
-            <nav className="space-y-1.5" aria-label="TemPad Navigation">
-              {SECTIONS.map((secId, idx) => {
-                const meta = SECTION_METADATA[secId];
-                const isActive = idx === currentSection;
-
-                return (
-                  <button
-                    key={secId}
-                    type="button"
-                    onClick={() => handleSelectSection(idx)}
-                    className={`w-full text-left tva-action-item ${
-                      isActive ? 'active' : ''
-                    }`}
-                  >
-                    <span className="badge text-[10px] px-1 py-0.2 bg-[#FF8C24]/10 border border-[#7A4210] text-[#FFB84D]">
-                      {meta.code}
-                    </span>
-                    <div className="flex flex-col truncate">
-                      <span className="text-xs font-bold truncate">
-                        {meta.tvaLabel}
-                      </span>
-                      <span className="text-[9px] opacity-75 truncate">
-                        {meta.recruiterLabel}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-
-          {/* Bottom Sidebar Diagnostic Readout */}
-          <div className="border-t border-[#7A4210] pt-3 text-[10px] text-[#7A4210] space-y-1.5">
-            <div className="flex justify-between">
-              <span>HOTKEYS:</span>
-              <span className="text-[#FF8C24] font-bold">[1 - 6] // [?] HELP</span>
-            </div>
-            <div className="flex justify-between">
-              <span>CALIBRATION:</span>
-              <span className="text-[#00FF66]">EARTH-616 // NORMALIZED</span>
-            </div>
-            <div className="flex justify-between">
-              <span>CLEARANCE:</span>
-              <span className="text-[#FFB84D]">LEVEL-4 RECRUITER</span>
-            </div>
-          </div>
-        </aside>
-
-        {/* MAIN VIEWPORT: ACTIVE MODULE WITH INTERNAL SCROLLING */}
-        <main className="flex-1 h-full overflow-hidden relative flex flex-col">
-          {/* CRT Module Header Ticker */}
-          <div className="h-7 border-b border-[#7A4210]/60 bg-[#120B05] px-3 md:px-4 flex items-center justify-between text-[9px] md:text-[10px] text-[#7A4210] flex-shrink-0">
-            <div className="flex items-center gap-1.5 md:gap-2 truncate">
-              <span className="text-[#FF8C24]">&gt;&gt;</span>
-              <span className="text-[#FFB84D] font-bold truncate">
-                {currentMeta?.tvaLabel} // {currentMeta?.recruiterLabel}
-              </span>
-            </div>
-            <span className="hidden sm:inline text-[#7A4210] flex-shrink-0 ml-2">
-              TEMPORAL COORDINATE: {String(currentSection + 1).padStart(2, '0')} / {String(SECTIONS.length).padStart(2, '0')}
+      <aside className="hidden lg:flex border-r border-[#7A4210] bg-[#120B05]/95 flex-col justify-between p-4 flex-shrink-0 z-10">
+        <div>
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-[#7A4210] pb-2 mb-3">
+            <span className="text-xs font-bold tracking-widest text-[#FF8C24]">
+              ACTION LIST ///
             </span>
-            <span className="sm:hidden text-[#FF8C24]/75 text-[9px] flex-shrink-0 flex items-center gap-1 font-bold">
-              SWIPE ◄ ►
-            </span>
+            <span className="tva-cursor">█</span>
           </div>
 
-          {/* Scrollable Viewport Container */}
-          <div className="flex-1 w-full h-full overflow-y-auto custom-scrollbar relative -webkit-overflow-scrolling-touch">
-            <ActiveComponent />
-          </div>
-        </main>
-      </div>
-
-      {/* ════════════════════════════════════════════════════════════════ */}
-      {/* 3. MOBILE BOTTOM HANDHELD SCANNER CONTROL DECK (< 768px)       */}
-      {/* ════════════════════════════════════════════════════════════════ */}
-      <div className="md:hidden flex-shrink-0 z-30">
-        {/* Compact Bottom Bar: Current section + Menu toggle */}
-        <div className="border-t border-[#FF8C24] bg-[#120B05] flex items-center justify-between px-3 py-2">
-          {/* Prev */}
-          <button
-            type="button"
-            disabled={currentSection === 0}
-            onClick={() => handleSelectSection(Math.max(0, currentSection - 1))}
-            className="px-3 py-2 text-[11px] border border-[#7A4210] text-[#FF8C24] disabled:opacity-30 disabled:pointer-events-none flex items-center"
-            aria-label="Previous section"
-          >
-            ◄
-          </button>
-
-          {/* Current Section Label (tappable to open menu) */}
-          <button
-            type="button"
-            onClick={() => {
-              soundFx.playMechanicalClick();
-              setMobileMenuOpen(!mobileMenuOpen);
-            }}
-            className="flex-1 mx-2 px-3 py-2 text-[11px] uppercase tracking-wider border border-[#FF8C24] text-[#FF8C24] font-bold text-center flex items-center justify-center gap-2"
-          >
-            <span className="text-[#FFB84D]">{currentMeta?.code}</span>
-            <span className="truncate">{currentMeta?.tvaLabel}</span>
-            <span className="text-[#7A4210] ml-1">{mobileMenuOpen ? '▼' : '▲'}</span>
-          </button>
-
-          {/* Next */}
-          <button
-            type="button"
-            disabled={currentSection === SECTIONS.length - 1}
-            onClick={() => handleSelectSection(Math.min(SECTIONS.length - 1, currentSection + 1))}
-            className="px-3 py-2 text-[11px] border border-[#7A4210] text-[#FF8C24] disabled:opacity-30 disabled:pointer-events-none flex items-center"
-            aria-label="Next section"
-          >
-            ►
-          </button>
-        </div>
-
-        {/* Expandable Menu Drawer */}
-        {mobileMenuOpen && (
-          <div className="border-t border-[#7A4210] bg-[#120B05] px-2 py-2 space-y-1 max-h-[50vh] overflow-y-auto">
+          {/* Desktop Dual-Labeled Menu Items */}
+          <nav className="space-y-1.5" aria-label="TemPad Navigation">
             {SECTIONS.map((secId, idx) => {
               const meta = SECTION_METADATA[secId];
               const isActive = idx === currentSection;
@@ -352,34 +236,94 @@ export function SectionController() {
                   key={secId}
                   type="button"
                   onClick={() => handleSelectSection(idx)}
-                  className={`w-full text-left px-3 py-3 flex items-center gap-3 text-[11px] uppercase tracking-wider border transition-all ${
-                    isActive
-                      ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
-                      : 'border-[#7A4210]/50 text-[#FF8C24] bg-[#120B05]'
+                  className={`w-full text-left tva-action-item ${
+                    isActive ? 'active' : ''
                   }`}
                 >
-                  <span className={`text-[10px] px-1.5 py-0.5 border ${
-                    isActive
-                      ? 'border-[#120B05] text-[#120B05]'
-                      : 'border-[#7A4210] text-[#FFB84D]'
-                  }`}>
+                  <span className="badge text-[10px] px-1 py-0.2 bg-[#FF8C24]/10 border border-[#7A4210] text-[#FFB84D]">
                     {meta.code}
                   </span>
-                  <div className="flex flex-col">
-                    <span className="font-bold">{meta.tvaLabel}</span>
-                    <span className={`text-[9px] ${isActive ? 'text-[#120B05]/70' : 'text-[#7A4210]'}`}>
+                  <div className="flex flex-col truncate">
+                    <span className="text-xs font-bold truncate">
+                      {meta.tvaLabel}
+                    </span>
+                    <span className="text-[9px] opacity-75 truncate">
                       {meta.recruiterLabel}
                     </span>
                   </div>
                 </button>
               );
             })}
+          </nav>
+        </div>
+
+        {/* Bottom Sidebar Readout */}
+        <div className="border-t border-[#7A4210] pt-3 text-[10px] text-[#7A4210] space-y-1.5">
+          <div className="flex justify-between">
+            <span>KEYPAD COMMANDS:</span>
+            <span className="text-[#FF8C24] font-bold">[1 - 6] // [?] HELP</span>
           </div>
-        )}
-      </div>
+          <div className="flex justify-between">
+            <span>GRID SYNCHRONIZATION:</span>
+            <span className="text-[#00FF66]">LOCKED // 24x24</span>
+          </div>
+          <div className="flex justify-between">
+            <span>CLEARANCE:</span>
+            <span className="text-[#FFB84D]">LEVEL-4 RECRUITER</span>
+          </div>
+        </div>
+      </aside>
 
       {/* ════════════════════════════════════════════════════════════════ */}
-      {/* 4. TEMPAD USER OPERATIONS HELP MODAL ([?] OR 'H')               */}
+      {/* 3. CENTER CRT VIEWPORT (Smooth touch scrolling, overscroll)    */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <main className="flex-1 overflow-hidden relative flex flex-col min-h-0">
+        {/* Module Header Ticker */}
+        <div className="h-7 border-b border-[#7A4210]/60 bg-[#120B05] px-3 md:px-4 flex items-center justify-between text-[9px] md:text-[10px] text-[#7A4210] flex-shrink-0">
+          <div className="flex items-center gap-1.5 md:gap-2 truncate">
+            <span className="text-[#FF8C24]">&gt;&gt;</span>
+            <span className="text-[#FFB84D] font-bold truncate">
+              {currentMeta?.tvaLabel} // {currentMeta?.recruiterLabel}
+            </span>
+          </div>
+          <span className="text-[#7A4210] flex-shrink-0 text-[9px]">
+            PRG {String(currentSection + 1).padStart(2, '0')}/06
+          </span>
+        </div>
+
+        {/* Center Scroll Container with native touch inertia */}
+        <div className="flex-1 w-full overflow-y-auto overscroll-contain px-3 py-4 md:p-6 custom-scrollbar relative -webkit-overflow-scrolling-touch">
+          <ActiveComponent />
+        </div>
+      </main>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 4. BOTTOM THUMB-DECK (ACTION LIST ///: 2-Row x 3-Col Keypad)   */}
+      {/* Fixed/docked in the natural mobile thumb zone (< lg)            */}
+      {/* ════════════════════════════════════════════════════════════════ */}
+      <nav
+        className="lg:hidden border-t-2 border-[#FF8C24] bg-[#120B05] grid grid-cols-3 grid-rows-2 gap-1 p-1 z-30 flex-shrink-0"
+        aria-label="Mobile Action List Keypad"
+      >
+        {MOBILE_THUMB_KEYS.map((key) => {
+          const isActive = key.id === currentSection;
+          return (
+            <button
+              key={key.id}
+              type="button"
+              onClick={() => handleSelectSection(key.id)}
+              className={`tva-thumb-key text-[10px] ${
+                isActive ? 'active' : ''
+              }`}
+            >
+              <span className="font-bold tracking-wider">{key.label}</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* ════════════════════════════════════════════════════════════════ */}
+      {/* 5. TEMPAD USER OPERATIONS HELP MODAL ([?] OR 'H')               */}
       {/* ════════════════════════════════════════════════════════════════ */}
       {helpOpen && (
         <div
@@ -411,30 +355,30 @@ export function SectionController() {
               </button>
             </div>
 
-            <div className="space-y-3 text-xs">
-              <div className="border border-[#7A4210]/50 p-2.5 bg-[#120B05]">
-                <div className="text-[10px] text-[#7A4210] uppercase mb-1">DIRECT MODULE JUMP</div>
+            <div className="space-y-2.5 text-xs">
+              <div className="border border-[#7A4210]/50 p-2 bg-[#120B05]">
+                <div className="text-[10px] text-[#7A4210] uppercase mb-0.5">MOBILE THUMB-DECK</div>
+                <div className="text-[#FFB84D] font-mono">
+                  Tap any key on the bottom 2x3 wireframe keypad to instantly load that program module.
+                </div>
+              </div>
+
+              <div className="border border-[#7A4210]/50 p-2 bg-[#120B05]">
+                <div className="text-[10px] text-[#7A4210] uppercase mb-0.5">DIRECT MODULE JUMP (KEYBOARD)</div>
                 <div className="text-[#FFB84D] font-mono">
                   Press <span className="text-[#FF8C24] font-bold">[1 - 6]</span> to jump directly to any TemPad module.
                 </div>
               </div>
 
-              <div className="border border-[#7A4210]/50 p-2.5 bg-[#120B05]">
-                <div className="text-[10px] text-[#7A4210] uppercase mb-1">SEQUENTIAL PAGING</div>
+              <div className="border border-[#7A4210]/50 p-2 bg-[#120B05]">
+                <div className="text-[10px] text-[#7A4210] uppercase mb-0.5">DESKTOP SCROLL WHEEL</div>
                 <div className="text-[#FFB84D] font-mono">
-                  Use <span className="text-[#FF8C24] font-bold">[Arrow Keys]</span> or <span className="text-[#FF8C24] font-bold">[PageUp / PageDn]</span> to step through modules.
+                  Wheel scrolling navigates internal page content. Warping only triggers when scrolled to the exact top or bottom boundary.
                 </div>
               </div>
 
-              <div className="border border-[#7A4210]/50 p-2.5 bg-[#120B05]">
-                <div className="text-[10px] text-[#7A4210] uppercase mb-1">TOUCH & MOBILE SWIPE</div>
-                <div className="text-[#FFB84D] font-mono">
-                  Swipe <span className="text-[#FF8C24] font-bold">LEFT</span> to go next, swipe <span className="text-[#FF8C24] font-bold">RIGHT</span> to go previous.
-                </div>
-              </div>
-
-              <div className="border border-[#7A4210]/50 p-2.5 bg-[#120B05]">
-                <div className="text-[10px] text-[#7A4210] uppercase mb-1">AUDIO HARDWARE RELAY</div>
+              <div className="border border-[#7A4210]/50 p-2 bg-[#120B05]">
+                <div className="text-[10px] text-[#7A4210] uppercase mb-0.5">AUDIO HARDWARE RELAY</div>
                 <div className="text-[#FFB84D] font-mono">
                   Press <span className="text-[#FF8C24] font-bold">[M]</span> to toggle authentic 1970s relay click feedback.
                 </div>
@@ -446,7 +390,7 @@ export function SectionController() {
               <button
                 type="button"
                 onClick={() => setHelpOpen(false)}
-                className="tva-button text-[10px]"
+                className="tva-button text-[10px] py-1"
               >
                 DISMISS MANUAL
               </button>

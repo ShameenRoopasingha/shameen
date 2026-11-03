@@ -21,32 +21,39 @@ export function useWarpTransition() {
       const el = flashRef.current;
       const tl = gsap.timeline({
         onComplete: () => {
+          // Cleanly scroll CRT viewport back to top on module change
+          if (typeof document !== 'undefined') {
+            const scrollContainers = document.querySelectorAll('.overflow-y-auto');
+            scrollContainers.forEach((c) => {
+              c.scrollTop = 0;
+            });
+          }
           dispatch(completeTransition());
           dispatch(setWarpSpeed(1.0));
         },
       });
 
-      dispatch(setWarpSpeed(3.0));
+      dispatch(setWarpSpeed(2.5));
 
       if (el) {
-        // Crisp 180ms stepped CRT scan-wipe / timedoor wireframe expansion
+        // Crisp 150ms stepped CRT scan-wipe (steps(3))
         tl.fromTo(
           el,
-          { opacity: 0, scale: 0.95 },
+          { opacity: 0, scale: 0.98 },
           {
             opacity: 0.85,
             scale: 1,
-            duration: 0.09,
-            ease: 'steps(2)',
+            duration: 0.075,
+            ease: 'steps(3)',
           }
         ).to(el, {
           opacity: 0,
-          scale: 1.05,
-          duration: 0.09,
-          ease: 'steps(2)',
+          scale: 1.02,
+          duration: 0.075,
+          ease: 'steps(3)',
         });
       } else {
-        tl.to({}, { duration: 0.18 });
+        tl.to({}, { duration: 0.15 });
       }
 
       return () => {

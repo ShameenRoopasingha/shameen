@@ -15,7 +15,7 @@ interface TypewriterTextProps {
 export function TypewriterText({
   text,
   className = '',
-  speed = 0.018, // High speed so recruiters aren't blocked
+  speed = 0.015,
   delay = 0,
   showCursor = true,
   onComplete,
@@ -23,6 +23,7 @@ export function TypewriterText({
   const containerRef = useRef<HTMLSpanElement>(null);
   const [displayText, setDisplayText] = useState('');
   const [isComplete, setIsComplete] = useState(false);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -35,8 +36,9 @@ export function TypewriterText({
         onComplete?.();
       },
     });
+    timelineRef.current = tl;
 
-    const step = Math.max(1, Math.floor(text.length / 50));
+    const step = Math.max(1, Math.floor(text.length / 45));
     for (let i = 0; i <= text.length; i += step) {
       const targetIndex = Math.min(i, text.length);
       tl.call(
@@ -48,7 +50,7 @@ export function TypewriterText({
         (targetIndex / text.length) * (text.length * speed)
       );
     }
-    // Ensure 100% finished
+    // Ensure final text matches completely
     tl.call(() => setDisplayText(text), [], text.length * speed);
 
     return () => {
@@ -56,10 +58,25 @@ export function TypewriterText({
     };
   }, [text, speed, delay, onComplete]);
 
+  // Tap anywhere to finish typing instantly on mobile
+  const handleFastFinish = () => {
+    if (!isComplete) {
+      timelineRef.current?.kill();
+      setDisplayText(text);
+      setIsComplete(true);
+      onComplete?.();
+    }
+  };
+
   return (
-    <span ref={containerRef} className={className}>
+    <span
+      ref={containerRef}
+      onClick={handleFastFinish}
+      className={`cursor-pointer ${className}`}
+      title="Tap to finish typing"
+    >
       {displayText}
-      {showCursor && <span className="tva-cursor">█</span>}
+      {showCursor && !isComplete && <span className="tva-cursor">█</span>}
     </span>
   );
 }

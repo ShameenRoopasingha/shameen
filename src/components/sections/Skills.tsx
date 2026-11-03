@@ -4,8 +4,11 @@ import { useState, useMemo } from 'react';
 import { PORTFOLIO_DATA } from '@/lib/data';
 import { VoltageBar } from '@/components/ui/VoltageBar';
 import { soundFx } from '@/lib/sound';
+import { useAppDispatch } from '@/store/hooks';
+import { setTargetSection } from '@/store/navigationSlice';
 
 export function SkillsSection() {
+  const dispatch = useAppDispatch();
   const [selectedGroupCode, setSelectedGroupCode] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -26,10 +29,15 @@ export function SkillsSection() {
     });
   }, [allSkills, selectedGroupCode, searchQuery]);
 
+  const goToNextProgram = () => {
+    soundFx.playWarpChirp();
+    dispatch(setTargetSection(4)); // Navigate to References
+  };
+
   return (
-    <div className="w-full p-3 sm:p-4 md:p-8 font-mono flex flex-col overflow-y-auto custom-scrollbar select-text">
+    <div className="w-full flex flex-col font-mono select-text space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="border-b border-[#7A4210] pb-2 sm:pb-3 mb-4 sm:mb-6 flex flex-wrap items-center justify-between gap-2">
+      <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
             CAPABILITY MATRIX
@@ -47,16 +55,16 @@ export function SkillsSection() {
       </div>
 
       {/* Filter Tabs + Search Input Bar */}
-      <div className="flex flex-col md:flex-row gap-3 mb-4 sm:mb-6 items-stretch md:items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-2.5 sm:gap-3 items-stretch md:items-center justify-between">
         {/* Category Tabs */}
-        <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 custom-scrollbar -mx-1 px-1 flex-shrink-0">
+        <div className="flex gap-1.5 overflow-x-auto pb-1 custom-scrollbar -mx-1 px-1 flex-shrink-0">
           <button
             type="button"
             onClick={() => {
               soundFx.playMechanicalClick();
               setSelectedGroupCode('ALL');
             }}
-            className={`flex-shrink-0 px-2.5 sm:px-3 py-2 text-[10px] sm:text-xs uppercase tracking-widest border transition-all ${
+            className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all ${
               selectedGroupCode === 'ALL'
                 ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
                 : 'border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24]'
@@ -72,7 +80,7 @@ export function SkillsSection() {
                 soundFx.playMechanicalClick();
                 setSelectedGroupCode(g.code);
               }}
-              className={`flex-shrink-0 px-2.5 sm:px-3 py-2 text-[10px] sm:text-xs uppercase tracking-widest border transition-all whitespace-nowrap ${
+              className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all whitespace-nowrap ${
                 selectedGroupCode === g.code
                   ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold'
                   : 'border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24]'
@@ -83,22 +91,22 @@ export function SkillsSection() {
           ))}
         </div>
 
-        {/* Real-Time Terminal Search Filter */}
+        {/* Real-Time Terminal Search Filter (text-base on mobile to prevent iOS zoom) */}
         <div className="relative flex-1 max-w-md">
-          <div className="flex items-center border border-[#7A4210] bg-[#120B05] px-2.5 py-1.5 focus-within:border-[#FF8C24] focus-within:shadow-[0_0_10px_rgba(255,140,36,0.2)]">
+          <div className="flex items-center border border-[#7A4210] bg-[#120B05] px-3 py-2 focus-within:border-[#FF8C24] focus-within:shadow-[0_0_10px_rgba(255,140,36,0.2)]">
             <span className="text-[#FF8C24] text-xs mr-2 select-none">&gt;</span>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="FILTER CAPABILITIES [e.g. React, Mongo, Node]..."
-              className="w-full bg-transparent text-xs text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono uppercase tracking-wider"
+              className="w-full bg-transparent text-base sm:text-xs text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono uppercase tracking-wider"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="text-[10px] text-[#7A4210] hover:text-[#FF8C24] ml-2 select-none"
+                className="text-[10px] text-[#7A4210] hover:text-[#FF8C24] ml-2 select-none min-h-[32px] px-1"
               >
                 [CLEAR]
               </button>
@@ -107,13 +115,13 @@ export function SkillsSection() {
         </div>
       </div>
 
-      {/* Voltage Meters Grid */}
+      {/* Voltage Meters Grid: Single Column Mobile, 2-Col Tablet/Desktop */}
       {filteredSkills.length === 0 ? (
-        <div className="border border-[#7A4210] p-8 text-center bg-[#120B05] my-6">
-          <div className="text-sm font-bold text-[#FF3B1F] tracking-widest mb-1">
+        <div className="border border-[#7A4210] p-6 text-center bg-[#120B05] my-4">
+          <div className="text-xs font-bold text-[#FF3B1F] tracking-widest mb-1">
             NO MATCHING TELEMETRY METRICS LOCATED
           </div>
-          <p className="text-xs text-[#7A4210] mb-3">
+          <p className="text-[11px] text-[#7A4210] mb-3">
             Zero capabilities found matching query &quot;{searchQuery}&quot;.
           </p>
           <button
@@ -128,14 +136,14 @@ export function SkillsSection() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
           {filteredSkills.map((skill, index) => (
             <div
               key={skill.name}
               className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05] hover:border-[#FF8C24] transition-all relative"
             >
-              <span className="absolute -top-1.5 -left-1.5 text-[10px] text-[#FF8C24]">+</span>
-              <span className="absolute -top-1.5 -right-1.5 text-[10px] text-[#FF8C24]">+</span>
+              <span className="absolute -top-1.5 -left-1.5 text-[10px] text-[#FF8C24] select-none">+</span>
+              <span className="absolute -top-1.5 -right-1.5 text-[10px] text-[#FF8C24] select-none">+</span>
 
               <div className="text-[9px] uppercase tracking-widest text-[#7A4210] mb-1">
                 {skill.category || 'RUNTIME'}
@@ -151,10 +159,18 @@ export function SkillsSection() {
         </div>
       )}
 
-      {/* Footer Notes */}
-      <div className="border-t border-[#7A4210] pt-3 mt-4 sm:mt-6 flex flex-wrap items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] gap-2">
-        <span>ALL 18 CAPABILITIES DERIVED DIRECTLY FROM OFFICIAL CV BENCHMARKS</span>
-        <span className="text-[#FF8C24] hidden sm:inline">TVA VOLTMETER // 60 FPS SAMPLING</span>
+      {/* Deliberate Bottom-of-Section Terminal Button */}
+      <div className="border-t border-[#7A4210] pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span className="text-[9px] text-[#7A4210] uppercase tracking-widest text-center sm:text-left">
+          ALL 18 CAPABILITIES DERIVED DIRECTLY FROM OFFICIAL CV BENCHMARKS
+        </span>
+        <button
+          type="button"
+          onClick={goToNextProgram}
+          className="tva-button primary w-full sm:w-auto text-xs font-bold"
+        >
+          [NEXT PROGRAM: CHRONO-LOGS -&gt;]
+        </button>
       </div>
     </div>
   );

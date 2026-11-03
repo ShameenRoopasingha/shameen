@@ -4,8 +4,11 @@ import { useState } from 'react';
 import { REFERENCES } from '@/lib/data';
 import { ClassifiedCard } from '@/components/ui/ClassifiedCard';
 import { soundFx } from '@/lib/sound';
+import { useAppDispatch } from '@/store/hooks';
+import { setTargetSection } from '@/store/navigationSlice';
 
 export function ReferencesSection() {
+  const dispatch = useAppDispatch();
   const [allDeclassified, setAllDeclassified] = useState(false);
 
   const handleToggleAll = () => {
@@ -13,10 +16,15 @@ export function ReferencesSection() {
     setAllDeclassified(!allDeclassified);
   };
 
+  const goToNextProgram = () => {
+    soundFx.playWarpChirp();
+    dispatch(setTargetSection(5)); // Navigate to Contact
+  };
+
   return (
-    <div className="w-full p-3 sm:p-4 md:p-8 font-mono flex flex-col overflow-y-auto custom-scrollbar select-text">
+    <div className="w-full flex flex-col font-mono select-text space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="border-b border-[#7A4210] pb-2 sm:pb-3 mb-4 sm:mb-6 flex flex-wrap items-center justify-between gap-2">
+      <div className="border-b border-[#7A4210] pb-2 sm:pb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="px-2 py-0.5 bg-[#FF8C24] text-[#120B05] text-[10px] font-bold tracking-widest">
             CHRONO-LOGS
@@ -29,7 +37,7 @@ export function ReferencesSection() {
           <button
             type="button"
             onClick={handleToggleAll}
-            className={`px-2.5 py-1 text-[10px] uppercase tracking-wider border font-bold transition-all ${
+            className={`min-h-[40px] px-3 text-[10px] uppercase tracking-wider border font-bold transition-all ${
               allDeclassified
                 ? 'border-[#00FF66] bg-[#00FF66]/15 text-[#00FF66]'
                 : 'border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05]'
@@ -43,20 +51,20 @@ export function ReferencesSection() {
       </div>
 
       {/* Description / Instructions */}
-      <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05] mb-4 sm:mb-6">
+      <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05]">
         <div className="flex items-center justify-between mb-1">
           <span className="text-[10px] uppercase tracking-widest text-[#FF3B1F] font-bold">
             [RESTRICTED ARCHIVE // PROFESSIONAL REFERENCES]
           </span>
-          <span className="text-[10px] text-[#7A4210]">ARCHIVE CLEARANCE: LEVEL-4</span>
+          <span className="text-[9px] text-[#7A4210]">LEVEL-4</span>
         </div>
-        <p className="text-[11px] sm:text-xs md:text-sm text-[#FF8C24]/85 leading-relaxed">
-          Verified professional references from senior technology leaders who have directly evaluated Shameen&apos;s technical execution and delivery. Tap any card or use the master button above to reveal full contact records.
+        <p className="text-xs sm:text-sm text-[#FF8C24]/85 leading-relaxed">
+          Verified professional references from senior technology leaders who have directly evaluated Shameen&apos;s technical execution. Tap any card or use the master declassify button to reveal direct contact phone numbers.
         </p>
       </div>
 
-      {/* Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+      {/* Cards Grid: Single Column Mobile Stack, 2-Col on Tablet/Desktop */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
         {REFERENCES.map((ref, idx) => (
           <ClassifiedCard
             key={ref.id}
@@ -73,10 +81,18 @@ export function ReferencesSection() {
         ))}
       </div>
 
-      {/* Footer */}
-      <div className="border-t border-[#7A4210] pt-3 mt-4 sm:mt-6 flex flex-wrap items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] gap-2">
-        <span>AUTHENTICATED REFERENCES PER RESUME DOSSIER</span>
-        <span className="text-[#00FF66] hidden sm:inline">INTEGRITY: 100%</span>
+      {/* Deliberate Bottom-of-Section Terminal Button */}
+      <div className="border-t border-[#7A4210] pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span className="text-[9px] text-[#7A4210] uppercase tracking-widest text-center sm:text-left">
+          AUTHENTICATED REFERENCES PER OFFICIAL RESUME DOSSIER
+        </span>
+        <button
+          type="button"
+          onClick={goToNextProgram}
+          className="tva-button primary w-full sm:w-auto text-xs font-bold"
+        >
+          [NEXT PROGRAM: MISSIVES -&gt;]
+        </button>
       </div>
     </div>
   );

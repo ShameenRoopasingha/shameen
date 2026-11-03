@@ -26,10 +26,10 @@ export function TerminalInput({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className="mb-5 font-mono">
+    <div className="mb-4 font-mono">
       <label
         htmlFor={name}
-        className="block mb-1 text-[11px] uppercase tracking-widest text-[#FF8C24] opacity-80"
+        className="block mb-1 text-[10px] sm:text-[11px] uppercase tracking-widest text-[#FF8C24] opacity-80"
       >
         <span className="text-[#FFB84D]">&gt;&gt;</span> {label}
         {required && <span className="text-[#FF3B1F] ml-1">*</span>}
@@ -52,7 +52,8 @@ export function TerminalInput({
             rows={rows}
             placeholder={placeholder}
             required={required}
-            className="w-full bg-transparent px-3 py-2 text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-none resize-none font-mono"
+            /* Enforce text-base (16px minimum) on mobile so iOS Safari NEVER auto-zooms on focus */
+            className="w-full bg-transparent px-3 py-2.5 text-base sm:text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden resize-none font-mono"
             style={{ caretColor: '#FF8C24' }}
           />
         ) : (
@@ -66,12 +67,13 @@ export function TerminalInput({
             onBlur={() => setIsFocused(false)}
             placeholder={placeholder}
             required={required}
-            className="w-full bg-transparent px-3 py-2 text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-none font-mono"
+            /* Enforce text-base (16px minimum) on mobile so iOS Safari NEVER auto-zooms on focus */
+            className="w-full bg-transparent px-3 py-2.5 text-base sm:text-sm text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono"
             style={{ caretColor: '#FF8C24' }}
           />
         )}
         {isFocused && (
-          <span className="absolute right-2 top-2 text-[10px] text-[#FF8C24] opacity-40 select-none">
+          <span className="absolute right-2 top-2 text-[9px] text-[#FF8C24] opacity-40 select-none hidden sm:inline">
             [INPUT_ACTIVE]
           </span>
         )}
