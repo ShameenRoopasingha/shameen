@@ -3,25 +3,40 @@
 import { useState } from 'react';
 import { PROFILE } from '@/lib/data';
 import { TerminalInput } from '@/components/ui/TerminalInput';
+import { ToastNotification } from '@/components/ui/ToastNotification';
+import { soundFx } from '@/lib/sound';
 
 export function ContactSection() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string, label: string) => {
+    soundFx.playMechanicalClick();
+    if (typeof navigator !== 'undefined') {
+      navigator.clipboard.writeText(text);
+      setToastMsg(`COPIED TO CLIPBOARD: ${label}`);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    soundFx.playMechanicalClick();
     setIsSubmitting(true);
 
     // Simulate snappy terminal transmission
     await new Promise((r) => setTimeout(r, 600));
 
+    soundFx.playWarpChirp();
     setIsSubmitting(false);
     setSubmitted(true);
   };
 
   return (
     <div className="w-full p-3 sm:p-4 md:p-8 font-mono flex flex-col overflow-y-auto custom-scrollbar select-text">
+      <ToastNotification message={toastMsg} onClear={() => setToastMsg(null)} />
+
       {/* Header */}
       <div className="border-b border-[#7A4210] pb-2 sm:pb-3 mb-4 sm:mb-6 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
@@ -51,25 +66,43 @@ export function ContactSection() {
             </p>
 
             <div className="space-y-3 sm:space-y-4 text-xs">
-              <a
-                href={`mailto:${PROFILE.socialLinks.email}`}
-                className="block border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors"
-              >
-                <span className="text-[10px] text-[#7A4210] uppercase block">OFFICIAL EMAIL</span>
-                <span className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5 break-all">
-                  {PROFILE.socialLinks.email}
-                </span>
-              </a>
+              <div className="border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors flex items-center justify-between gap-2">
+                <div>
+                  <span className="text-[10px] text-[#7A4210] uppercase block">OFFICIAL EMAIL</span>
+                  <a
+                    href={`mailto:${PROFILE.socialLinks.email}`}
+                    className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5 break-all hover:underline"
+                  >
+                    {PROFILE.socialLinks.email}
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(PROFILE.socialLinks.email, PROFILE.socialLinks.email)}
+                  className="px-2 py-1 text-[9px] border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] flex-shrink-0"
+                >
+                  COPY
+                </button>
+              </div>
 
-              <a
-                href={`tel:${PROFILE.socialLinks.phone}`}
-                className="block border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors"
-              >
-                <span className="text-[10px] text-[#7A4210] uppercase block">PHONE / DIRECT LINE</span>
-                <span className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5">
-                  {PROFILE.socialLinks.phone}
-                </span>
-              </a>
+              <div className="border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors flex items-center justify-between gap-2">
+                <div>
+                  <span className="text-[10px] text-[#7A4210] uppercase block">PHONE / DIRECT LINE</span>
+                  <a
+                    href={`tel:${PROFILE.socialLinks.phone}`}
+                    className="text-xs sm:text-sm text-[#FFB84D] font-bold block mt-0.5 hover:underline"
+                  >
+                    {PROFILE.socialLinks.phone}
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(PROFILE.socialLinks.phone, PROFILE.socialLinks.phone)}
+                  className="px-2 py-1 text-[9px] border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] flex-shrink-0"
+                >
+                  COPY
+                </button>
+              </div>
 
               <a
                 href={PROFILE.socialLinks.resumeUrl}
@@ -113,7 +146,7 @@ export function ContactSection() {
         </div>
 
         {/* Right Transmission Terminal (7 cols) */}
-        <div className="lg:col-span-7 border border-[#FF8C24] p-3 sm:p-4 md:p-6 bg-[#120B05] shadow-[0_0_20px_rgba(255,140,36,0.15)] relative flex flex-col">
+        <div className="lg:col-span-7 border border-[#FF8C24] p-3 sm:p-4 md:p-6 bg-[#120B05] shadow-[0_0_20px_rgba(255,140,36,0.15)] relative flex flex-col justify-between">
           <span className="absolute -top-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
           <span className="absolute -top-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
           <span className="absolute -bottom-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
@@ -138,6 +171,7 @@ export function ContactSection() {
                 <button
                   type="button"
                   onClick={() => {
+                    soundFx.playMechanicalClick();
                     setSubmitted(false);
                     setFormData({ name: '', email: '', message: '' });
                   }}

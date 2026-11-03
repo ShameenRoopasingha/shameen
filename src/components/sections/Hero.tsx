@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import { PROFILE, SKILLS, PORTFOLIO_DATA } from '@/lib/data';
 import { VoltageBar } from '@/components/ui/VoltageBar';
+import { ToastNotification } from '@/components/ui/ToastNotification';
+import { soundFx } from '@/lib/sound';
 
 type BootPhase = 'booting' | 'ready';
 
 export function Hero() {
   const [bootPhase, setBootPhase] = useState<BootPhase>('booting');
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   // Check sessionStorage for fast boot bypass
   useEffect(() => {
@@ -47,11 +50,20 @@ export function Hero() {
     }
   };
 
-  // Top 5 voltage readings from authentic CV skills
+  const copyToClipboard = (text: string, label: string) => {
+    soundFx.playMechanicalClick();
+    if (typeof navigator !== 'undefined') {
+      navigator.clipboard.writeText(text);
+      setToastMsg(`COPIED TO CLIPBOARD: ${label}`);
+    }
+  };
+
   const keySkills = SKILLS.slice(0, 5);
 
   return (
     <div className="relative w-full flex flex-col p-3 sm:p-4 md:p-8 font-mono overflow-y-auto custom-scrollbar select-text">
+      <ToastNotification message={toastMsg} onClear={() => setToastMsg(null)} />
+
       {/* Booting Flash Overlay */}
       {bootPhase === 'booting' && (
         <div
@@ -125,18 +137,24 @@ export function Hero() {
 
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
               {/* Photo Frame */}
-              <div className="relative w-28 h-36 sm:w-36 sm:h-44 flex-shrink-0 border border-[#FF8C24] p-1 bg-[#120B05] overflow-hidden group mx-auto sm:mx-0">
+              <div className="relative w-28 h-36 sm:w-36 sm:h-44 flex-shrink-0 border border-[#FF8C24] p-1 bg-[#120B05] overflow-hidden group mx-auto sm:mx-0 flex items-center justify-center">
+                {/* Fallback wireframe hologram icon */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-[#7A4210] group-hover:text-[#FF8C24] transition-colors p-2 text-center pointer-events-none">
+                  <span className="text-2xl mb-1">⬡</span>
+                  <span className="text-[9px] uppercase tracking-widest">VARIANT AVATAR</span>
+                </div>
+
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/profile.png"
                   alt={PROFILE.name}
-                  className="w-full h-full object-cover filter contrast-125 brightness-90 grayscale group-hover:grayscale-0 transition-all duration-150"
+                  className="w-full h-full object-cover filter contrast-125 brightness-90 grayscale group-hover:grayscale-0 transition-all duration-150 relative z-1"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
                 />
-                <div className="absolute inset-0 bg-[#FF8C24]/10 pointer-events-none" />
-                <div className="absolute bottom-1 left-1 right-1 bg-[#120B05]/90 border border-[#FF8C24]/40 text-[9px] text-[#FF8C24] text-center tracking-widest py-0.5">
+                <div className="absolute inset-0 bg-[#FF8C24]/10 pointer-events-none z-2" />
+                <div className="absolute bottom-1 left-1 right-1 bg-[#120B05]/90 border border-[#FF8C24]/40 text-[9px] text-[#FF8C24] text-center tracking-widest py-0.5 z-3">
                   ID: SR-2025
                 </div>
               </div>
@@ -163,18 +181,22 @@ export function Hero() {
                   >
                     <span>▼</span> CV (PDF)
                   </a>
-                  <a
-                    href={`mailto:${PROFILE.socialLinks.email}`}
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(PROFILE.socialLinks.email, PROFILE.socialLinks.email)}
+                    title="Click to copy email address"
                     className="tva-button text-[10px] sm:text-xs"
                   >
-                    <span>✉</span> EMAIL
-                  </a>
-                  <a
-                    href={`tel:${PROFILE.socialLinks.phone}`}
+                    <span>✉</span> COPY EMAIL
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(PROFILE.socialLinks.phone, PROFILE.socialLinks.phone)}
+                    title="Click to copy phone number"
                     className="tva-button text-[10px] sm:text-xs"
                   >
-                    <span>☎</span> {PROFILE.socialLinks.phone}
-                  </a>
+                    <span>☎</span> COPY PHONE
+                  </button>
                   <a
                     href={PROFILE.socialLinks.github}
                     target="_blank"
@@ -288,7 +310,7 @@ export function Hero() {
       {/* Bottom Technical Bar */}
       <div className="border-t border-[#7A4210] pt-3 mt-4 sm:mt-6 flex flex-wrap items-center justify-between text-[9px] sm:text-[10px] text-[#7A4210] tracking-widest gap-2">
         <span>TVA-ARCHIVE // ALL DATA SOURCED DIRECTLY FROM OFFICIAL CV</span>
-        <span className="text-[#FF8C24] hidden sm:inline">AUTHENTICATED PERSONNEL DOSSIER</span>
+        <span className="text-[#FF8C24] hidden sm:inline">PRESS [?] FOR KEYBOARD SHORTCUTS MANUAL</span>
       </div>
     </div>
   );

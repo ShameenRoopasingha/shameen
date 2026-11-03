@@ -2,10 +2,16 @@
 
 import { useState } from 'react';
 import { EXPERIENCE, LegacyExperience } from '@/lib/data';
+import { soundFx } from '@/lib/sound';
 
 export function ExperienceSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const currentExp: LegacyExperience = EXPERIENCE[activeIndex] || EXPERIENCE[0];
+
+  const handleSelect = (index: number) => {
+    soundFx.playMechanicalClick();
+    setActiveIndex(index);
+  };
 
   return (
     <div className="w-full p-3 sm:p-4 md:p-8 font-mono flex flex-col overflow-y-auto custom-scrollbar select-text">
@@ -34,7 +40,7 @@ export function ExperienceSection() {
             <button
               key={exp.id}
               type="button"
-              onClick={() => setActiveIndex(index)}
+              onClick={() => handleSelect(index)}
               className={`flex-shrink-0 px-3 py-2.5 sm:py-2 border text-[10px] sm:text-xs uppercase tracking-wider transition-all flex items-center gap-2 ${
                 isActive
                   ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold shadow-[0_0_12px_rgba(255,140,36,0.3)]'
@@ -95,7 +101,7 @@ export function ExperienceSection() {
               return (
                 <g
                   key={exp.id}
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => handleSelect(index)}
                   className="cursor-pointer group"
                 >
                   {/* Outer pulse when active */}
@@ -221,21 +227,21 @@ export function ExperienceSection() {
           <button
             type="button"
             disabled={activeIndex === 0}
-            onClick={() => setActiveIndex(Math.max(0, activeIndex - 1))}
+            onClick={() => handleSelect(Math.max(0, activeIndex - 1))}
             className="tva-button text-[10px] sm:text-xs disabled:opacity-30 disabled:pointer-events-none"
           >
-            ◄ PREV
+            ◄ PREV INCIDENT
           </button>
-          <span className="text-[10px] text-[#7A4210]">
-            {activeIndex + 1} / {EXPERIENCE.length}
+          <span className="text-[10px] text-[#7A4210] font-mono">
+            INCIDENT {activeIndex + 1} OF {EXPERIENCE.length}
           </span>
           <button
             type="button"
             disabled={activeIndex === EXPERIENCE.length - 1}
-            onClick={() => setActiveIndex(Math.min(EXPERIENCE.length - 1, activeIndex + 1))}
+            onClick={() => handleSelect(Math.min(EXPERIENCE.length - 1, activeIndex + 1))}
             className="tva-button text-[10px] sm:text-xs disabled:opacity-30 disabled:pointer-events-none"
           >
-            NEXT ►
+            NEXT INCIDENT ►
           </button>
         </div>
       </div>

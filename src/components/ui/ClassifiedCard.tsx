@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { soundFx } from '@/lib/sound';
 
 interface ClassifiedCardProps {
   name: string;
@@ -11,6 +12,7 @@ interface ClassifiedCardProps {
   endorsement?: string;
   status?: string;
   index?: number;
+  forceReveal?: boolean;
 }
 
 export function ClassifiedCard({
@@ -22,9 +24,16 @@ export function ClassifiedCard({
   endorsement,
   status = 'AUTHENTICATED',
   index = 0,
+  forceReveal,
 }: ClassifiedCardProps) {
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [internalRevealed, setInternalRevealed] = useState(false);
+  const isRevealed = forceReveal !== undefined ? forceReveal : internalRevealed;
   const fileId = fileNumber || `REF-${(index + 1).toString().padStart(3, '0')}`;
+
+  const handleToggle = () => {
+    soundFx.playMechanicalClick();
+    setInternalRevealed(!internalRevealed);
+  };
 
   return (
     <div
@@ -33,9 +42,13 @@ export function ClassifiedCard({
           ? 'border-[#FF8C24] shadow-[0_0_15px_rgba(255,140,36,0.25)]'
           : 'border-[#7A4210]'
       }`}
-      onMouseEnter={() => setIsRevealed(true)}
-      onMouseLeave={() => setIsRevealed(false)}
-      onClick={() => setIsRevealed(!isRevealed)}
+      onMouseEnter={() => {
+        if (forceReveal === undefined) setInternalRevealed(true);
+      }}
+      onMouseLeave={() => {
+        if (forceReveal === undefined) setInternalRevealed(false);
+      }}
+      onClick={handleToggle}
     >
       {/* Corner Reticle Ticks (+) */}
       <span className="absolute -top-1.5 -left-1.5 text-[11px] text-[#FF8C24] leading-none select-none">+</span>
@@ -95,10 +108,18 @@ export function ClassifiedCard({
 
         {phone && (
           <div className="pt-1">
-            <span className="text-[10px] uppercase text-[#7A4210] block">TELEMETRY / PHONE FREQUENCY</span>
-            <span className={`font-mono text-xs ${isRevealed ? 'text-[#00FF66] font-bold' : 'text-[#7A4210]'}`}>
-              {isRevealed ? phone : '+██ ██████████'}
-            </span>
+            <span className="text-[10px] uppercase text-[#7A4210] block">OFFICIAL CONTACT FREQUENCY</span>
+            {isRevealed ? (
+              <a
+                href={`tel:${phone}`}
+                onClick={(e) => e.stopPropagation()}
+                className="font-mono text-xs text-[#00FF66] font-bold hover:underline inline-flex items-center gap-1.5"
+              >
+                <span>☎</span> {phone} ↗
+              </a>
+            ) : (
+              <span className="font-mono text-xs text-[#7A4210]">+██ ██████████</span>
+            )}
           </div>
         )}
 
@@ -116,6 +137,10 @@ export function ClassifiedCard({
         </span>
         <button
           type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleToggle();
+          }}
           className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05] transition-all font-bold"
         >
           {isRevealed ? 'VERIFIED ✓' : 'DECLASSIFY'}

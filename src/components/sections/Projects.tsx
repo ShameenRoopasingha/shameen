@@ -2,12 +2,43 @@
 
 import { useState } from 'react';
 import { PROJECTS, LegacyProject } from '@/lib/data';
+import { soundFx } from '@/lib/sound';
 
 export function ProjectsSection() {
   const [selectedProjectId, setSelectedProjectId] = useState<string>(PROJECTS[0]?.id || '');
   const [showList, setShowList] = useState(false);
-  const activeProject: LegacyProject =
-    PROJECTS.find((p) => p.id === selectedProjectId) || PROJECTS[0];
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  const activeIndex = PROJECTS.findIndex((p) => p.id === selectedProjectId);
+  const safeIndex = activeIndex >= 0 ? activeIndex : 0;
+  const activeProject: LegacyProject = PROJECTS[safeIndex] || PROJECTS[0];
+
+  const handleSelect = (id: string) => {
+    soundFx.playMechanicalClick();
+    setSelectedProjectId(id);
+    setShowList(false);
+  };
+
+  const handlePrev = () => {
+    if (safeIndex > 0) {
+      handleSelect(PROJECTS[safeIndex - 1].id);
+    }
+  };
+
+  const handleNext = () => {
+    if (safeIndex < PROJECTS.length - 1) {
+      handleSelect(PROJECTS[safeIndex + 1].id);
+    }
+  };
+
+  const handleCopyLink = () => {
+    soundFx.playMechanicalClick();
+    if (activeProject.githubUrl && typeof navigator !== 'undefined') {
+      navigator.clipboard.writeText(activeProject.githubUrl);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }
+  };
 
   return (
     <div className="w-full p-3 sm:p-4 md:p-8 font-mono flex flex-col overflow-y-auto custom-scrollbar select-text">
@@ -18,11 +49,11 @@ export function ProjectsSection() {
             TIMEDOOR EVIDENCE
           </span>
           <span className="text-[10px] sm:text-xs text-[#FF8C24] tracking-widest hidden sm:inline">
-            ARCHIVE: SEC-04
+            CANONICAL ARCHIVE: SEC-04
           </span>
         </div>
         <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
-          <span className="text-[#FFB84D] font-bold">{PROJECTS.length} RECORDS</span>
+          <span className="text-[#FFB84D] font-bold">CASE {safeIndex + 1} OF {PROJECTS.length}</span>
           <span className="text-[#00FF66] font-bold hidden sm:inline">DECLASSIFIED</span>
         </div>
       </div>
@@ -31,7 +62,10 @@ export function ProjectsSection() {
       <div className="lg:hidden mb-4">
         <button
           type="button"
-          onClick={() => setShowList(!showList)}
+          onClick={() => {
+            soundFx.playMechanicalClick();
+            setShowList(!showList);
+          }}
           className="w-full px-3 py-3 border border-[#FF8C24] bg-[#120B05] text-[#FF8C24] text-xs uppercase tracking-wider flex items-center justify-between"
         >
           <span className="flex items-center gap-2">
@@ -49,10 +83,7 @@ export function ProjectsSection() {
                 <button
                   key={proj.id}
                   type="button"
-                  onClick={() => {
-                    setSelectedProjectId(proj.id);
-                    setShowList(false);
-                  }}
+                  onClick={() => handleSelect(proj.id)}
                   className={`w-full text-left p-3 border-b border-[#7A4210]/30 text-xs transition-all flex items-center gap-3 ${
                     isSelected
                       ? 'bg-[#FF8C24] text-[#120B05] font-bold'
@@ -91,7 +122,7 @@ export function ProjectsSection() {
               return (
                 <div
                   key={proj.id}
-                  onClick={() => setSelectedProjectId(proj.id)}
+                  onClick={() => handleSelect(proj.id)}
                   className={`p-3 border cursor-pointer transition-all duration-75 ${
                     isSelected
                       ? 'border-[#FF8C24] bg-[#FF8C24] text-[#120B05] font-bold shadow-[0_0_12px_rgba(255,140,36,0.3)]'
@@ -132,7 +163,7 @@ export function ProjectsSection() {
         </div>
 
         {/* Right Project Schematic View */}
-        <div className="lg:col-span-8 flex flex-col border border-[#FF8C24] bg-[#120B05] p-3 sm:p-5 md:p-7 shadow-[0_0_20px_rgba(255,140,36,0.15)] relative">
+        <div className="lg:col-span-8 flex flex-col justify-between border border-[#FF8C24] bg-[#120B05] p-3 sm:p-5 md:p-7 shadow-[0_0_20px_rgba(255,140,36,0.15)] relative">
           {/* Corner Reticle Ticks */}
           <span className="absolute -top-1.5 -left-1.5 text-xs text-[#FF8C24]">+</span>
           <span className="absolute -top-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
@@ -140,14 +171,32 @@ export function ProjectsSection() {
           <span className="absolute -bottom-1.5 -right-1.5 text-xs text-[#FF8C24]">+</span>
 
           <div>
-            {/* Header Readout */}
+            {/* Header Readout + Quick In-Panel Nav */}
             <div className="flex flex-wrap items-center justify-between border-b border-[#7A4210] pb-2 mb-3 sm:mb-4 text-[10px] sm:text-xs gap-2">
               <span className="text-[#FFB84D] font-bold tracking-widest">
                 {activeProject.codeName || 'CASE SPECIFICATION'}
               </span>
-              <span className="text-[10px] text-[#00FF66]">
-                VERIFIED [OK]
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={safeIndex === 0}
+                  onClick={handlePrev}
+                  className="px-2 py-0.5 border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] disabled:opacity-30 disabled:pointer-events-none text-[10px]"
+                >
+                  ◄ PREV CASE
+                </button>
+                <span className="text-[10px] text-[#7A4210] font-mono">
+                  {safeIndex + 1}/{PROJECTS.length}
+                </span>
+                <button
+                  type="button"
+                  disabled={safeIndex === PROJECTS.length - 1}
+                  onClick={handleNext}
+                  className="px-2 py-0.5 border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] disabled:opacity-30 disabled:pointer-events-none text-[10px]"
+                >
+                  NEXT CASE ►
+                </button>
+              </div>
             </div>
 
             {/* Title & Category */}
@@ -155,14 +204,14 @@ export function ProjectsSection() {
               {activeProject.title}
             </h2>
             <div className="text-[10px] sm:text-xs uppercase tracking-widest text-[#FFB84D] mb-3 sm:mb-4">
-              &gt;&gt; {activeProject.category || 'ENTERPRISE SYSTEM'}
+              &gt;&gt; CATEGORY: {activeProject.category || 'ENTERPRISE SYSTEM'}
             </div>
 
             {/* Problem Solved */}
             {activeProject.problemSolved && (
               <div className="border border-[#7A4210] p-2.5 sm:p-3 mb-3 sm:mb-4 bg-[#120B05]/80">
                 <span className="text-[10px] uppercase tracking-widest text-[#FF3B1F] block mb-1 font-bold">
-                  [PROBLEM SOLVED]
+                  [PROBLEM SOLVED & MISSION OBJECTIVE]
                 </span>
                 <p className="text-[11px] sm:text-xs md:text-sm text-[#FF8C24]/90 leading-relaxed">
                   {activeProject.problemSolved}
@@ -184,7 +233,7 @@ export function ProjectsSection() {
             {activeProject.architectureHighlights && activeProject.architectureHighlights.length > 0 && (
               <div className="mb-3 sm:mb-4">
                 <span className="text-[10px] uppercase tracking-widest text-[#FFB84D] block mb-2 font-bold">
-                  ARCHITECTURE HIGHLIGHTS:
+                  ARCHITECTURE & ENGINEERING HIGHLIGHTS:
                 </span>
                 <ul className="space-y-1.5 text-[11px] sm:text-xs text-[#FF8C24]/90">
                   {activeProject.architectureHighlights.map((hl, i) => (
@@ -200,7 +249,7 @@ export function ProjectsSection() {
             {/* Tech Stack Artifacts */}
             <div className="mb-4 sm:mb-6">
               <span className="text-[10px] uppercase tracking-widest text-[#7A4210] block mb-2">
-                TECH STACK
+                TECHNOLOGY STACK
               </span>
               <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {activeProject.techStack.map((tech) => (
@@ -215,8 +264,8 @@ export function ProjectsSection() {
             </div>
           </div>
 
-          {/* Action Buttons: Live Demo + GitHub */}
-          <div className="border-t border-[#7A4210] pt-3 sm:pt-4 flex flex-wrap gap-2 sm:gap-3">
+          {/* Action Buttons: Live Demo + GitHub + Quick Copy */}
+          <div className="border-t border-[#7A4210] pt-3 sm:pt-4 flex flex-wrap gap-2 sm:gap-3 items-center">
             {activeProject.liveUrl ? (
               <a
                 href={activeProject.liveUrl}
@@ -224,20 +273,17 @@ export function ProjectsSection() {
                 rel="noopener noreferrer"
                 className="tva-button primary text-[10px] sm:text-xs"
               >
-                <span>⚡</span> LIVE DEMO
+                <span>⚡</span> VIEW CODEBASE // GITHUB
               </a>
             ) : null}
 
-            {activeProject.githubUrl ? (
-              <a
-                href={activeProject.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="tva-button text-[10px] sm:text-xs"
-              >
-                <span>⌨</span> SOURCE CODE
-              </a>
-            ) : null}
+            <button
+              type="button"
+              onClick={handleCopyLink}
+              className="tva-button text-[10px] sm:text-xs"
+            >
+              <span>📋</span> {copiedLink ? 'LINK COPIED ✓' : 'COPY REPO LINK'}
+            </button>
           </div>
         </div>
       </div>

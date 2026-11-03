@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setTargetSection, navigateNext, navigatePrev } from '@/store/navigationSlice';
 import { SECTIONS, SECTION_METADATA } from '@/lib/constants';
+import { soundFx } from '@/lib/sound';
 
 export function useGSAPObserver() {
   const dispatch = useAppDispatch();
@@ -34,6 +35,18 @@ export function useGSAPObserver() {
         return;
       }
 
+      // Toggle Help overlay on '?' or 'h'
+      if (e.key === '?' || e.key === 'h' || e.key === 'H') {
+        window.dispatchEvent(new CustomEvent('tva-toggle-help'));
+        return;
+      }
+
+      // Toggle Audio on 'm'
+      if (e.key === 'm' || e.key === 'M') {
+        window.dispatchEvent(new CustomEvent('tva-toggle-audio'));
+        return;
+      }
+
       const now = Date.now();
       if (now - lastActionTime.current < 250) return;
 
@@ -43,6 +56,7 @@ export function useGSAPObserver() {
         lastActionTime.current = now;
         e.preventDefault();
         const targetIndex = num - 1;
+        soundFx.playWarpChirp();
         dispatch(setTargetSection(targetIndex));
         const hash = SECTION_METADATA[SECTIONS[targetIndex]]?.hash;
         if (hash) {
@@ -56,12 +70,14 @@ export function useGSAPObserver() {
         if (!isTransitioningRef.current && currentSectionRef.current < SECTIONS.length - 1) {
           lastActionTime.current = now;
           e.preventDefault();
+          soundFx.playWarpChirp();
           dispatch(navigateNext());
         }
       } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') {
         if (!isTransitioningRef.current && currentSectionRef.current > 0) {
           lastActionTime.current = now;
           e.preventDefault();
+          soundFx.playWarpChirp();
           dispatch(navigatePrev());
         }
       }
@@ -131,18 +147,19 @@ export function useGSAPObserver() {
       const absY = Math.abs(diffY);
 
       // A) PRIMARY: Horizontal Swipe (Left = Next, Right = Prev)
-      // Must be horizontally dominant and at least 45px
       if (absX >= 45 && absX > absY * 1.3 && !isInsideHScroll) {
         if (diffX < 0) {
           // Swipe Left -> Next Section
           if (currentSectionRef.current < SECTIONS.length - 1) {
             lastActionTime.current = now;
+            soundFx.playWarpChirp();
             dispatch(navigateNext());
           }
         } else {
           // Swipe Right -> Prev Section
           if (currentSectionRef.current > 0) {
             lastActionTime.current = now;
+            soundFx.playWarpChirp();
             dispatch(navigatePrev());
           }
         }
@@ -150,17 +167,17 @@ export function useGSAPObserver() {
       }
 
       // B) SECONDARY: Vertical Boundary Overscroll
-      // Swipe Up while already at the bottom of the section -> Next Section
-      // Swipe Down while already at the top of the section -> Prev Section
       if (absY >= 75 && absY > absX * 1.5) {
         if (diffY < 0 && startedAtBottom) {
           if (currentSectionRef.current < SECTIONS.length - 1) {
             lastActionTime.current = now;
+            soundFx.playWarpChirp();
             dispatch(navigateNext());
           }
         } else if (diffY > 0 && startedAtTop) {
           if (currentSectionRef.current > 0) {
             lastActionTime.current = now;
+            soundFx.playWarpChirp();
             dispatch(navigatePrev());
           }
         }

@@ -1,9 +1,18 @@
 'use client';
 
+import { useState } from 'react';
 import { REFERENCES } from '@/lib/data';
 import { ClassifiedCard } from '@/components/ui/ClassifiedCard';
+import { soundFx } from '@/lib/sound';
 
 export function ReferencesSection() {
+  const [allDeclassified, setAllDeclassified] = useState(false);
+
+  const handleToggleAll = () => {
+    soundFx.playMechanicalClick();
+    setAllDeclassified(!allDeclassified);
+  };
+
   return (
     <div className="w-full p-3 sm:p-4 md:p-8 font-mono flex flex-col overflow-y-auto custom-scrollbar select-text">
       {/* Header */}
@@ -16,19 +25,33 @@ export function ReferencesSection() {
             AUTHENTICATED PERSONNEL DOSSIERS
           </span>
         </div>
-        <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A4210]">
-          <span className="text-[#FFB84D] font-bold">{REFERENCES.length} FILES</span>
+        <div className="flex items-center gap-3 text-[10px] sm:text-xs">
+          <button
+            type="button"
+            onClick={handleToggleAll}
+            className={`px-2.5 py-1 text-[10px] uppercase tracking-wider border font-bold transition-all ${
+              allDeclassified
+                ? 'border-[#00FF66] bg-[#00FF66]/15 text-[#00FF66]'
+                : 'border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05]'
+            }`}
+          >
+            {allDeclassified ? '✓ ALL DECLASSIFIED' : '⚡ DECLASSIFY ALL DOSSIERS'}
+          </button>
+          <span className="text-[#7A4210] hidden sm:inline">|</span>
           <span className="text-[#00FF66] font-bold hidden sm:inline">VERIFIED</span>
         </div>
       </div>
 
       {/* Description / Instructions */}
       <div className="border border-[#7A4210] p-3 sm:p-4 bg-[#120B05] mb-4 sm:mb-6">
-        <span className="text-[10px] uppercase tracking-widest text-[#FF3B1F] block mb-1 font-bold">
-          [RESTRICTED ARCHIVE // PROFESSIONAL REFERENCES]
-        </span>
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] uppercase tracking-widest text-[#FF3B1F] font-bold">
+            [RESTRICTED ARCHIVE // PROFESSIONAL REFERENCES]
+          </span>
+          <span className="text-[10px] text-[#7A4210]">ARCHIVE CLEARANCE: LEVEL-4</span>
+        </div>
         <p className="text-[11px] sm:text-xs md:text-sm text-[#FF8C24]/85 leading-relaxed">
-          Verified professional references from senior technology leaders who have directly evaluated Shameen&apos;s technical execution and delivery. Tap or hover any dossier to declassify official contact details.
+          Verified professional references from senior technology leaders who have directly evaluated Shameen&apos;s technical execution and delivery. Tap any card or use the master button above to reveal full contact records.
         </p>
       </div>
 
@@ -45,6 +68,7 @@ export function ReferencesSection() {
             endorsement={ref.endorsement}
             status={ref.status}
             index={idx}
+            forceReveal={allDeclassified ? true : undefined}
           />
         ))}
       </div>
