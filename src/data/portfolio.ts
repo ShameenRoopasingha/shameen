@@ -46,7 +46,7 @@ export const PORTFOLIO_DATA: PortfolioData = {
     socialLinks: {
       github: 'https://github.com/ShameenRoopasingha',
       linkedin: 'https://linkedin.com/in/shameen-roopasingha',
-      email: 'shameenroopasingha98@gmail.com',
+      email: 'shameenroopasingha@gmail.com',
       phone: '+94 70 370 3986',
       resumeUrl: '/documents/Shameen_Roopasingha_CV.pdf',
     },
