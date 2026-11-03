@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { PROJECTS } from '@/lib/data';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 import { useAppDispatch } from '@/store/hooks';
 import { setTargetSection } from '@/store/navigationSlice';
 import { ToastNotification } from '@/components/ui/ToastNotification';
@@ -12,7 +12,7 @@ export function ProjectsSection() {
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const copyLink = (url: string, title: string) => {
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     if (typeof navigator !== 'undefined') {
       navigator.clipboard.writeText(url);
       setToastMsg(`COPIED CODEBASE LINK: ${title}`);
@@ -20,7 +20,7 @@ export function ProjectsSection() {
   };
 
   const goToNextProgram = () => {
-    soundFx.playWarpChirp();
+    tvaSound.playConfirm();
     dispatch(setTargetSection(2)); // Navigate to Experience
   };
 
@@ -135,6 +135,8 @@ export function ProjectsSection() {
                   href={proj.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onMouseEnter={() => tvaSound.playHover()}
+                  onClick={() => tvaSound.playConfirm()}
                   className="tva-button primary w-full sm:flex-1 text-xs"
                 >
                   <span>⚡</span> SOURCE CODE ↗
@@ -142,6 +144,7 @@ export function ProjectsSection() {
               )}
               <button
                 type="button"
+                onMouseEnter={() => tvaSound.playHover()}
                 onClick={() => copyLink(proj.githubUrl || '', proj.title)}
                 className="tva-button w-full sm:w-auto text-xs"
               >
@@ -159,6 +162,7 @@ export function ProjectsSection() {
         </span>
         <button
           type="button"
+          onMouseEnter={() => tvaSound.playHover()}
           onClick={goToNextProgram}
           className="tva-button primary w-full sm:w-auto text-xs font-bold"
         >

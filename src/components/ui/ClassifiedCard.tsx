@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 
 interface ClassifiedCardProps {
   name: string;
@@ -31,23 +31,29 @@ export function ClassifiedCard({
   const fileId = fileNumber || `REF-${(index + 1).toString().padStart(3, '0')}`;
 
   const handleToggle = () => {
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     setInternalRevealed(!internalRevealed);
+  };
+
+  const handleMouseEnter = () => {
+    tvaSound.playHover();
+    if (forceReveal === undefined) setInternalRevealed(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (forceReveal === undefined) setInternalRevealed(false);
   };
 
   return (
     <div
-      className={`relative p-4 sm:p-5 bg-[#120B05] border transition-all duration-100 font-mono ${
+      className={`relative p-4 sm:p-5 bg-[#120B05] border transition-all duration-80 font-mono select-none ${
         isRevealed
           ? 'border-[#FF8C24] shadow-[0_0_15px_rgba(255,140,36,0.25)]'
-          : 'border-[#7A4210]'
+          : 'border-[#7A4210] hover:border-[#FF8C24]/70'
       }`}
-      onMouseEnter={() => {
-        if (forceReveal === undefined) setInternalRevealed(true);
-      }}
-      onMouseLeave={() => {
-        if (forceReveal === undefined) setInternalRevealed(false);
-      }}
+      style={{ transitionTimingFunction: 'steps(2)' }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onClick={handleToggle}
     >
       {/* Corner Reticle Ticks (+) */}
@@ -80,7 +86,7 @@ export function ClassifiedCard({
           </span>
           <div className="relative inline-block overflow-hidden">
             <span
-              className={`text-base sm:text-lg font-bold uppercase tracking-wider block transition-colors duration-100 ${
+              className={`text-base sm:text-lg font-bold uppercase tracking-wider block transition-colors duration-80 ${
                 isRevealed ? 'text-[#FFB84D] crt-glow' : 'text-[#7A4210] select-none'
               }`}
             >
@@ -112,8 +118,11 @@ export function ClassifiedCard({
             {isRevealed ? (
               <a
                 href={`tel:${phone}`}
-                onClick={(e) => e.stopPropagation()}
-                className="font-mono text-xs text-[#00FF66] font-bold hover:underline inline-flex items-center gap-1.5"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  tvaSound.playConfirm();
+                }}
+                className="font-mono text-xs text-[#00FF66] font-bold hover:underline inline-flex items-center gap-1.5 py-1"
               >
                 <span>☎</span> {phone} ↗
               </a>
@@ -130,10 +139,10 @@ export function ClassifiedCard({
         )}
       </div>
 
-      {/* Action Footer */}
+      {/* Action Footer (min-h-[44px] on mobile) */}
       <div className="mt-4 pt-2 border-t border-[#7A4210]/40 flex items-center justify-between">
         <span className="text-[9px] uppercase tracking-widest text-[#7A4210]">
-          {isRevealed ? '[RECORD DECLASSIFIED]' : '[HOVER / TAP TO DECLASSIFY]'}
+          {isRevealed ? '[RECORD DECLASSIFIED]' : '[TAP / HOVER TO DECLASSIFY]'}
         </span>
         <button
           type="button"
@@ -141,7 +150,7 @@ export function ClassifiedCard({
             e.stopPropagation();
             handleToggle();
           }}
-          className="text-[10px] uppercase tracking-widest px-2.5 py-1 border border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05] transition-all font-bold"
+          className="min-h-[44px] px-3 border border-[#FF8C24] text-[#FF8C24] hover:bg-[#FF8C24] hover:text-[#120B05] transition-all font-bold text-[10px] uppercase tracking-widest inline-flex items-center justify-center"
         >
           {isRevealed ? 'VERIFIED ✓' : 'DECLASSIFY'}
         </button>

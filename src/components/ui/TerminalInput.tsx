@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { tvaSound } from '@/lib/tvaSound';
 
 interface TerminalInputProps {
   label: string;
@@ -46,7 +47,15 @@ export function TerminalInput({
             id={name}
             name={name}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              onChange(e.target.value);
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('tva-input-active'));
+              }
+            }}
+            onKeyDown={() => {
+              tvaSound.playKeystroke();
+            }}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             rows={rows}
@@ -62,7 +71,15 @@ export function TerminalInput({
             name={name}
             type={type}
             value={value}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => {
+              onChange(e.target.value);
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('tva-input-active'));
+              }
+            }}
+            onKeyDown={() => {
+              tvaSound.playKeystroke();
+            }}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder={placeholder}

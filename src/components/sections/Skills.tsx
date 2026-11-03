@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { PORTFOLIO_DATA } from '@/lib/data';
 import { VoltageBar } from '@/components/ui/VoltageBar';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 import { useAppDispatch } from '@/store/hooks';
 import { setTargetSection } from '@/store/navigationSlice';
 
@@ -30,7 +30,7 @@ export function SkillsSection() {
   }, [allSkills, selectedGroupCode, searchQuery]);
 
   const goToNextProgram = () => {
-    soundFx.playWarpChirp();
+    tvaSound.playConfirm();
     dispatch(setTargetSection(4)); // Navigate to References
   };
 
@@ -60,8 +60,9 @@ export function SkillsSection() {
         <div className="flex gap-1.5 overflow-x-auto pb-1 custom-scrollbar -mx-1 px-1 flex-shrink-0">
           <button
             type="button"
+            onMouseEnter={() => tvaSound.playHover()}
             onClick={() => {
-              soundFx.playMechanicalClick();
+              tvaSound.playConfirm();
               setSelectedGroupCode('ALL');
             }}
             className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all ${
@@ -76,8 +77,9 @@ export function SkillsSection() {
             <button
               key={g.code}
               type="button"
+              onMouseEnter={() => tvaSound.playHover()}
               onClick={() => {
-                soundFx.playMechanicalClick();
+                tvaSound.playConfirm();
                 setSelectedGroupCode(g.code);
               }}
               className={`min-h-[40px] px-2.5 sm:px-3 text-[10px] sm:text-xs uppercase tracking-widest border transition-all whitespace-nowrap ${
@@ -98,14 +100,24 @@ export function SkillsSection() {
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={() => tvaSound.playKeystroke()}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (typeof window !== 'undefined') {
+                  window.dispatchEvent(new CustomEvent('tva-input-active'));
+                }
+              }}
               placeholder="FILTER CAPABILITIES [e.g. React, Mongo, Node]..."
               className="w-full bg-transparent text-base sm:text-xs text-[#FF8C24] placeholder-[#7A4210] focus:outline-hidden font-mono uppercase tracking-wider"
             />
             {searchQuery && (
               <button
                 type="button"
-                onClick={() => setSearchQuery('')}
+                onMouseEnter={() => tvaSound.playHover()}
+                onClick={() => {
+                  tvaSound.playConfirm();
+                  setSearchQuery('');
+                }}
                 className="text-[10px] text-[#7A4210] hover:text-[#FF8C24] ml-2 select-none min-h-[32px] px-1"
               >
                 [CLEAR]
@@ -166,6 +178,7 @@ export function SkillsSection() {
         </span>
         <button
           type="button"
+          onMouseEnter={() => tvaSound.playHover()}
           onClick={goToNextProgram}
           className="tva-button primary w-full sm:w-auto text-xs font-bold"
         >

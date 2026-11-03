@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { PROFILE } from '@/lib/data';
 import { TerminalInput } from '@/components/ui/TerminalInput';
 import { ToastNotification } from '@/components/ui/ToastNotification';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 import { useAppDispatch } from '@/store/hooks';
 import { setTargetSection } from '@/store/navigationSlice';
 
@@ -16,7 +16,7 @@ export function ContactSection() {
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
   const copyToClipboard = (text: string, label: string) => {
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     if (typeof navigator !== 'undefined') {
       navigator.clipboard.writeText(text);
       setToastMsg(`COPIED TO CLIPBOARD: ${label}`);
@@ -25,19 +25,19 @@ export function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     setIsSubmitting(true);
 
     // Simulate snappy terminal transmission
     await new Promise((r) => setTimeout(r, 600));
 
-    soundFx.playWarpChirp();
+    tvaSound.playConfirm();
     setIsSubmitting(false);
     setSubmitted(true);
   };
 
   const returnToStart = () => {
-    soundFx.playWarpChirp();
+    tvaSound.playConfirm();
     dispatch(setTargetSection(0)); // Return to Dossier
   };
 
@@ -87,6 +87,7 @@ export function ContactSection() {
                 </div>
                 <button
                   type="button"
+                  onMouseEnter={() => tvaSound.playHover()}
                   onClick={() => copyToClipboard(PROFILE.socialLinks.email, 'Email')}
                   className="min-h-[44px] min-w-[50px] px-2 text-[10px] border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] flex-shrink-0 inline-flex items-center justify-center font-bold"
                 >
@@ -107,6 +108,7 @@ export function ContactSection() {
                 </div>
                 <button
                   type="button"
+                  onMouseEnter={() => tvaSound.playHover()}
                   onClick={() => copyToClipboard(PROFILE.socialLinks.phone, 'Phone')}
                   className="min-h-[44px] min-w-[50px] px-2 text-[10px] border border-[#7A4210] text-[#FF8C24] hover:border-[#FF8C24] flex-shrink-0 inline-flex items-center justify-center font-bold"
                 >
@@ -119,6 +121,8 @@ export function ContactSection() {
                 href={PROFILE.socialLinks.resumeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onMouseEnter={() => tvaSound.playHover()}
+                onClick={() => tvaSound.playConfirm()}
                 className="block border border-[#7A4210] p-3 hover:border-[#FF8C24] transition-colors"
               >
                 <span className="text-[9px] sm:text-[10px] text-[#7A4210] uppercase block">OFFICIAL RESUME RECORD</span>
@@ -135,6 +139,8 @@ export function ContactSection() {
                     href={PROFILE.socialLinks.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onMouseEnter={() => tvaSound.playHover()}
+                    onClick={() => tvaSound.playConfirm()}
                     className="text-[#FF8C24] hover:text-[#FFB84D] underline font-bold text-xs sm:text-sm"
                   >
                     LINKEDIN ↗
@@ -143,6 +149,8 @@ export function ContactSection() {
                     href={PROFILE.socialLinks.github}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onMouseEnter={() => tvaSound.playHover()}
+                    onClick={() => tvaSound.playConfirm()}
                     className="text-[#FF8C24] hover:text-[#FFB84D] underline font-bold text-xs sm:text-sm"
                   >
                     GITHUB ↗
@@ -182,8 +190,9 @@ export function ContactSection() {
                 </p>
                 <button
                   type="button"
+                  onMouseEnter={() => tvaSound.playHover()}
                   onClick={() => {
-                    soundFx.playMechanicalClick();
+                    tvaSound.playConfirm();
                     setSubmitted(false);
                     setFormData({ name: '', email: '', message: '' });
                   }}
@@ -226,6 +235,7 @@ export function ContactSection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
+                    onMouseEnter={() => tvaSound.playHover()}
                     className="tva-button primary w-full text-xs py-3"
                   >
                     {isSubmitting ? (
@@ -253,6 +263,7 @@ export function ContactSection() {
         </span>
         <button
           type="button"
+          onMouseEnter={() => tvaSound.playHover()}
           onClick={returnToStart}
           className="tva-button primary w-full sm:w-auto text-xs font-bold"
         >

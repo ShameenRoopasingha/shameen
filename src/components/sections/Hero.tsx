@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { PROFILE, SKILLS, PORTFOLIO_DATA } from '@/lib/data';
 import { VoltageBar } from '@/components/ui/VoltageBar';
 import { ToastNotification } from '@/components/ui/ToastNotification';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 import { useAppDispatch } from '@/store/hooks';
 import { setTargetSection } from '@/store/navigationSlice';
 
@@ -54,7 +54,7 @@ export function Hero() {
   };
 
   const copyToClipboard = (text: string, label: string) => {
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     if (typeof navigator !== 'undefined') {
       navigator.clipboard.writeText(text);
       setToastMsg(`COPIED: ${label}`);
@@ -62,7 +62,7 @@ export function Hero() {
   };
 
   const goToNextProgram = () => {
-    soundFx.playWarpChirp();
+    tvaSound.playConfirm();
     dispatch(setTargetSection(1)); // Navigate to Projects
   };
 
@@ -181,12 +181,15 @@ export function Hero() {
                     href={PROFILE.socialLinks.resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onMouseEnter={() => tvaSound.playHover()}
+                    onClick={() => tvaSound.playConfirm()}
                     className="tva-button primary text-[10px] sm:text-xs"
                   >
                     <span>▼</span> CV (PDF)
                   </a>
                   <button
                     type="button"
+                    onMouseEnter={() => tvaSound.playHover()}
                     onClick={() => copyToClipboard(PROFILE.socialLinks.email, 'Email')}
                     title="Click to copy email address"
                     className="tva-button text-[10px] sm:text-xs"
@@ -195,6 +198,7 @@ export function Hero() {
                   </button>
                   <button
                     type="button"
+                    onMouseEnter={() => tvaSound.playHover()}
                     onClick={() => copyToClipboard(PROFILE.socialLinks.phone, 'Phone')}
                     title="Click to copy phone number"
                     className="tva-button text-[10px] sm:text-xs"
@@ -205,6 +209,8 @@ export function Hero() {
                     href={PROFILE.socialLinks.github}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onMouseEnter={() => tvaSound.playHover()}
+                    onClick={() => tvaSound.playConfirm()}
                     className="tva-button text-[10px] sm:text-xs"
                   >
                     GITHUB ↗
@@ -318,6 +324,7 @@ export function Hero() {
         </span>
         <button
           type="button"
+          onMouseEnter={() => tvaSound.playHover()}
           onClick={goToNextProgram}
           className="tva-button primary w-full sm:w-auto text-xs font-bold"
         >

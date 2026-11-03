@@ -4,6 +4,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import gsap from 'gsap';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setWarpSpeed, completeTransition } from '@/store/navigationSlice';
+import { tvaSound } from '@/lib/tvaSound';
 
 export function useWarpTransition() {
   const dispatch = useAppDispatch();
@@ -19,9 +20,13 @@ export function useWarpTransition() {
   useEffect(() => {
     if (isTransitioning && targetSection !== currentSection) {
       const el = flashRef.current;
+
+      // Play analog synthesizer low-pass warp sweep
+      tvaSound.playWarp();
+
       const tl = gsap.timeline({
         onComplete: () => {
-          // Cleanly scroll CRT viewport back to top on module change
+          // Scroll active container back to top
           if (typeof document !== 'undefined') {
             const scrollContainers = document.querySelectorAll('.overflow-y-auto');
             scrollContainers.forEach((c) => {
@@ -36,12 +41,12 @@ export function useWarpTransition() {
       dispatch(setWarpSpeed(2.5));
 
       if (el) {
-        // Crisp 150ms stepped CRT scan-wipe (steps(3))
+        // Fast 150ms stepped CRT scan-wipe
         tl.fromTo(
           el,
           { opacity: 0, scale: 0.98 },
           {
-            opacity: 0.85,
+            opacity: 0.9,
             scale: 1,
             duration: 0.075,
             ease: 'steps(3)',

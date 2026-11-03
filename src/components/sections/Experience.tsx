@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { EXPERIENCE } from '@/lib/data';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 import { useAppDispatch } from '@/store/hooks';
 import { setTargetSection } from '@/store/navigationSlice';
 
@@ -11,12 +11,12 @@ export function ExperienceSection() {
   const [activeNodeId, setActiveNodeId] = useState<string>(EXPERIENCE[0]?.id || '');
 
   const goToNextProgram = () => {
-    soundFx.playWarpChirp();
+    tvaSound.playConfirm();
     dispatch(setTargetSection(3)); // Navigate to Skills
   };
 
   const handleSelectNode = (id: string) => {
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     setActiveNodeId(id);
   };
 
@@ -48,6 +48,7 @@ export function ExperienceSection() {
           return (
             <div
               key={exp.id}
+              onMouseEnter={() => tvaSound.playHover()}
               onClick={() => handleSelectNode(exp.id)}
               className="relative group cursor-pointer"
             >
@@ -154,6 +155,7 @@ export function ExperienceSection() {
         </span>
         <button
           type="button"
+          onMouseEnter={() => tvaSound.playHover()}
           onClick={goToNextProgram}
           className="tva-button primary w-full sm:w-auto text-xs font-bold"
         >

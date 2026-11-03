@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { REFERENCES } from '@/lib/data';
 import { ClassifiedCard } from '@/components/ui/ClassifiedCard';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 import { useAppDispatch } from '@/store/hooks';
 import { setTargetSection } from '@/store/navigationSlice';
 
@@ -12,12 +12,12 @@ export function ReferencesSection() {
   const [allDeclassified, setAllDeclassified] = useState(false);
 
   const handleToggleAll = () => {
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     setAllDeclassified(!allDeclassified);
   };
 
   const goToNextProgram = () => {
-    soundFx.playWarpChirp();
+    tvaSound.playConfirm();
     dispatch(setTargetSection(5)); // Navigate to Contact
   };
 
@@ -36,6 +36,7 @@ export function ReferencesSection() {
         <div className="flex items-center gap-3 text-[10px] sm:text-xs">
           <button
             type="button"
+            onMouseEnter={() => tvaSound.playHover()}
             onClick={handleToggleAll}
             className={`min-h-[40px] px-3 text-[10px] uppercase tracking-wider border font-bold transition-all ${
               allDeclassified
@@ -88,6 +89,7 @@ export function ReferencesSection() {
         </span>
         <button
           type="button"
+          onMouseEnter={() => tvaSound.playHover()}
           onClick={goToNextProgram}
           className="tva-button primary w-full sm:w-auto text-xs font-bold"
         >

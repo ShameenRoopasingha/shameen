@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { tvaSound } from '@/lib/tvaSound';
 
 interface TypewriterTextProps {
   text: string;
@@ -45,12 +46,16 @@ export function TypewriterText({
         () => {
           currentIndex = targetIndex;
           setDisplayText(text.substring(0, currentIndex));
+          // Play CRT keystroke sound on every 3rd tick
+          if (currentIndex % 3 === 0) {
+            tvaSound.playKeystroke();
+          }
         },
         [],
         (targetIndex / text.length) * (text.length * speed)
       );
     }
-    // Ensure final text matches completely
+    // Ensure final text is complete
     tl.call(() => setDisplayText(text), [], text.length * speed);
 
     return () => {
@@ -58,12 +63,13 @@ export function TypewriterText({
     };
   }, [text, speed, delay, onComplete]);
 
-  // Tap anywhere to finish typing instantly on mobile
+  // Tap or click anywhere on the text to finish typing immediately
   const handleFastFinish = () => {
     if (!isComplete) {
       timelineRef.current?.kill();
       setDisplayText(text);
       setIsComplete(true);
+      tvaSound.playConfirm();
       onComplete?.();
     }
   };
@@ -73,7 +79,7 @@ export function TypewriterText({
       ref={containerRef}
       onClick={handleFastFinish}
       className={`cursor-pointer ${className}`}
-      title="Tap to finish typing"
+      title="Click/tap to complete text"
     >
       {displayText}
       {showCursor && !isComplete && <span className="tva-cursor">█</span>}

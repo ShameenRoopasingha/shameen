@@ -14,7 +14,7 @@ import { useGSAPObserver } from '@/hooks/useGSAPObserver';
 import { WarpFlash } from '@/components/ui/WarpFlash';
 import { SECTIONS, SECTION_METADATA } from '@/lib/constants';
 import { PROFILE } from '@/lib/data';
-import { soundFx } from '@/lib/sound';
+import { tvaSound } from '@/lib/tvaSound';
 
 const sectionComponents = [
   Hero,
@@ -38,11 +38,12 @@ const MOBILE_THUMB_KEYS = [
 export function SectionController() {
   const flashRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const { currentSection } = useAppSelector((state) => state.navigation);
+  const { currentSection, isTransitioning } = useAppSelector((state) => state.navigation);
   const { setFlashRef } = useWarpTransition();
   const [chronoTime, setChronoTime] = useState<string>('00:00:00 // 616');
   const [helpOpen, setHelpOpen] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const [inputSurge, setInputSurge] = useState(false);
 
   // Register observer
   useGSAPObserver();
@@ -55,21 +56,28 @@ export function SectionController() {
   // Audio state initialization & listeners
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setAudioEnabled(soundFx.isEnabled());
+      setAudioEnabled(!tvaSound.getMuted());
     }
 
     const toggleHelp = () => setHelpOpen((prev) => !prev);
     const toggleAudio = () => {
-      const next = soundFx.toggle();
-      setAudioEnabled(next);
+      const muted = tvaSound.toggleMute();
+      setAudioEnabled(!muted);
+    };
+
+    const handleInputSurge = () => {
+      setInputSurge(true);
+      setTimeout(() => setInputSurge(false), 200);
     };
 
     window.addEventListener('tva-toggle-help', toggleHelp);
     window.addEventListener('tva-toggle-audio', toggleAudio);
+    window.addEventListener('tva-input-active', handleInputSurge);
 
     return () => {
       window.removeEventListener('tva-toggle-help', toggleHelp);
       window.removeEventListener('tva-toggle-audio', toggleAudio);
+      window.removeEventListener('tva-input-active', handleInputSurge);
     };
   }, []);
 
@@ -118,15 +126,16 @@ export function SectionController() {
   }, [currentSection]);
 
   const handleSelectSection = (idx: number) => {
-    soundFx.playMechanicalClick();
+    tvaSound.playConfirm();
     dispatch(setTargetSection(idx));
   };
 
   const handleAudioToggle = () => {
-    const next = soundFx.toggle();
-    setAudioEnabled(next);
+    const muted = tvaSound.toggleMute();
+    setAudioEnabled(!muted);
   };
 
+  const isSurging = isTransitioning || inputSurge;
   const ActiveComponent = sectionComponents[currentSection] || Hero;
   const currentMeta = SECTION_METADATA[SECTIONS[currentSection]];
 
@@ -147,13 +156,29 @@ export function SectionController() {
             </span>
           </div>
 
-          {/* Compact Hardware Voltage Indicator */}
-          <div className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 border border-[#7A4210] bg-[#120B05] text-[10px]">
-            <span className="text-[#7A4210]">VLT:</span>
+          {/* Dynamic Hardware Voltage Indicator */}
+          <div
+            className={`hidden sm:flex items-center gap-1.5 px-2 py-0.5 border text-[10px] transition-colors ${
+              isSurging
+                ? 'border-[#FF3B1F] bg-[#FF3B1F]/15 text-[#FF3B1F]'
+                : 'border-[#7A4210] bg-[#120B05]'
+            }`}
+          >
+            <span className={isSurging ? 'text-[#FF3B1F]' : 'text-[#7A4210]'}>VLT:</span>
             <div className="w-12 h-1.5 bg-[#7A4210]/40 overflow-hidden relative">
-              <div className="w-4/5 h-full bg-[#FF8C24]" />
+              <div
+                className={`h-full transition-all duration-100 ${
+                  isSurging ? 'w-full bg-[#FF3B1F]' : 'w-4/5 bg-[#FF8C24]'
+                }`}
+              />
             </div>
-            <span className="text-[#FF8C24] font-bold">24.2V</span>
+            <span
+              className={`font-bold font-mono transition-colors ${
+                isSurging ? 'text-[#FF3B1F]' : 'text-[#FF8C24]'
+              }`}
+            >
+              {isSurging ? '28.8V' : '24.2V'}
+            </span>
           </div>
         </div>
 
@@ -169,14 +194,15 @@ export function SectionController() {
           <button
             type="button"
             onClick={handleAudioToggle}
-            title="Toggle mechanical relay clicks [Key: M]"
-            className={`min-h-[44px] min-w-[44px] px-2 text-[10px] border tracking-wider transition-all hidden sm:inline-flex items-center justify-center gap-1 ${
+            title="Toggle authentic TVA audio synthesis [Key: M]"
+            className={`min-h-[44px] min-w-[44px] px-2 text-[10px] border tracking-wider transition-all inline-flex items-center justify-center gap-1 ${
               audioEnabled
-                ? 'border-[#00FF66] text-[#00FF66] bg-[#00FF66]/10 font-bold'
+                ? 'border-[#00FF66] text-[#00FF66] bg-[#00FF66]/10 font-bold shadow-[0_0_8px_rgba(0,255,102,0.2)]'
                 : 'border-[#7A4210] text-[#7A4210] hover:text-[#FF8C24]'
             }`}
           >
-            <span>AUDIO:</span>
+            <span className="hidden xs:inline">AUDIO:</span>
+            <span className="xs:hidden">AUD:</span>
             <span>{audioEnabled ? 'ON' : 'OFF'}</span>
           </button>
 
@@ -235,6 +261,7 @@ export function SectionController() {
                 <button
                   key={secId}
                   type="button"
+                  onMouseEnter={() => tvaSound.playHover()}
                   onClick={() => handleSelectSection(idx)}
                   className={`w-full text-left tva-action-item ${
                     isActive ? 'active' : ''
@@ -311,6 +338,7 @@ export function SectionController() {
             <button
               key={key.id}
               type="button"
+              onMouseEnter={() => tvaSound.playHover()}
               onClick={() => handleSelectSection(key.id)}
               className={`tva-thumb-key text-[10px] ${
                 isActive ? 'active' : ''
